@@ -1,15 +1,16 @@
 package com.muk.sami;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class ActivityLeaderboard extends AppCompatActivity {
 
-    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -17,15 +18,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_trip_creator:
-                    mTextMessage.setText(R.string.navigation_trip_creator);
-                    return true;
+                case R.id.navigation_trip_search:
+                    Intent a = new Intent(ActivityLeaderboard.this,MainActivitySearchTrip.class);
+                    startActivity(a);
+                    break;
                 case R.id.navigation_my_page:
-                    mTextMessage.setText(R.string.navigation_my_page);
-                    return true;
+                    Intent b = new Intent(ActivityLeaderboard.this,ActivityMyPage.class);
+                    startActivity(b);
+                    break;
                 case R.id.navigation_leaderboard:
-                    mTextMessage.setText(R.string.navigation_leaderboard);
-                    return true;
+                    break;
             }
             return false;
         }
@@ -34,11 +36,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_leaderboard);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        TextView title = (TextView) findViewById(R.id.leaderboardTitle);
+        title.setText(R.string.navigation_leaderboard);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
+        Menu menu = navigation.getMenu();
+        MenuItem menuItem = menu.getItem(2);
+        menuItem.setChecked(true);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
-
 }
