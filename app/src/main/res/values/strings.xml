@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Sami</string>
-    <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="navigation_trip_creator">Travel</string>
-    <string name="navigation_my_page">My Page</string>
-    <string name="navigation_leaderboard">Leaderboard</string>
+    <string name="title_notifications">Aviseringar</string>
+    <string name="navigation_trip_creator">Sök resa</string>
+    <string name="navigation_my_page">Min sida</string>
+    <string name="navigation_leaderboard">Topplista</string>
+    <string name="title_home">Hem</string>
 </resources>
