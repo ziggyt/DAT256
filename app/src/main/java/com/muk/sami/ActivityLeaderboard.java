@@ -37,6 +37,7 @@ public class ActivityLeaderboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+        ActivityLeaderboard.this.overridePendingTransition(0,0);
 
         TextView title = (TextView) findViewById(R.id.leaderboardTitle);
         title.setText(R.string.navigation_leaderboard);
