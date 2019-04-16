@@ -37,6 +37,7 @@ public class ActivityMyPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
+        ActivityMyPage.this.overridePendingTransition(0,0);
 
         TextView title = (TextView) findViewById(R.id.myPageTitle);
         title.setText(R.string.navigation_my_page);

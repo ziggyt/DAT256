@@ -37,6 +37,7 @@ public class MainActivitySearchTrip extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MainActivitySearchTrip.this.overridePendingTransition(0,0);
 
         TextView title = (TextView) findViewById(R.id.homeTitle);
         title.setText(R.string.navigation_trip_search);
