@@ -81,9 +81,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MainActivity.this.overridePendingTransition(0,0);
 
-        TextView title = (TextView) findViewById(R.id.homeTitle);
-        title.setText(R.string.navigation_trip_search);
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
         Menu menu = navigation.getMenu();
         MenuItem menuItem = menu.getItem(0);
