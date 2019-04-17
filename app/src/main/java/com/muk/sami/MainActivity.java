@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MainActivitySearchTrip.this.overridePendingTransition(0,0);
+        MainActivity.this.overridePendingTransition(0,0);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
         Menu menu = navigation.getMenu();
@@ -74,20 +74,5 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        MainActivity.this.overridePendingTransition(0,0);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
-        Menu menu = navigation.getMenu();
-        MenuItem menuItem = menu.getItem(0);
-        menuItem.setChecked(true);
-
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-    }
 
 }
