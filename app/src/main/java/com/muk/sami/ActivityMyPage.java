@@ -36,7 +36,7 @@ public class ActivityMyPage extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_trip_search:
-                    Intent a = new Intent(ActivityMyPage.this,MainActivitySearchTrip.class);
+                    Intent a = new Intent(ActivityMyPage.this, MainActivity.class);
                     startActivity(a);
                     finish();
                     break;

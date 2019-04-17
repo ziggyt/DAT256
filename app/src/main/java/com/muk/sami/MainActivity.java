@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class MainActivitySearchTrip extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
 
     @Override
@@ -61,12 +61,12 @@ public class MainActivitySearchTrip extends AppCompatActivity {
                 case R.id.navigation_trip_search:
                     break;
                 case R.id.navigation_my_page:
-                    Intent a = new Intent(MainActivitySearchTrip.this,ActivityMyPage.class);
+                    Intent a = new Intent(MainActivity.this,ActivityMyPage.class);
                     startActivity(a);
                     finish();
                     break;
                 case R.id.navigation_leaderboard:
-                    Intent b = new Intent(MainActivitySearchTrip.this,ActivityLeaderboard.class);
+                    Intent b = new Intent(MainActivity.this,ActivityLeaderboard.class);
                     startActivity(b);
                     finish();
                     break;
@@ -74,5 +74,23 @@ public class MainActivitySearchTrip extends AppCompatActivity {
             return false;
         }
     };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        MainActivity.this.overridePendingTransition(0,0);
+
+        TextView title = (TextView) findViewById(R.id.homeTitle);
+        title.setText(R.string.navigation_trip_search);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
+        Menu menu = navigation.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+    }
 
 }
