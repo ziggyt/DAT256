@@ -26,15 +26,19 @@ public class MainActivitySearchTrip extends AppCompatActivity {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
+        initStartingView();
 
     }
 
-    /*private void initStartingView(){
+    /**
+     * Initializes the starting view by setting the fragment to first be displayed in the fragment
+     * container
+     */
+    private void initStartingView(){
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new StartPageFragment())
+                .replace(R.id.fragment_container, new SearchTripFragment())
                 .commit();
-    }*/
+    }
 
     /**
      * Sets a fragment in the fragment container to be displayed on the screen.

@@ -11,6 +11,22 @@ import android.widget.TextView;
 
 public class ActivityLeaderboard extends AppCompatActivity {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_leaderboard);
+        ActivityLeaderboard.this.overridePendingTransition(0,0);
+
+        TextView title = (TextView) findViewById(R.id.leaderboardTitle);
+        title.setText(R.string.navigation_leaderboard);
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
+        Menu menu = navigation.getMenu();
+        MenuItem menuItem = menu.getItem(2);
+        menuItem.setChecked(true);
+
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -35,20 +51,4 @@ public class ActivityLeaderboard extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leaderboard);
-        ActivityLeaderboard.this.overridePendingTransition(0,0);
-
-        TextView title = (TextView) findViewById(R.id.leaderboardTitle);
-        title.setText(R.string.navigation_leaderboard);
-
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
-        Menu menu = navigation.getMenu();
-        MenuItem menuItem = menu.getItem(2);
-        menuItem.setChecked(true);
-
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
 }

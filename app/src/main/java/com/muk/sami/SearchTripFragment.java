@@ -1,17 +1,21 @@
 package com.muk.sami;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
@@ -49,6 +53,28 @@ public class SearchTripFragment extends Fragment implements ExampleDialog.Exampl
         FirebaseApp.initializeApp(getContext());
         testdatabase = FirebaseDatabase.getInstance();
         myRef = testdatabase.getReference("trips");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                trips.clear();
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting trip
+                    Trip trip = postSnapshot.getValue(Trip.class);
+                    //adding trip to the list
+                    trips.add(trip);
+                }
+
+                TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
+
+                listViewTrips.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         trips = new ArrayList<>();
 
@@ -63,7 +89,8 @@ public class SearchTripFragment extends Fragment implements ExampleDialog.Exampl
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialog();
+                createTripDialog();
+                //openDialog();
             }
         });
 
@@ -84,36 +111,88 @@ public class SearchTripFragment extends Fragment implements ExampleDialog.Exampl
         return view;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private void createTripDialog(){
+        //Create a dialog and set the title
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Ny resa");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.layout_dialog, (ViewGroup) getView(), false);
+
+        //Initialize the components
+        final EditText editTextFrom = dialogView.findViewById(R.id.edit_From);
+        final EditText editTextTo = dialogView.findViewById(R.id.edit_To);
+        final EditText editTextSeats = dialogView.findViewById(R.id.edit_Seats);
+        final TextView textViewDate = dialogView.findViewById(R.id.textViewDate);
+        final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
+        final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+
+        //Set the content of the main dialog view
+        builder.setView(dialogView);
+
+        // Set up the OK-button
+        builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                trips.clear();
+            public void onClick(DialogInterface dialog, int which) {
+                String from = "Från: " + editTextFrom.getText().toString();
+                String to = "Till: " + editTextTo.getText().toString();
+                String seats = "Antal passagerare: " + editTextSeats.getText().toString();
 
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //getting trip
-                    Trip trip = postSnapshot.getValue(Trip.class);
-                    //adding trip to the list
-                    trips.add(trip);
+                String year = Integer.toString(datePicker.getYear());
+                String month = Integer.toString(datePicker.getMonth()+1);
+                String day = Integer.toString(datePicker.getDayOfMonth());
+                if(Integer.valueOf(month) < 10){
+
+                    month = "0" + month;
                 }
+                if(Integer.valueOf(day) < 10){
 
-                TripList adapter = new TripList (getActivity(), trips);
-                listViewTrips.setAdapter(adapter);
-            }
+                    day  = "0" + day ;
+                }
+                String date = day +"-"+ month + "-" + year;
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                String hour = Integer.toString(timePicker.getHour());
+                String minute = Integer.toString(timePicker.getMinute());
+                if(Integer.valueOf(hour) < 10){
 
+                    hour = "0" + hour;
+                }
+                if(Integer.valueOf(minute) < 10){
+
+                    minute  = "0" + minute ;
+                }
+                String time = hour +":" + minute ;
+                createTrip(from, to, date, seats, time);
+                dialog.cancel();
             }
         });
 
+        //Set up the Cancel-button
+        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
 
     }
 
+    private void createTrip(String from, String to, String date, String seats, String time){
+        /* textViewFrom.setText(from);
+        textViewTo.setText(to);
+        textViewDate.setText(date);
+        textViewSeats.setText(seats);
+        textViewTime.setText(time); */
 
+        String tripid = myRef.push().getKey();
+
+        Trip trip = new Trip (tripid, from, to, date, time, seats);
+
+        myRef.child(tripid).setValue(trip);
+
+        Toast.makeText(getContext(),"Resa tillagd", Toast.LENGTH_LONG).show();
+    }
 
     /*@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +261,8 @@ public class SearchTripFragment extends Fragment implements ExampleDialog.Exampl
 
     public void openDialog() {
         ExampleDialog exampleDialog = new ExampleDialog();
-        exampleDialog.show(getChildFragmentManager(), "example");
+        exampleDialog.show(getFragmentManager(), "example");
+
     }
 
     /* private void addTrip(){
