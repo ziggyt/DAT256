@@ -5,6 +5,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
         initStartingView();
 
+        NavController navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
+        NavigationUI.setupWithNavController(navigation, navController);
     }
 
     /**

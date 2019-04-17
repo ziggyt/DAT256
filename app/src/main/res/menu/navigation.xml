@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_trip_search"
+        android:id="@id/tripsFragment"
         android:icon="@drawable/ic_directions_car_black_24dp"
         android:title="@string/navigation_trip_search" />
     <item
-        android:id="@+id/navigation_my_page"
+        android:id="@id/myPageFragment"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="@string/navigation_my_page" />
     <item
-        android:id="@+id/navigation_leaderboard"
+        android:id="@id/leaderboardFragment"
         android:icon="@drawable/ic_stars_black_24dp"
         android:title="@string/navigation_leaderboard" />
 
