@@ -10,4 +10,14 @@
         android:name="com.muk.sami.TripsFragment"
         android:label="fragment_trips"
         tools:layout="@layout/fragment_trips" />
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.muk.sami.MyPageFragment"
+        android:label="fragment_my_page"
+        tools:layout="@layout/fragment_my_page" />
+    <fragment
+        android:id="@+id/leaderboardFragment"
+        android:name="com.muk.sami.LeaderboardFragment"
+        android:label="fragment_leaderboard"
+        tools:layout="@layout/fragment_leaderboard" />
 </navigation>
