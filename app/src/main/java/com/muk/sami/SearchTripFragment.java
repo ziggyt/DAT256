@@ -28,7 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchTripFragment extends Fragment implements ExampleDialog.ExampleDialogListener {
+public class SearchTripFragment extends Fragment{
 
     private TextView textViewFrom;
     private TextView textViewTo;
@@ -194,77 +194,6 @@ public class SearchTripFragment extends Fragment implements ExampleDialog.Exampl
         Toast.makeText(getContext(),"Resa tillagd", Toast.LENGTH_LONG).show();
     }
 
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_search_trip);
-        FirebaseApp.initializeApp(this);
-        testdatabase = FirebaseDatabase.getInstance();
-        myRef = testdatabase.getReference("trips");
-
-
-        trips = new ArrayList<>();
-        listViewTrips = (ListView) findViewById(R.id.listView_Trips);
-        textViewFrom = (TextView) findViewById(R.id.textview_from);
-        textViewTo = (TextView) findViewById(R.id.textview_to);
-        textViewDate = (TextView) findViewById(R.id.textview_date);
-        textViewSeats = (TextView) findViewById(R.id.textview_seats);
-        textViewTime = (TextView) findViewById(R.id.textview_time);
-        button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
-        });
-
-        listViewTrips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trip trip = trips.get(position);
-
-                textViewFrom.setText(trip.getFrom());
-                textViewTo.setText(trip.getTo());
-                textViewDate.setText(trip.getDate());
-                textViewSeats.setText(trip.getSeats());
-                textViewTime.setText(trip.getTime());
-            }
-        });
-    }*/
-
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                trips.clear();
-
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //getting trip
-                    Trip trip = postSnapshot.getValue(Trip.class);
-                    //adding trip to the list
-                    trips.add(trip);
-                }
-
-                TripList adapter = new TripList (SearchTripFragment.this, trips);
-                listViewTrips.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
-
-    public void openDialog() {
-        ExampleDialog exampleDialog = new ExampleDialog();
-        exampleDialog.show(getFragmentManager(), "example");
-
-    }
-
     /* private void addTrip(){
         String from = textViewFrom.getText().toString();
         String to = textViewTo.getText().toString();
@@ -282,21 +211,4 @@ public class SearchTripFragment extends Fragment implements ExampleDialog.Exampl
 
     } */
 
-    @Override
-    public void applyTexts(String from, String to, String date, String seats, String time) {
-       /* textViewFrom.setText(from);
-        textViewTo.setText(to);
-        textViewDate.setText(date);
-        textViewSeats.setText(seats);
-        textViewTime.setText(time); */
-
-       String tripid = myRef.push().getKey();
-
-        Trip trip = new Trip (tripid, from, to, date, time, seats);
-
-        myRef.child(tripid).setValue(trip);
-
-        Toast.makeText(getContext(),"Resa tillagd", Toast.LENGTH_LONG).show();
-
-    }
 }

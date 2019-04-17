@@ -27,11 +27,6 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        /*View listitem = convertView;
-        if(listitem == null){
-            listitem = LayoutInflater.from(context).inflate(R.layout.layout_list, parent, false);
-        }*/
-
         LayoutInflater inflater = context.getLayoutInflater();
         View listitem = inflater.inflate(R.layout.layout_list, null, true);
 
