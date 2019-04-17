@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+
+    <TextView
+        android:id="@+id/textView_From"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Från - "
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/textView_To"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/textView_From"
+        android:text="Till"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/textView_Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView_From"
+        android:text="Datum"
+        android:textSize="20dp"/>
+
+    <TextView
+        android:id="@+id/textView_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/textView_Date"
+        android:layout_below="@id/textView_To"
+        android:text="Tid"
+        android:textSize="20dp"/>
+</RelativeLayout>
