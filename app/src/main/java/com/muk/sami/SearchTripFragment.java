@@ -2,8 +2,12 @@ package com.muk.sami;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -20,22 +24,101 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity1 extends AppCompatActivity implements ExampleDialog.ExampleDialogListener {
+public class SearchTripFragment extends Fragment implements ExampleDialog.ExampleDialogListener {
+
     private TextView textViewFrom;
     private TextView textViewTo;
     private TextView textViewDate;
     private TextView textViewSeats;
     private TextView textViewTime;
     private Button button;
+
     private FirebaseDatabase testdatabase;
-    DatabaseReference myRef;
-    ListView listViewTrips;
-    List<Trip> trips;
+    private DatabaseReference myRef;
+
+    private ListView listViewTrips;
+    private List<Trip> trips;
+
+    private View view;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        view  = inflater.inflate(R.layout.fragment_search_trip, container, false);
+
+        FirebaseApp.initializeApp(getContext());
+        testdatabase = FirebaseDatabase.getInstance();
+        myRef = testdatabase.getReference("trips");
+
+        trips = new ArrayList<>();
+
+        listViewTrips = (ListView) view.findViewById(R.id.listView_Trips);
+        textViewFrom = (TextView) view.findViewById(R.id.textview_from);
+        textViewTo = (TextView) view.findViewById(R.id.textview_to);
+        textViewDate = (TextView) view.findViewById(R.id.textview_date);
+        textViewSeats = (TextView) view.findViewById(R.id.textview_seats);
+        textViewTime = (TextView) view.findViewById(R.id.textview_time);
+
+        button = (Button) view.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
+
+        listViewTrips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Trip trip = trips.get(position);
+
+                textViewFrom.setText(trip.getFrom());
+                textViewTo.setText(trip.getTo());
+                textViewDate.setText(trip.getDate());
+                textViewSeats.setText(trip.getSeats());
+                textViewTime.setText(trip.getTime());
+            }
+        });
+
+
+        return view;
+    }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                trips.clear();
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    //getting trip
+                    Trip trip = postSnapshot.getValue(Trip.class);
+                    //adding trip to the list
+                    trips.add(trip);
+                }
+
+                TripList adapter = new TripList (getActivity(), trips);
+                listViewTrips.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+
+
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.fragment_search_trip);
         FirebaseApp.initializeApp(this);
         testdatabase = FirebaseDatabase.getInstance();
         myRef = testdatabase.getReference("trips");
@@ -68,9 +151,9 @@ public class MainActivity1 extends AppCompatActivity implements ExampleDialog.Ex
                 textViewTime.setText(trip.getTime());
             }
         });
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
 
@@ -86,7 +169,7 @@ public class MainActivity1 extends AppCompatActivity implements ExampleDialog.Ex
                     trips.add(trip);
                 }
 
-                TripList adapter = new TripList (MainActivity1.this, trips);
+                TripList adapter = new TripList (SearchTripFragment.this, trips);
                 listViewTrips.setAdapter(adapter);
             }
 
@@ -95,11 +178,11 @@ public class MainActivity1 extends AppCompatActivity implements ExampleDialog.Ex
 
             }
         });
-    }
+    }*/
 
     public void openDialog() {
         ExampleDialog exampleDialog = new ExampleDialog();
-        exampleDialog.show(getSupportFragmentManager(), "example dialog");
+        exampleDialog.show(getChildFragmentManager(), "example");
     }
 
     /* private void addTrip(){
@@ -133,7 +216,7 @@ public class MainActivity1 extends AppCompatActivity implements ExampleDialog.Ex
 
         myRef.child(tripid).setValue(trip);
 
-        Toast.makeText(this,"Resa tillagd", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"Resa tillagd", Toast.LENGTH_LONG).show();
 
     }
 }

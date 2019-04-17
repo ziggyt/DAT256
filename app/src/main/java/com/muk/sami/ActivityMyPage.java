@@ -21,12 +21,14 @@ public class ActivityMyPage extends AppCompatActivity {
                 case R.id.navigation_trip_search:
                     Intent a = new Intent(ActivityMyPage.this,MainActivitySearchTrip.class);
                     startActivity(a);
+                    finish();
                     break;
                 case R.id.navigation_my_page:
                     break;
                 case R.id.navigation_leaderboard:
                     Intent b = new Intent(ActivityMyPage.this,ActivityLeaderboard.class);
                     startActivity(b);
+                    finish();
                     break;
             }
             return false;
@@ -39,8 +41,8 @@ public class ActivityMyPage extends AppCompatActivity {
         setContentView(R.layout.activity_mypage);
         ActivityMyPage.this.overridePendingTransition(0,0);
 
-        TextView title = (TextView) findViewById(R.id.myPageTitle);
-        title.setText(R.string.navigation_my_page);
+        //TextView title = (TextView) findViewById(R.id.myPageTitle);
+        //title.setText(R.string.navigation_my_page);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_bar);
         Menu menu = navigation.getMenu();

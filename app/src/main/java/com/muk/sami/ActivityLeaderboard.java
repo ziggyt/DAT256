@@ -21,10 +21,12 @@ public class ActivityLeaderboard extends AppCompatActivity {
                 case R.id.navigation_trip_search:
                     Intent a = new Intent(ActivityLeaderboard.this,MainActivitySearchTrip.class);
                     startActivity(a);
+                    finish();
                     break;
                 case R.id.navigation_my_page:
                     Intent b = new Intent(ActivityLeaderboard.this,ActivityMyPage.class);
                     startActivity(b);
+                    finish();
                     break;
                 case R.id.navigation_leaderboard:
                     break;
