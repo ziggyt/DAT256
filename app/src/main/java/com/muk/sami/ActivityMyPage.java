@@ -11,27 +11,6 @@ import android.widget.TextView;
 
 public class ActivityMyPage extends AppCompatActivity {
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_trip_search:
-                    Intent a = new Intent(ActivityMyPage.this,MainActivitySearchTrip.class);
-                    startActivity(a);
-                    break;
-                case R.id.navigation_my_page:
-                    break;
-                case R.id.navigation_leaderboard:
-                    Intent b = new Intent(ActivityMyPage.this,ActivityLeaderboard.class);
-                    startActivity(b);
-                    break;
-            }
-            return false;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,5 +28,28 @@ public class ActivityMyPage extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_trip_search:
+                    Intent a = new Intent(ActivityMyPage.this,MainActivitySearchTrip.class);
+                    startActivity(a);
+                    finish();
+                    break;
+                case R.id.navigation_my_page:
+                    break;
+                case R.id.navigation_leaderboard:
+                    Intent b = new Intent(ActivityMyPage.this,ActivityLeaderboard.class);
+                    startActivity(b);
+                    finish();
+                    break;
+            }
+            return false;
+        }
+    };
 
 }

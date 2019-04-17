@@ -11,28 +11,6 @@ import android.widget.TextView;
 
 public class ActivityLeaderboard extends AppCompatActivity {
 
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_trip_search:
-                    Intent a = new Intent(ActivityLeaderboard.this,MainActivitySearchTrip.class);
-                    startActivity(a);
-                    break;
-                case R.id.navigation_my_page:
-                    Intent b = new Intent(ActivityLeaderboard.this,ActivityMyPage.class);
-                    startActivity(b);
-                    break;
-                case R.id.navigation_leaderboard:
-                    break;
-            }
-            return false;
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,4 +27,28 @@ public class ActivityLeaderboard extends AppCompatActivity {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_trip_search:
+                    Intent a = new Intent(ActivityLeaderboard.this,MainActivitySearchTrip.class);
+                    startActivity(a);
+                    finish();
+                    break;
+                case R.id.navigation_my_page:
+                    Intent b = new Intent(ActivityLeaderboard.this,ActivityMyPage.class);
+                    startActivity(b);
+                    finish();
+                    break;
+                case R.id.navigation_leaderboard:
+                    break;
+            }
+            return false;
+        }
+    };
+
 }

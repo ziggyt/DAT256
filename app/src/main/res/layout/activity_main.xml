@@ -7,21 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivitySearchTrip">
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/homeTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="25dp"
-            android:text="@string/navigation_trip_search"
-            android:textAlignment="viewStart"
-            android:textSize="30sp" />
-
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation_bar"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_bar"
