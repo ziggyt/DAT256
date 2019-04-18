@@ -18,8 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityLeaderboard"></activity>
-        <activity android:name=".ActivityMyPage"></activity>
     </application>
 
 </manifest>
