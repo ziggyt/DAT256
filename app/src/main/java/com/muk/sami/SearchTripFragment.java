@@ -66,9 +66,11 @@ public class SearchTripFragment extends Fragment {
                     trips.add(trip);
                 }
 
-                TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
+                if (getActivity() != null) {
+                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
 
-                listViewTrips.setAdapter(adapter);
+                    listViewTrips.setAdapter(adapter);
+                }
             }
 
             @Override
