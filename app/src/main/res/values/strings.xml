@@ -6,4 +6,8 @@
     <string name="navigation_my_page">Min sida</string>
     <string name="navigation_leaderboard">Topplista</string>
     <string name="title_home">Hem</string>
+
+    <!-- My Page -->
+    <string name="edit_profile">Ändra profil</string>
+    <string name="sign_out">Logga ut</string>
 </resources>
