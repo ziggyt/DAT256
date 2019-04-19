@@ -2,11 +2,18 @@ package com.muk.sami;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.WindowManager;
 
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Arrays;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +23,8 @@ import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity implements MyPageFragment.OnSignOutListener {
 
+    private static final String TAG = "MainActivity";
+    private static final int RC_SIGN_IN = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +33,59 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
 
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation_bar);
         NavController navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
-
         NavigationUI.setupWithNavController(navigation, navController);
+
+        signIn();
+    }
+
+    private void signIn() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) { // Already signed in
+
+        } else { // Not signed in
+            // Disable the screen before successful sign in
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(Arrays.asList(
+                                    new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                    new AuthUI.IdpConfig.EmailBuilder().build()))
+                            .setTosAndPrivacyPolicyUrls(
+                                    "https://superapp.example.com/terms-of-service.html",
+                                    "https://superapp.example.com/privacy-policy.html")
+                            .build(),
+                    RC_SIGN_IN);
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            // Successfully signed in
+            if (resultCode == RESULT_OK) {
+                //Re-enable the screen after successful sing in
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            } else { // Sign in failed
+                if (response == null) { // User pressed back button
+                    //showSnackbar(R.string.sign_in_cancelled);
+                    finish();
+                    return;
+                }
+
+                signIn();
+
+                if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+                    //showSnackbar(R.string.no_internet_connection);
+                    return;
+                }
+
+                //showSnackbar(R.string.unknown_error);
+                Log.e(TAG, "Sign-in error: ", response.getError());
+            }
+        }
     }
 
     @Override
@@ -35,8 +95,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) {
                         // User is now signed out
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                        finish();
+                        signIn();
                     }
                 });
     }
