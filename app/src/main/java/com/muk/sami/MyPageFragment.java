@@ -21,10 +21,11 @@ public class MyPageFragment extends Fragment {
 
     private Button editProfileButton;
     private Button signOutButton;
+    private Button deleteAccountButton;
 
     private View view;
 
-    private OnSignOutListener mSignOutListener;
+    private OnAccountManageListener mAccountManageListener;
 
     public MyPageFragment() {
         // Required empty public constructor
@@ -38,6 +39,7 @@ public class MyPageFragment extends Fragment {
 
         editProfileButton = view.findViewById(R.id.edit_profile_button);
         signOutButton = view.findViewById(R.id.sign_out_button);
+        deleteAccountButton = view.findViewById(R.id.delete_account_button);
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +51,17 @@ public class MyPageFragment extends Fragment {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mSignOutListener != null) {
-                    mSignOutListener.onSignOut();
+                if (mAccountManageListener != null) {
+                    mAccountManageListener.onSignOut();
+                }
+            }
+        });
+
+        deleteAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAccountManageListener != null) {
+                    mAccountManageListener.onDeleteAccount();
                 }
             }
         });
@@ -61,8 +72,8 @@ public class MyPageFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof OnSignOutListener) {
-            mSignOutListener = (OnSignOutListener) context;
+        if (context instanceof OnAccountManageListener) {
+            mAccountManageListener = (OnAccountManageListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -72,11 +83,12 @@ public class MyPageFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mSignOutListener = null;
+        mAccountManageListener = null;
     }
 
-    public interface OnSignOutListener {
+    public interface OnAccountManageListener {
         void onSignOut();
+        void onDeleteAccount();
     }
 
 }
