@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUserMetadata;
 
 import java.util.Arrays;
 
@@ -21,7 +22,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity implements MyPageFragment.OnSignOutListener {
+public class MainActivity extends AppCompatActivity implements MyPageFragment.OnAccountManageListener {
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 0;
@@ -68,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
             if (resultCode == RESULT_OK) {
                 //Re-enable the screen after successful sing in
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
+                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                    // The user is new
+
+                }
             } else { // Sign in failed
                 if (response == null) { // User pressed back button
                     //showSnackbar(R.string.sign_in_cancelled);
@@ -93,9 +100,24 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // User is now signed out
+                    public void onComplete(@NonNull Task<Void> task) { // User is now signed out
                         signIn();
+                    }
+                });
+    }
+
+    @Override
+    public void onDeleteAccount() {
+        AuthUI.getInstance()
+                .delete(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) { // Deletion succeeded
+                            signIn();
+                        } else { // Deletion failed
+
+                        }
                     }
                 });
     }

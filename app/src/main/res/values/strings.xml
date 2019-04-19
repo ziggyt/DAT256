@@ -10,4 +10,5 @@
     <!-- My Page -->
     <string name="edit_profile">Ändra profil</string>
     <string name="sign_out">Logga ut</string>
+    <string name="delete_account">Radera konto</string>
 </resources>
