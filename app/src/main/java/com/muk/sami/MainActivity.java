@@ -12,7 +12,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 0;
 
+    DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         NavController navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
         NavigationUI.setupWithNavController(navigation, navController);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         signIn();
     }
 
@@ -67,13 +73,16 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
 
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                //Re-enable the screen after successful sing in
+                //Re-enable the screen after successful sign in
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
+                FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser()
+                        .getMetadata();
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
                     // The user is new
-
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    User user = new User(firebaseUser.getEmail(), firebaseUser.getDisplayName());
+                    mDatabase.child("users").child(firebaseUser.getUid()).setValue(user);
                 }
             } else { // Sign in failed
                 if (response == null) { // User pressed back button
@@ -116,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                         if (task.isSuccessful()) { // Deletion succeeded
                             signIn();
                         } else { // Deletion failed
-
+                            // Re-authentication required
                         }
                     }
                 });
