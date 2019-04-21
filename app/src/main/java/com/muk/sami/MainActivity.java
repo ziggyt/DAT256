@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         } else { // Not signed in
             // Disable the screen before successful sign in
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+            // Start AuthUI's sign in flow
             startActivityForResult(
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
@@ -75,15 +77,6 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
             if (resultCode == RESULT_OK) {
                 //Re-enable the screen after successful sign in
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser()
-                        .getMetadata();
-                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
-                    // The user is new
-                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    User user = new User(firebaseUser.getEmail(), firebaseUser.getDisplayName());
-                    mDatabase.child("users").child(firebaseUser.getUid()).setValue(user);
-                }
             } else { // Sign in failed
                 if (response == null) { // User pressed back button
                     //showSnackbar(R.string.sign_in_cancelled);
