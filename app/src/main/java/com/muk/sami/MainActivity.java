@@ -12,8 +12,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -45,6 +43,14 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         signIn();
     }
 
+    /**
+     * Starts the sign in flow.
+     * Checks if there is a FirebaseAuth instance with an already signed in user, and if not,
+     * starts a new activity with the sign in screen.
+     * <p>
+     * If the user is not signed in, screen inputs are disabled to prevent any actions to be
+     * made before the sign in screen has a chance to load.
+     */
     private void signIn() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) { // Already signed in
@@ -68,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         }
     }
 
+    /**
+     * Handles what happens after successful sign in and unsuccessful attempts with errors.
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
@@ -97,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         }
     }
 
+    /**
+     * Signs out, and on completing the sign out, starts the sign in process again.
+     */
     @Override
     public void onSignOut() {
         AuthUI.getInstance()
@@ -108,6 +120,11 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                 });
     }
 
+    /**
+     * Tries to delete the account.
+     * If successful, starts the sign in process again.
+     * If unsuccessful, TODO: handle re-authentication
+     */
     @Override
     public void onDeleteAccount() {
         AuthUI.getInstance()
@@ -119,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                             signIn();
                         } else { // Deletion failed
                             // Re-authentication required
+                            // You need to have signed in recently to be allowed to delete
                         }
                     }
                 });
