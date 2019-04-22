@@ -9,7 +9,7 @@ public class Trip {
     String seats;
 
     public Trip(){
-
+        // Required empty public constructor
     }
 
     public Trip(String tripId, String from, String to, String date, String time, String seats) {
