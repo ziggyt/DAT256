@@ -3,6 +3,7 @@ package com.muk.sami;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.firebase.ui.auth.AuthUI;
@@ -11,6 +12,7 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
@@ -137,7 +139,9 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
     /**
      * Tries to delete the account.
      * If successful, starts the sign in process again.
-     * If unsuccessful, TODO: handle re-authentication
+     * If unsuccessful, reauthentication is required.
+     * <p>
+     * To delete an account through AuthUI the user needs to have signed in recently.
      */
     @Override
     public void onDeleteAccount() {
@@ -149,8 +153,14 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                         if (task.isSuccessful()) { // Deletion succeeded
                             signIn();
                         } else { // Deletion failed
-                            // Re-authentication required
-                            // You need to have signed in recently to be allowed to delete
+                            Snackbar.make(findViewById(android.R.id.content), R.string.deletion_failed_message, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.sign_in, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            onSignOut();
+                                        }
+                                    })
+                                    .show();
                         }
                     }
                 });
