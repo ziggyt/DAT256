@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -49,7 +50,7 @@ public class SearchTripFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
         mDatabase = FirebaseFirestore.getInstance();
@@ -74,14 +75,14 @@ public class SearchTripFragment extends Fragment {
 
         trips = new ArrayList<>();
 
-        listViewTrips = (ListView) view.findViewById(R.id.listView_Trips);
-        textViewFrom = (TextView) view.findViewById(R.id.textview_from);
-        textViewTo = (TextView) view.findViewById(R.id.textview_to);
-        textViewDate = (TextView) view.findViewById(R.id.textview_date);
-        textViewSeats = (TextView) view.findViewById(R.id.textview_seats);
-        textViewTime = (TextView) view.findViewById(R.id.textview_time);
+        listViewTrips = view.findViewById(R.id.listView_Trips);
+        textViewFrom = view.findViewById(R.id.textview_from);
+        textViewTo = view.findViewById(R.id.textview_to);
+        textViewDate = view.findViewById(R.id.textview_date);
+        textViewSeats = view.findViewById(R.id.textview_seats);
+        textViewTime = view.findViewById(R.id.textview_time);
 
-        button = (Button) view.findViewById(R.id.button);
+        button = view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
