@@ -90,9 +90,8 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
-            // Successfully signed in
-            if (resultCode == RESULT_OK) {
-                //Re-enable the screen after successful sign in
+            if (resultCode == RESULT_OK) { // Successfully signed in
+                //Re-enable the screen
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                 }
             } else { // Sign in failed
                 if (response == null) { // User pressed back button
-                    //showSnackbar(R.string.sign_in_cancelled);
                     finish();
                     return;
                 }
@@ -112,11 +110,11 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                 signIn();
 
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    //showSnackbar(R.string.no_internet_connection);
+                    //Network error
                     return;
                 }
 
-                //showSnackbar(R.string.unknown_error);
+                //Unknown error
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
         }
