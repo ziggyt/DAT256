@@ -11,5 +11,7 @@
     <!-- My Page -->
     <string name="edit_profile">Edit profile</string>
     <string name="sign_out">Sign out</string>
+    <string name="sign_in">Sign in</string>
     <string name="delete_account">Delete account</string>
+    <string name="deletion_failed_message">Deletion failed. Reauthentication required to delete account.</string>
 </resources>

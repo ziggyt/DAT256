@@ -10,5 +10,7 @@
     <!-- My Page -->
     <string name="edit_profile">Ändra profil</string>
     <string name="sign_out">Logga ut</string>
+    <string name="sign_in">Logga in</string>
     <string name="delete_account">Radera konto</string>
+    <string name="deletion_failed_message">Radering misslyckades. Återautentisering nödvändig för att radera konto.</string>
 </resources>
