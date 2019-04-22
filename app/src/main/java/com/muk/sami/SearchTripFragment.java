@@ -50,7 +50,7 @@ public class SearchTripFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        view  = inflater.inflate(R.layout.fragment_search_trip, container, false);
+        view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
@@ -107,7 +107,7 @@ public class SearchTripFragment extends Fragment {
         return view;
     }
 
-    private void createTripDialog(){
+    private void createTripDialog() {
         //Create a dialog and set the title
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Ny resa");
@@ -134,29 +134,29 @@ public class SearchTripFragment extends Fragment {
                 String seats = editTextSeats.getText().toString();
 
                 String year = Integer.toString(datePicker.getYear());
-                String month = Integer.toString(datePicker.getMonth()+1);
+                String month = Integer.toString(datePicker.getMonth() + 1);
                 String day = Integer.toString(datePicker.getDayOfMonth());
-                if(Integer.valueOf(month) < 10){
+                if (Integer.valueOf(month) < 10) {
 
                     month = "0" + month;
                 }
-                if(Integer.valueOf(day) < 10){
+                if (Integer.valueOf(day) < 10) {
 
-                    day  = "0" + day ;
+                    day = "0" + day;
                 }
-                String date = day +"-"+ month + "-" + year;
+                String date = day + "-" + month + "-" + year;
 
                 String hour = Integer.toString(timePicker.getHour());
                 String minute = Integer.toString(timePicker.getMinute());
-                if(Integer.valueOf(hour) < 10){
+                if (Integer.valueOf(hour) < 10) {
 
                     hour = "0" + hour;
                 }
-                if(Integer.valueOf(minute) < 10){
+                if (Integer.valueOf(minute) < 10) {
 
-                    minute  = "0" + minute ;
+                    minute = "0" + minute;
                 }
-                String time = hour +":" + minute ;
+                String time = hour + ":" + minute;
                 createTrip(from, to, date, seats, time);
                 dialog.cancel();
             }
@@ -174,7 +174,7 @@ public class SearchTripFragment extends Fragment {
 
     }
 
-    private void createTrip(String from, String to, String date, String seats, String time){
+    private void createTrip(String from, String to, String date, String seats, String time) {
         /* textViewFrom.setText(from);
         textViewTo.setText(to);
         textViewDate.setText(date);
@@ -182,10 +182,10 @@ public class SearchTripFragment extends Fragment {
         textViewTime.setText(time); */
 
         String tripId = mTripsRef.document().getId();
-        Trip trip = new Trip (tripId, from, to, date, time, seats);
+        Trip trip = new Trip(tripId, from, to, date, time, seats);
         mTripsRef.document(tripId).set(trip);
 
-        Toast.makeText(getContext(),"Resa tillagd", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show();
     }
 
     /* private void addTrip(){
