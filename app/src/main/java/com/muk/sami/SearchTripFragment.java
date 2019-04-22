@@ -129,9 +129,9 @@ public class SearchTripFragment extends Fragment {
         builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String from = "Från: " + editTextFrom.getText().toString();
-                String to = "Till: " + editTextTo.getText().toString();
-                String seats = "Antal passagerare: " + editTextSeats.getText().toString();
+                String from = editTextFrom.getText().toString();
+                String to = editTextTo.getText().toString();
+                String seats = editTextSeats.getText().toString();
 
                 String year = Integer.toString(datePicker.getYear());
                 String month = Integer.toString(datePicker.getMonth()+1);
