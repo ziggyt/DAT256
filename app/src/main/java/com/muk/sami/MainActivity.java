@@ -16,10 +16,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 0;
 
-    DatabaseReference mDatabase;
+    private FirebaseFirestore mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         NavController navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
         NavigationUI.setupWithNavController(navigation, navController);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseFirestore.getInstance();
         signIn();
     }
 
@@ -100,8 +102,10 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
                 FirebaseUserMetadata metadata = firebaseUser.getMetadata();
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
                     // The user is new
-                    mDatabase.child("users").child(firebaseUser.getUid()).child("displayName")
-                            .setValue(firebaseUser.getDisplayName());
+                    Map<String, Object> dataMap = new HashMap<>();
+                    dataMap.put("displayName", firebaseUser.getDisplayName());
+                    mDatabase.collection("users").document(firebaseUser.getUid())
+                            .set(dataMap, SetOptions.merge());
                 }
             } else { // Sign in failed
                 if (response == null) { // User pressed back button

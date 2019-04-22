@@ -24,7 +24,7 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-database:16.1.0'
+    implementation 'com.google.firebase:firebase-firestore:18.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
 
     // Navigation

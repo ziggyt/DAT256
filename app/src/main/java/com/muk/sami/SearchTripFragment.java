@@ -3,6 +3,7 @@ package com.muk.sami;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +16,21 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class SearchTripFragment extends Fragment {
+
+    private static final String TAG = "MainActivity";
 
     private TextView textViewFrom;
     private TextView textViewTo;
@@ -38,8 +39,8 @@ public class SearchTripFragment extends Fragment {
     private TextView textViewTime;
     private Button button;
 
-    private FirebaseDatabase testdatabase;
-    private DatabaseReference myRef;
+    private FirebaseFirestore mDatabase;
+    private CollectionReference mTripsRef;
 
     private ListView listViewTrips;
     private List<Trip> trips;
@@ -51,31 +52,23 @@ public class SearchTripFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view  = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
-        FirebaseApp.initializeApp(getContext());
-        testdatabase = FirebaseDatabase.getInstance();
-        myRef = testdatabase.getReference("trips");
-        myRef.addValueEventListener(new ValueEventListener() {
+        mDatabase = FirebaseFirestore.getInstance();
+        mTripsRef = mDatabase.collection("trips");
+        mTripsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                trips.clear();
-
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    //getting trip
-                    Trip trip = postSnapshot.getValue(Trip.class);
-                    //adding trip to the list
-                    trips.add(trip);
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
                 }
+
+                trips.clear();
+                trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
 
                 if (getActivity() != null) {
                     TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
-
                     listViewTrips.setAdapter(adapter);
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -188,11 +181,9 @@ public class SearchTripFragment extends Fragment {
         textViewSeats.setText(seats);
         textViewTime.setText(time); */
 
-        String tripid = myRef.push().getKey();
-
-        Trip trip = new Trip (tripid, from, to, date, time, seats);
-
-        myRef.child(tripid).setValue(trip);
+        String tripId = mTripsRef.document().getId();
+        Trip trip = new Trip (tripId, from, to, date, time, seats);
+        mTripsRef.document(tripId).set(trip);
 
         Toast.makeText(getContext(),"Resa tillagd", Toast.LENGTH_LONG).show();
     }
