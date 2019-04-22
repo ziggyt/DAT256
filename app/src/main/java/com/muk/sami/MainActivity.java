@@ -12,6 +12,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -57,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
 
         } else { // Not signed in
             // Disable the screen before successful sign in
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
             // Start AuthUI's sign in flow
             startActivityForResult(
@@ -76,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
 
     /**
      * Handles what happens after successful sign in and unsuccessful attempts with errors.
+     * <p>
+     * Firebase cloud functions will handle adding newly created users to the database, but non
+     * OAuth registration methods, like email + password, do not update the displayName before
+     * the cloud function gets called even though it is a field you can fill in. So after successful
+     * sign in, if it is a new user, manually add the displayName to the database.
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -86,6 +94,14 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
             if (resultCode == RESULT_OK) {
                 //Re-enable the screen after successful sign in
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseUserMetadata metadata = firebaseUser.getMetadata();
+                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                    // The user is new
+                    mDatabase.child("users").child(firebaseUser.getUid()).child("displayName")
+                            .setValue(firebaseUser.getDisplayName());
+                }
             } else { // Sign in failed
                 if (response == null) { // User pressed back button
                     //showSnackbar(R.string.sign_in_cancelled);
