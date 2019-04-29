@@ -53,99 +53,38 @@ public class TripDetailViewFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_trip_detailview, container, false);
 
-        //String tripId = getArguments().getString("tripId");
+        //Retrieve the tripId string that was passed along from SearchTripFragment
         String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
+        //Get the database instance and a reference to the selected trip
         mDatabase = FirebaseFirestore.getInstance();
         mTripRef = mDatabase.document("trips/" + tripId);
         mTripRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
                 if (e != null) {
-                    //Log.w(TAG, "Listen failed.", e);
+                    //Listen failed
                     return;
                 }
 
+                //Convert the snapshot to a trip object
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
+                //Set the components
                 if(displayedTrip != null){
                     textViewFrom.setText(displayedTrip.getFrom());
+                    textViewTo.setText(displayedTrip.getTo());
                 }
 
 
             }
         });
-
-
-        /*final Task<DocumentSnapshot> task = mDatabase.document("trips/" + tripId).get();
-
-        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                displayedTrip = documentSnapshot.toObject(Trip.class);
-            }
-        });*/
-        /*
-        task.addOnSuccessListener(new OnSuccessListener() {
-
-            @Override
-            public void onSuccess(Object o) {
-
-            }
-
-            public void onSuccess(DocumentSnapshot snapshot) {
-                // handle the document snapshot here
-                displayedTrip = snapshot.toObject(Trip.class);
-            }
-        });
-        task.addOnFailureListener(new OnFailureListener() {
-            public void onFailure(Exception e) {
-                // handle any errors here
-            }
-        });*/
-
-
-
-
-        //Trip displayedTrip = mDatabase.collection("trips").document(tripId).get().getResult().toObject(Trip.class);
-        //DocumentReference docref = mDatabase.collection("trips").document(tripId);
-        /*docref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if(document.exists()){
-                        //Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        displayedTrip = document.toObject(Trip.class);
-                    }else{
-                        Log.d("TAG", "Cached get failed" + task.getException());
-                    }
-                }
-            }
-        });*/
-
-        //final Trip trip;
-        /*docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-               displayedTrip = documentSnapshot.toObject(Trip.class);
-            }
-        });*/
-
-
-
-
 
         textViewFrom = view.findViewById(R.id.textview_from);
         textViewTo = view.findViewById(R.id.textview_to);
         //textViewDate = view.findViewById(R.id.textview_date);
         //textViewSeats = view.findViewById(R.id.textview_seats);
         //textViewTime = view.findViewById(R.id.textview_time);
-
-
-
-        //textViewFrom.setText(displayedTrip.from);
-
 
 
         return view;

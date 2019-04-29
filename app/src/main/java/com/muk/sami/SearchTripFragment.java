@@ -87,8 +87,8 @@ public class SearchTripFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Opens the tripCreator-dialog
                 createTripDialog();
-                //openDialog();
             }
         });
 
@@ -97,9 +97,6 @@ public class SearchTripFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = trips.get(position);
 
-                //Bundle bundle = new Bundle();
-                //bundle.putString("tripId", trip.getTripId());
-                //Navigation.findNavController(view).navigate(R.id.detailViewAction, bundle);
                 SearchTripFragmentDirections.DetailViewAction action = SearchTripFragmentDirections.detailViewAction();
                 action.setTripId(trip.getTripId());
                 Navigation.findNavController(view).navigate(action);
