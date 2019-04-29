@@ -23,7 +23,24 @@
         android:id="@+id/searchTripFragment"
         android:name="com.muk.sami.SearchTripFragment"
         android:label="fragment_search_trip"
-        tools:layout="@layout/fragment_search_trip" />
+        tools:layout="@layout/fragment_search_trip" >
+        <action
+            android:id="@+id/detailViewAction"
+            app:destination="@id/tripDetailViewFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tripDetailViewFragment"
+        android:name="com.muk.sami.TripDetailViewFragment"
+        android:label="fragment_detailview"
+        tools:layout="@layout/fragment_trip_detailview">
+        <argument
+            android:name="tripId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.muk.sami.EditProfileFragment"
