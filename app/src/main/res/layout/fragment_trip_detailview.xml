@@ -29,7 +29,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="21dp"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="49dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="190dp"
         android:layout_toEndOf="@+id/from"
         android:text="@string/placeholder"
@@ -44,7 +44,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="21dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="46dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="190dp"
         android:layout_toEndOf="@+id/to"
         android:text="@string/placeholder"
@@ -53,28 +53,26 @@
 
     <TextView
         android:id="@+id/textview_date"
-        android:layout_width="168dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bookTripButton"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="105dp"
-        android:text="@string/placeholder"
+        android:layout_below="@+id/date"
+        android:layout_alignStart="@+id/date"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/placeholder_date"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textview_time"
-        android:layout_width="168dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bookTripButton"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="9dp"
-        android:layout_marginBottom="108dp"
-        android:layout_toEndOf="@+id/textview_date"
-        android:text="@string/placeholder"
+        android:layout_below="@+id/time"
+        android:layout_alignStart="@+id/time"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/placeholder_time"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -85,7 +83,7 @@
         android:layout_below="@+id/from"
         android:layout_alignParentStart="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="38dp"
         android:text="@string/to" />
 
     <TextView
@@ -95,27 +93,27 @@
         android:layout_below="@+id/textview_title"
         android:layout_alignParentStart="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:text="@string/from" />
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textview_date"
-        android:layout_alignStart="@+id/textview_date"
-        android:layout_marginStart="3dp"
-        android:layout_marginBottom="12dp"
+        android:layout_below="@+id/textview_to"
+        android:layout_alignStart="@+id/textview_to"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="30dp"
         android:text="@string/date" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="46dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textview_time"
-        android:layout_alignStart="@+id/textview_time"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_below="@+id/textview_to"
+        android:layout_marginStart="-190dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/textview_to"
         android:text="@string/time" />
 
     <Button
@@ -127,6 +125,168 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="118dp"
         android:layout_marginEnd="122dp"
-        android:layout_marginBottom="49dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/book_trip" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/textview_time"
+        app:srcCompat="@drawable/ic_access_time_black_24dp" />
+
+    <TextView
+        android:id="@+id/driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview_date"
+        android:layout_alignStart="@+id/textview_date"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="35dp"
+        android:text="@string/driver" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_alignStart="@+id/driver"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/textView8"
+        app:srcCompat="@drawable/ic_directions_car_black_24dp" />
+
+    <ImageView
+        android:id="@+id/star1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/car"
+        app:srcCompat="@drawable/ic_star_black_full__24dp" />
+
+    <ImageView
+        android:id="@+id/star2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/star1"
+        app:srcCompat="@drawable/ic_star_black_full__24dp" />
+
+    <ImageView
+        android:id="@+id/star3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/star2"
+        app:srcCompat="@drawable/ic_star_black_full__24dp" />
+
+    <ImageView
+        android:id="@+id/star4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/star3"
+        app:srcCompat="@drawable/ic_star_black_full__24dp" />
+
+    <ImageView
+        android:id="@+id/star5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/driver"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/star4"
+        app:srcCompat="@drawable/ic_star_half_black_24dp" />
+
+    <TextView
+        android:id="@+id/passengers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView8"
+        android:layout_alignStart="@+id/textView8"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="35dp"
+        android:text="@string/passengers" />
+
+    <TextView
+        android:id="@+id/textview_passenger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passengers"
+        android:layout_alignStart="@+id/passengers"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/passengerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passengers"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="14dp"
+        android:layout_toEndOf="@+id/textview_passenger"
+        app:srcCompat="@drawable/ic_person_black_24dp" />
+
+    <TextView
+        android:id="@+id/numberOfBookedSeats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passengers"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/passengerIcon"
+        android:text="3"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passengers"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/numberOfBookedSeats"
+        android:text="/"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/totalNumberOfSeats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/passengers"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/divider"
+        android:text="4"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+
 </RelativeLayout>

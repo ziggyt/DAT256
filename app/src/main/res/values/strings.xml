@@ -6,6 +6,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Aviseringar</string>
     <string name="placeholder">TextView</string>
+    <string name="placeholder_date">12-05-2019</string>
+    <string name="placeholder_time">08:48</string>
 
 
     <!-- SearchTrip -->
@@ -15,6 +17,8 @@
     <string name="to">Till</string>
     <string name="date">Datum</string>
     <string name="time">Tid</string>
+    <string name="driver">Förare</string>
+    <string name="passengers">Passagerare</string>
     <string name="book_trip">Boka resa</string>
 
 
