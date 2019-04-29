@@ -33,8 +33,8 @@ public class TripDetailViewFragment extends Fragment {
     private TextView textViewFrom;
     private TextView textViewTo;
     private TextView textViewDate;
-    private TextView textViewSeats;
     private TextView textViewTime;
+    private TextView textViewSeats;
     //private Button button;
 
     private FirebaseFirestore mDatabase;
@@ -74,6 +74,8 @@ public class TripDetailViewFragment extends Fragment {
                 if(displayedTrip != null){
                     textViewFrom.setText(displayedTrip.getFrom());
                     textViewTo.setText(displayedTrip.getTo());
+                    textViewDate.setText(displayedTrip.getDate());
+                    textViewTime.setText(displayedTrip.getTime());
                 }
 
 
@@ -82,9 +84,9 @@ public class TripDetailViewFragment extends Fragment {
 
         textViewFrom = view.findViewById(R.id.textview_from);
         textViewTo = view.findViewById(R.id.textview_to);
-        //textViewDate = view.findViewById(R.id.textview_date);
+        textViewDate = view.findViewById(R.id.textview_date);
+        textViewTime = view.findViewById(R.id.textview_time);
         //textViewSeats = view.findViewById(R.id.textview_seats);
-        //textViewTime = view.findViewById(R.id.textview_time);
 
 
         return view;
