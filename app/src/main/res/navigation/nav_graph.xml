@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/tripDetailViewFragment"
         android:name="com.muk.sami.TripDetailViewFragment"
-
+        android:label="fragment_detailview"
         tools:layout="@layout/fragment_trip_detailview">
         <argument
             android:name="tripId"

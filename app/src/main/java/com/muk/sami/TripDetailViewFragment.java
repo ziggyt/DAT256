@@ -9,7 +9,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,7 +38,9 @@ public class TripDetailViewFragment extends Fragment {
     //private Button button;
 
     private FirebaseFirestore mDatabase;
-    //private CollectionReference mTripsRef;
+    private DocumentReference mTripRef;
+
+    private Trip displayedTrip;
 
     private View view;
 
@@ -49,6 +57,84 @@ public class TripDetailViewFragment extends Fragment {
         String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
         mDatabase = FirebaseFirestore.getInstance();
+        mTripRef = mDatabase.document("trips/" + tripId);
+        mTripRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    //Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                displayedTrip = documentSnapshot.toObject(Trip.class);
+
+                if(displayedTrip != null){
+                    textViewFrom.setText(displayedTrip.getFrom());
+                }
+
+
+            }
+        });
+
+
+        /*final Task<DocumentSnapshot> task = mDatabase.document("trips/" + tripId).get();
+
+        task.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                displayedTrip = documentSnapshot.toObject(Trip.class);
+            }
+        });*/
+        /*
+        task.addOnSuccessListener(new OnSuccessListener() {
+
+            @Override
+            public void onSuccess(Object o) {
+
+            }
+
+            public void onSuccess(DocumentSnapshot snapshot) {
+                // handle the document snapshot here
+                displayedTrip = snapshot.toObject(Trip.class);
+            }
+        });
+        task.addOnFailureListener(new OnFailureListener() {
+            public void onFailure(Exception e) {
+                // handle any errors here
+            }
+        });*/
+
+
+
+
+        //Trip displayedTrip = mDatabase.collection("trips").document(tripId).get().getResult().toObject(Trip.class);
+        //DocumentReference docref = mDatabase.collection("trips").document(tripId);
+        /*docref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists()){
+                        //Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        displayedTrip = document.toObject(Trip.class);
+                    }else{
+                        Log.d("TAG", "Cached get failed" + task.getException());
+                    }
+                }
+            }
+        });*/
+
+        //final Trip trip;
+        /*docref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+               displayedTrip = documentSnapshot.toObject(Trip.class);
+            }
+        });*/
+
+
+
+
 
         textViewFrom = view.findViewById(R.id.textview_from);
         textViewTo = view.findViewById(R.id.textview_to);
@@ -56,7 +142,9 @@ public class TripDetailViewFragment extends Fragment {
         //textViewSeats = view.findViewById(R.id.textview_seats);
         //textViewTime = view.findViewById(R.id.textview_time);
 
-        textViewFrom.setText(tripId);
+
+
+        //textViewFrom.setText(displayedTrip.from);
 
 
 
