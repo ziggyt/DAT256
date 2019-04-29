@@ -1,17 +1,38 @@
 <resources>
+
+    <!-- MainStrings -->
     <string name="app_name">Sami</string>
+    <string name="title_home">Hem</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Aviseringar</string>
+    <string name="placeholder">TextView</string>
+
+
+    <!-- SearchTrip -->
     <string name="navigation_trip_search">Sök resa</string>
     <string name="navigation_trip_detailview">Bokningsinformation</string>
-    <string name="navigation_my_page">Min sida</string>
-    <string name="navigation_leaderboard">Topplista</string>
-    <string name="title_home">Hem</string>
+    <string name="from">Från</string>
+    <string name="to">Till</string>
+    <string name="date">Datum</string>
+    <string name="time">Tid</string>
+    <string name="book_trip">Boka resa</string>
+
 
     <!-- My Page -->
+    <string name="navigation_my_page">Min sida</string>
     <string name="edit_profile">Ändra profil</string>
     <string name="sign_out">Logga ut</string>
     <string name="sign_in">Logga in</string>
     <string name="delete_account">Radera konto</string>
     <string name="deletion_failed_message">Radering misslyckades. Återautentisering nödvändig för att radera konto.</string>
+
+
+    <!-- MyTrips -->
+
+
+    <!-- LeaderBoard -->
+    <string name="navigation_leaderboard">Topplista</string>
+
+
+
 </resources>

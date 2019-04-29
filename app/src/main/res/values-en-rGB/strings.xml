@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- MainStrings -->
     <string name="app_name">Sami</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="navigation_trip_search">Search trip</string>
+    <string name="placeholder">TextView</string>
+
+
+    <!-- SearchTrip -->
+    <string name="navigation_trip_search">Search Trip</string>
     <string name="navigation_trip_detailview">Booking info</string>
-    <string name="navigation_my_page">My page</string>
-    <string name="navigation_leaderboard">Leaderboard</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="book_trip">Book Trip</string>
+
 
     <!-- My Page -->
-    <string name="edit_profile">Edit profile</string>
-    <string name="sign_out">Sign out</string>
-    <string name="sign_in">Sign in</string>
-    <string name="delete_account">Delete account</string>
+    <string name="navigation_my_page">My Page</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_in">Sign In</string>
+    <string name="delete_account">Delete Account</string>
     <string name="deletion_failed_message">Deletion failed. Reauthentication required to delete account.</string>
+
+
+    <!-- MyTrips -->
+
+
+    <!-- LeaderBoard -->
+    <string name="navigation_leaderboard">Leaderboard</string>
+
+
 
 </resources>
