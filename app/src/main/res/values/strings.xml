@@ -3,6 +3,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Aviseringar</string>
     <string name="navigation_trip_search">Sök resa</string>
+    <string name="navigation_trip_detailview">Bokningsinformation</string>
     <string name="navigation_my_page">Min sida</string>
     <string name="navigation_leaderboard">Topplista</string>
     <string name="title_home">Hem</string>

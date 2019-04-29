@@ -41,9 +41,12 @@ public class TripDetailViewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,@Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_trip_detailview, container, false);
+
+        //String tripId = getArguments().getString("tripId");
+        String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
         mDatabase = FirebaseFirestore.getInstance();
 
@@ -52,6 +55,8 @@ public class TripDetailViewFragment extends Fragment {
         //textViewDate = view.findViewById(R.id.textview_date);
         //textViewSeats = view.findViewById(R.id.textview_seats);
         //textViewTime = view.findViewById(R.id.textview_time);
+
+        textViewFrom.setText(tripId);
 
 
 

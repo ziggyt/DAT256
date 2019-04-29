@@ -28,6 +28,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 public class SearchTripFragment extends Fragment {
 
@@ -96,11 +97,18 @@ public class SearchTripFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = trips.get(position);
 
-                textViewFrom.setText(trip.getFrom());
+                //Bundle bundle = new Bundle();
+                //bundle.putString("tripId", trip.getTripId());
+                //Navigation.findNavController(view).navigate(R.id.detailViewAction, bundle);
+                SearchTripFragmentDirections.DetailViewAction action = SearchTripFragmentDirections.detailViewAction();
+                action.setTripId(trip.getTripId());
+                Navigation.findNavController(view).navigate(action);
+
+                /*textViewFrom.setText(trip.getFrom());
                 textViewTo.setText(trip.getTo());
                 textViewDate.setText(trip.getDate());
                 textViewSeats.setText(trip.getSeats());
-                textViewTime.setText(trip.getTime());
+                textViewTime.setText(trip.getTime());*/
             }
         });
 
