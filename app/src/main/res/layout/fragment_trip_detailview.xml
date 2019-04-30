@@ -111,9 +111,9 @@
         android:layout_width="46dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textview_to"
-        android:layout_marginStart="-190dp"
+        android:layout_marginStart="58dp"
         android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/textview_to"
+        android:layout_toEndOf="@+id/textview_date"
         android:text="@string/time" />
 
     <Button
@@ -125,7 +125,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="118dp"
         android:layout_marginEnd="122dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="25dp"
         android:text="@string/book_trip" />
 
     <ImageView
@@ -175,7 +175,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/driver"
-        android:layout_marginStart="58dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@+id/car"
         app:srcCompat="@drawable/ic_star_black_full__24dp" />
@@ -247,7 +247,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passengers"
-        android:layout_marginStart="50dp"
+        android:layout_marginStart="80dp"
         android:layout_marginTop="14dp"
         android:layout_toEndOf="@+id/textview_passenger"
         app:srcCompat="@drawable/ic_person_black_24dp" />
@@ -257,7 +257,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passengers"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/passengerIcon"
         android:text="3"
