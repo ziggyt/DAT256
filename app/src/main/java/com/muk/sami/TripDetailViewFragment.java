@@ -36,7 +36,7 @@ public class TripDetailViewFragment extends Fragment {
     private TextView textViewDate;
     private TextView textViewTime;
     private TextView textViewTotalNumOfSeats;
-    private TextView textViewavailableNumOfSeats;
+    private TextView textViewNumOfBookedSeats;
     private Button bookTripButton;
 
     private FirebaseFirestore mDatabase;
@@ -79,7 +79,7 @@ public class TripDetailViewFragment extends Fragment {
                     textViewDate.setText(displayedTrip.getDate());
                     textViewTime.setText(displayedTrip.getTime());
                     textViewTotalNumOfSeats.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
-                    textViewavailableNumOfSeats.setText(String.valueOf(displayedTrip.getAvailableNumberOfSeats()));
+                    textViewNumOfBookedSeats.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
                 }
 
 
@@ -91,8 +91,19 @@ public class TripDetailViewFragment extends Fragment {
         textViewDate = view.findViewById(R.id.textview_date);
         textViewTime = view.findViewById(R.id.textview_time);
         textViewTotalNumOfSeats = view.findViewById(R.id.totalNumberOfSeats);
-        textViewavailableNumOfSeats = view.findViewById(R.id.numberOfBookedSeats);
+        textViewNumOfBookedSeats = view.findViewById(R.id.numberOfBookedSeats);
 
+        bookTripButton = view.findViewById(R.id.bookTripButton);
+
+        bookTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!displayedTrip.FullTrip()) {
+                    displayedTrip.addPassenger();
+                    mTripRef.set(displayedTrip);
+                }
+            }
+        });
 
         return view;
     }
