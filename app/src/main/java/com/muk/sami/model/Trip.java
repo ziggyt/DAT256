@@ -100,5 +100,11 @@ public class Trip {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH-mm", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
     }
+
+    /*
+    @Override
+    public int compare(Trip o1, Trip o2) {
+        return o1.getDate().compareTo(o2.getDate());
+    }*/
 }
 
