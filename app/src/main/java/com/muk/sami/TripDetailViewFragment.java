@@ -154,8 +154,9 @@ public class TripDetailViewFragment extends Fragment {
                 if (displayedTrip.addPassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
                     hideBookTripButton();
+                    Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getContext(), "The trip is full", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -166,7 +167,7 @@ public class TripDetailViewFragment extends Fragment {
                 if (displayedTrip.removePassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
                     showBookTripButton();
-                    Toast.makeText(getContext(), "User removed from trip", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
                 }
             }
         });

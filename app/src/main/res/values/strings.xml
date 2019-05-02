@@ -38,7 +38,7 @@
 
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Topplista</string>
-
+    <string name="user_added_to_trip">Booked a seat</string>
 
 
 </resources>
