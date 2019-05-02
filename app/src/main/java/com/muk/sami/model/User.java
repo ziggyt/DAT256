@@ -1,5 +1,7 @@
 package com.muk.sami.model;
 
+import java.util.Objects;
+
 import lombok.Getter;
 
 public class User {
@@ -21,5 +23,19 @@ public class User {
         this.displayName = displayName;
         this.phoneNumber = phoneNumber;
         // this.address = address;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, displayName, phoneNumber);
     }
 }
