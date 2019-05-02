@@ -22,7 +22,8 @@
     <string name="book_trip">Boka resa</string>
     <string name="cancel_trip">Avboka Resa</string>
     <string name="trip_full_message">Resan är fullbokad</string>
-    <string name="user_removed_from_trip">Du har nu avbokat din plats på re  san</string>
+    <string name="user_removed_from_trip">Du har nu avbokat din plats på resan</string>
+
 
 
     <!-- My Page -->
