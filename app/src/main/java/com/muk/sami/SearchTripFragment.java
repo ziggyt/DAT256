@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -82,20 +83,38 @@ public class SearchTripFragment extends Fragment {
         mDatabase = FirebaseFirestore.getInstance();
 
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        mUserRef = mDatabase.document("users/" + userId);
-        mUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        //Initialize listener for user login
+        FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    //Listen failed
-                    return;
-                }
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
-                //Convert the snapshot to a trip object
-                activeUser = documentSnapshot.toObject(User.class);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                if(user != null){
+                    //User is signed in
+                    String userId = user.getUid();
+
+                    //Retrieve the user
+                    mUserRef = mDatabase.document("users/" + userId);
+                    mUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                            if (e != null) {
+                                //Listen failed
+                                return;
+                            }
+
+                            //Convert the snapshot to a trip object
+                            activeUser = documentSnapshot.toObject(User.class);
+                        }
+                    });
+
+
+                }else{
+                    //User is not signed in yet
+                }
             }
-        });
+        };
 
 
         trips = new ArrayList<>();
@@ -203,17 +222,5 @@ public class SearchTripFragment extends Fragment {
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
     }
-
-    /* private void addTrip(){
-        String from = textViewFrom.getText().toString();
-        String to = textViewTo.getText().toString();
-        String date = textViewDate.getText().toString();
-        String time = textViewTime.getText().toString();
-        String seats = textViewSeats.getText().toString();
-        String tripid = myRef.push().getKey();
-        Trip trip = new Trip (tripid, from, to, date, time, seats);
-        myRef.child(tripid).setValue(trip);
-        Toast.makeText(this,"Resa tillagd", Toast.LENGTH_LONG).show();
-    } */
 
 }
