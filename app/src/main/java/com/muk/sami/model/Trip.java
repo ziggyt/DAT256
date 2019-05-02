@@ -25,14 +25,14 @@ public class Trip {
     private @Getter
     List<User> passengers = new ArrayList<>();
     private @Getter
-    User driver;
+    String driver;
 
     public Trip() {
         // Required empty public constructor
     }
 
 
-    public Trip(String tripId, String from, String to, Date date, int numberOfBookedSeats, int totalNumberOfSeats, User driver) {
+    public Trip(String tripId, String from, String to, Date date, int numberOfBookedSeats, int totalNumberOfSeats, String driver) {
         this.tripId = tripId;
         this.from = from;
         this.to = to;

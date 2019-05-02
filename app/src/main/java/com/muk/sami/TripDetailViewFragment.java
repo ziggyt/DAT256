@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -141,7 +143,17 @@ public class TripDetailViewFragment extends Fragment {
                     dateTextView.setText(displayedTrip.getDateString());
                     timeTextView.setText(displayedTrip.getTimeString());
 
-                    driverTextView.setText(displayedTrip.getDriver().getDisplayName());
+                    mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot user = task.getResult();
+                                if (user != null) {
+                                    driverTextView.setText(user.getString("displayName"));
+                                }
+                            }
+                        }
+                    });
                     totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
                     numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
                 }

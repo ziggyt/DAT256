@@ -262,7 +262,8 @@ public class SearchTripFragment extends Fragment {
     private void createTrip(String from, String to, Date date, int seats) {
 
         String tripId = mTripsRef.document().getId();
-        Trip trip = new Trip(tripId, from, to, date,0 , seats, activeUser);
+        String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Trip trip = new Trip(tripId, from, to, date,0 , seats, driverId);
         mTripsRef.document(tripId).set(trip);
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
