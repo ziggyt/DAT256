@@ -6,82 +6,24 @@
     android:layout_height="match_parent"
     tools:context="com.muk.sami.SearchTripFragment">
 
-    <TextView
-        android:id="@+id/textview_from"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:gravity="center_horizontal"
-        android:text="Åker från"
-        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/textview_to"
+    <ListView
+        android:id="@+id/listView_Trips"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textview_from"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:text="Åker till"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textview_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textview_to"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:text="Datum"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textview_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textview_date"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="1dp"
-        android:gravity="center_horizontal"
-        android:text="Tid"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/textview_seats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textview_time"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:text="Antal passagerare"
-        android:textSize="20sp" />
-
+        android:layout_height="600dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textview_seats"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listView_Trips"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="130dp"
-        android:layout_marginLeft="130dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="129dp"
-        android:layout_marginRight="129dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
         android:text="Lägg till ny resa" />
-
-    <ListView
-        android:id="@+id/listView_Trips"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp" />
 
 
 </RelativeLayout>
