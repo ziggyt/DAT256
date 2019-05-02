@@ -3,6 +3,8 @@ package com.muk.sami;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -160,7 +162,7 @@ public class SearchTripFragment extends Fragment {
 
     private void createTripDialog() {
         //Create a dialog and set the title
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Ny resa"); //TODO replace with string value
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.layout_dialog, (ViewGroup) getView(), false);
@@ -177,17 +179,19 @@ public class SearchTripFragment extends Fragment {
         builder.setView(dialogView);
 
 
+
+
         // Set up the OK-button
         builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+
                 String from = fromEditText.getText().toString();
                 String to = toEditText.getText().toString();
                 String seats = seatsEditText.getText().toString();
                 Date date = dateFromDatePicker(datePicker, timePicker);
 
                 createTrip(from, to, date, Integer.parseInt(seats));
-                dialog.cancel();
             }
         });
 
@@ -195,12 +199,50 @@ public class SearchTripFragment extends Fragment {
         builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
-                dialog.cancel();
+               // dialog.cancel();
             }
         });
 
-        builder.show();
 
+        final AlertDialog alertDialog = builder.show();
+
+        fromEditText.addTextChangedListener(new TextWatcherSami() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(noFieldsEmpty(fromEditText, toEditText, seatsEditText)){
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
+
+            }
+        });
+
+        toEditText.addTextChangedListener(new TextWatcherSami() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(noFieldsEmpty(fromEditText, toEditText, seatsEditText)){
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
+
+            }
+        });
+
+        seatsEditText.addTextChangedListener(new TextWatcherSami() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(noFieldsEmpty(fromEditText, toEditText, seatsEditText)){
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+        });
+
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        alertDialog.show();
+    }
+
+    private boolean noFieldsEmpty(EditText from, EditText to, EditText seats){
+        return !from.getText().toString().equals("")
+                && !to.getText().toString().equals("")
+                && !seats.getText().toString().equals("");
     }
 
     private Date dateFromDatePicker(DatePicker p, TimePicker t){
@@ -226,4 +268,24 @@ public class SearchTripFragment extends Fragment {
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
     }
 
+    private class TextWatcherSami implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    }
+
+
 }
+
