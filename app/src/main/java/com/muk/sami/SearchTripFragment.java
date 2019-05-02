@@ -29,6 +29,8 @@ import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -163,6 +165,7 @@ public class SearchTripFragment extends Fragment {
         //Set the content of the main dialog view
         builder.setView(dialogView);
 
+
         // Set up the OK-button
         builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
             @Override
@@ -170,32 +173,9 @@ public class SearchTripFragment extends Fragment {
                 String from = fromEditText.getText().toString();
                 String to = toEditText.getText().toString();
                 String seats = seatsEditText.getText().toString();
+                Date date = dateFromDatePicker(datePicker, timePicker);
 
-                String year = Integer.toString(datePicker.getYear());
-                String month = Integer.toString(datePicker.getMonth() + 1);
-                String day = Integer.toString(datePicker.getDayOfMonth());
-                if (Integer.valueOf(month) < 10) {
-
-                    month = "0" + month;
-                }
-                if (Integer.valueOf(day) < 10) {
-
-                    day = "0" + day;
-                }
-                String date = day + "-" + month + "-" + year;
-
-                String hour = Integer.toString(timePicker.getHour());
-                String minute = Integer.toString(timePicker.getMinute());
-                if (Integer.valueOf(hour) < 10) {
-
-                    hour = "0" + hour;
-                }
-                if (Integer.valueOf(minute) < 10) {
-
-                    minute = "0" + minute;
-                }
-                String time = hour + ":" + minute;
-                createTrip(from, to, date, Integer.parseInt(seats), time);
+                createTrip(from, to, date, Integer.parseInt(seats));
                 dialog.cancel();
             }
         });
@@ -212,10 +192,24 @@ public class SearchTripFragment extends Fragment {
 
     }
 
-    private void createTrip(String from, String to, String date, int seats, String time) {
+    private Date dateFromDatePicker(DatePicker p, TimePicker t){
+        int year = p.getYear();
+        int month = p.getMonth();
+        int day = p.getDayOfMonth();
+        int hour = t.getHour();
+        int min = t.getMinute();
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(year, month, day, hour, min);
+
+        return calendar.getTime();
+    }
+
+    private void createTrip(String from, String to, Date date, int seats) {
 
         String tripId = mTripsRef.document().getId();
-        Trip trip = new Trip(tripId, from, to, date, time,0 , seats, activeUser);
+        Trip trip = new Trip(tripId, from, to, date,0 , seats, activeUser);
         mTripsRef.document(tripId).set(trip);
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
