@@ -21,6 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class TripDetailViewFragment extends Fragment {
 
     private TextView fromTextView;
@@ -135,9 +138,10 @@ public class TripDetailViewFragment extends Fragment {
                 if (displayedTrip != null) {
                     fromTextView.setText(displayedTrip.getFrom());
                     toTextView.setText(displayedTrip.getTo());
-                    dateTextView.setText(displayedTrip.getDate());
-                    timeTextView.setText(displayedTrip.getTime());
-                    //driverTextView.setText(displayedTrip.getDriver().getDisplayName());
+                    dateTextView.setText(displayedTrip.getDateString());
+                    timeTextView.setText(displayedTrip.getTimeString());
+
+                    driverTextView.setText(displayedTrip.getDriver().getDisplayName());
                     totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
                     numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
                 }

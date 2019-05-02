@@ -38,8 +38,8 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
 
         textViewFrom.setText(trip.getFrom());
         textViewTo.setText(trip.getTo());
-        textViewDate.setText(trip.getDate());
-        textViewTime.setText(trip.getTime());
+        textViewDate.setText(trip.getDateString());
+        textViewTime.setText(trip.getTimeString());
 
         int remainingSeats = trip.getTotalNumberOfSeats() - trip.getNumberOfBookedSeats();
         textViewSeats.setText(remainingSeats + " platser kvar");
