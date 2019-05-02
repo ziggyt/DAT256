@@ -36,7 +36,7 @@ public class TripDetailViewFragment extends Fragment {
     private TextView textViewDate;
     private TextView textViewTime;
     private TextView textViewSeats;
-    //private Button button;
+    private Button bookTripButton;
 
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
