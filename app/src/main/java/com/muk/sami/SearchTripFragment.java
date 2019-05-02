@@ -164,7 +164,7 @@ public class SearchTripFragment extends Fragment {
                     minute = "0" + minute;
                 }
                 String time = hour + ":" + minute;
-                createTrip(from, to, date, seats, time);
+                createTrip(from, to, date, Integer.parseInt(seats), time);
                 dialog.cancel();
             }
         });
@@ -181,7 +181,7 @@ public class SearchTripFragment extends Fragment {
 
     }
 
-    private void createTrip(String from, String to, String date, String seats, String time) {
+    private void createTrip(String from, String to, String date, int seats, String time) {
         /* textViewFrom.setText(from);
         textViewTo.setText(to);
         textViewDate.setText(date);

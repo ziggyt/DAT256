@@ -9,19 +9,19 @@ public class Trip {
     private @Getter String to;
     private @Getter String date;
     private @Getter String time;
-    private @Getter String seats;
+    private @Getter int availableSeats;
 
     public Trip(){
         // Required empty public constructor
     }
 
-    public Trip(String tripId, String from, String to, String date, String time, String seats) {
+    public Trip(String tripId, String from, String to, String date, String time, int seats) {
         this.tripId = tripId;
         this.from = from;
         this.to = to;
         this.date = date;
         this.time = time;
-        this.seats = seats;
+        this.availableSeats = seats;
     }
 
 
