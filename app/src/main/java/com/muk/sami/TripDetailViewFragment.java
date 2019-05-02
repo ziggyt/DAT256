@@ -69,12 +69,6 @@ public class TripDetailViewFragment extends Fragment {
         initFirebaseSetup();
         initListeners();
 
-        if (displayedTrip.userInTrip(activeUser)) {
-            hideBookTripButton();
-        } else {
-            showBookTripButton();
-        }
-
         return view;
     }
 
@@ -108,6 +102,15 @@ public class TripDetailViewFragment extends Fragment {
 
                 //Convert the snapshot to a trip object
                 activeUser = documentSnapshot.toObject(User.class);
+
+                //Check if the user is a passenger
+                if (displayedTrip != null){
+                    if (displayedTrip.userInTrip(activeUser)) {
+                        hideBookTripButton();
+                    } else {
+                        showBookTripButton();
+                    }
+                }
             }
         });
 
@@ -135,12 +138,19 @@ public class TripDetailViewFragment extends Fragment {
                     toTextView.setText(displayedTrip.getTo());
                     dateTextView.setText(displayedTrip.getDate());
                     timeTextView.setText(displayedTrip.getTime());
-                    driverTextView.setText(displayedTrip.getDriver().getDisplayName());
+                    //driverTextView.setText(displayedTrip.getDriver().getDisplayName());
                     totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
                     numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
                 }
 
-
+                //Check if the user is a passenger
+                if (activeUser != null){
+                    if (displayedTrip.userInTrip(activeUser)) {
+                        hideBookTripButton();
+                    } else {
+                        showBookTripButton();
+                    }
+                }
             }
         });
 
