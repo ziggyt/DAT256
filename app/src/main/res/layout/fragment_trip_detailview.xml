@@ -161,7 +161,7 @@
         android:text="@string/driver" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/driver_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/driver"
@@ -179,7 +179,7 @@
         android:layout_below="@+id/driver"
         android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/textView8"
+        android:layout_toEndOf="@+id/driver_text_view"
         app:srcCompat="@drawable/ic_directions_car_black_24dp" />
 
     <ImageView
@@ -236,8 +236,8 @@
         android:id="@+id/passengers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView8"
-        android:layout_alignStart="@+id/textView8"
+        android:layout_below="@+id/driver_text_view"
+        android:layout_alignStart="@+id/driver_text_view"
         android:layout_marginStart="0dp"
         android:layout_marginTop="35dp"
         android:text="@string/passengers" />
