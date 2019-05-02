@@ -1,29 +1,21 @@
 package com.muk.sami;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.muk.sami.model.Trip;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.muk.sami.model.User;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,9 +30,13 @@ public class TripDetailViewFragment extends Fragment {
     private TextView textViewTotalNumOfSeats;
     private TextView textViewNumOfBookedSeats;
     private Button bookTripButton;
+    private Button cancelTripButton;
 
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
+
+    private User activeUser;
+    private DocumentReference mUserRef;
 
     private Trip displayedTrip;
 
@@ -51,15 +47,71 @@ public class TripDetailViewFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,@Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         view = inflater.inflate(R.layout.fragment_trip_detailview, container, false);
+
+        textViewFrom = view.findViewById(R.id.textview_from);
+        textViewTo = view.findViewById(R.id.textview_to);
+        textViewDate = view.findViewById(R.id.textview_date);
+        textViewTime = view.findViewById(R.id.textview_time);
+        textViewTotalNumOfSeats = view.findViewById(R.id.totalNumberOfSeats);
+        textViewNumOfBookedSeats = view.findViewById(R.id.numberOfBookedSeats);
+
+        bookTripButton = view.findViewById(R.id.bookTripButton);
+        cancelTripButton = view.findViewById(R.id.cancel_trip_btn);
+
+        initFirebaseSetup();
+        initListeners();
+
+        if (displayedTrip.userInTrip(activeUser)) {
+            hideBookTripButton();
+        } else {
+            showBookTripButton();
+        }
+
+        return view;
+    }
+
+    private void hideBookTripButton() {
+        bookTripButton.setVisibility(View.INVISIBLE);
+        cancelTripButton.setVisibility(View.VISIBLE);
+    }
+
+    private void showBookTripButton() {
+        bookTripButton.setVisibility(View.VISIBLE);
+        cancelTripButton.setVisibility(View.INVISIBLE);
+    }
+
+
+    private void initFirebaseSetup() {
+
+
+        // Inflate the layout for this fragment
+        mDatabase = FirebaseFirestore.getInstance();
+
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mUserRef = mDatabase.document("users/" + userId);
+        mUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    //Listen failed
+                    return;
+                }
+
+                //Convert the snapshot to a trip object
+                activeUser = documentSnapshot.toObject(User.class);
+            }
+        });
+
 
         //Retrieve the tripId string that was passed along from SearchTripFragment
         String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
         //Get the database instance and a reference to the selected trip
-        mDatabase = FirebaseFirestore.getInstance();
+
         mTripRef = mDatabase.document("trips/" + tripId);
         mTripRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -73,7 +125,7 @@ public class TripDetailViewFragment extends Fragment {
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
                 //Set the components
-                if(displayedTrip != null){
+                if (displayedTrip != null) {
                     textViewFrom.setText(displayedTrip.getFrom());
                     textViewTo.setText(displayedTrip.getTo());
                     textViewDate.setText(displayedTrip.getDate());
@@ -86,26 +138,33 @@ public class TripDetailViewFragment extends Fragment {
             }
         });
 
-        textViewFrom = view.findViewById(R.id.textview_from);
-        textViewTo = view.findViewById(R.id.textview_to);
-        textViewDate = view.findViewById(R.id.textview_date);
-        textViewTime = view.findViewById(R.id.textview_time);
-        textViewTotalNumOfSeats = view.findViewById(R.id.totalNumberOfSeats);
-        textViewNumOfBookedSeats = view.findViewById(R.id.numberOfBookedSeats);
+    }
 
-        bookTripButton = view.findViewById(R.id.bookTripButton);
+    private void initListeners() {
 
         bookTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!displayedTrip.FullTrip()) {
-                    displayedTrip.addPassenger();
+                if (displayedTrip.addPassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
+                    hideBookTripButton();
+                } else {
+                    Toast.makeText(getContext(), "The trip is full", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        return view;
+        cancelTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (displayedTrip.removePassenger(activeUser)) {
+                    mTripRef.set(displayedTrip);
+                    showBookTripButton();
+                    Toast.makeText(getContext(), "User removed from trip", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
 }

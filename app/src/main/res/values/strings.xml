@@ -20,6 +20,7 @@
     <string name="driver">Förare</string>
     <string name="passengers">Passagerare</string>
     <string name="book_trip">Boka resa</string>
+    <string name="cancel_trip">Avboka Resa</string>
 
 
     <!-- My Page -->
