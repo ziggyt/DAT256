@@ -22,8 +22,6 @@
     <string name="passengers">Passengers</string>
     <string name="book_trip">Book Trip</string>
     <string name="cancel_trip">Cancel Trip</string>
-    <string name="trip_full_message">No seats available</string>
-    <string name="user_removed_from_trip">Removed user from trip</string>
 
 
     <!-- My Page -->
