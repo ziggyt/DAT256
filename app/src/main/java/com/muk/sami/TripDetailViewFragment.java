@@ -23,12 +23,13 @@ import androidx.fragment.app.Fragment;
 
 public class TripDetailViewFragment extends Fragment {
 
-    private TextView textViewFrom;
-    private TextView textViewTo;
-    private TextView textViewDate;
-    private TextView textViewTime;
-    private TextView textViewTotalNumOfSeats;
-    private TextView textViewNumOfBookedSeats;
+    private TextView fromTextView;
+    private TextView toTextView;
+    private TextView dateTextView;
+    private TextView timeTextView;
+    private TextView totalNumOfSeatsTextView;
+    private TextView numOfBookedSeatsTextView;
+    private TextView driverNameTextView;
     private Button bookTripButton;
     private Button cancelTripButton;
 
@@ -51,12 +52,13 @@ public class TripDetailViewFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_trip_detailview, container, false);
 
-        textViewFrom = view.findViewById(R.id.textview_from);
-        textViewTo = view.findViewById(R.id.textview_to);
-        textViewDate = view.findViewById(R.id.textview_date);
-        textViewTime = view.findViewById(R.id.textview_time);
-        textViewTotalNumOfSeats = view.findViewById(R.id.totalNumberOfSeats);
-        textViewNumOfBookedSeats = view.findViewById(R.id.numberOfBookedSeats);
+        fromTextView = view.findViewById(R.id.textview_from);
+        toTextView = view.findViewById(R.id.textview_to);
+        dateTextView = view.findViewById(R.id.textview_date);
+        timeTextView = view.findViewById(R.id.textview_time);
+        driverNameTextView = view.findViewById(R.id.driver_text_view);
+        totalNumOfSeatsTextView = view.findViewById(R.id.totalNumberOfSeats);
+        numOfBookedSeatsTextView = view.findViewById(R.id.numberOfBookedSeats);
 
         bookTripButton = view.findViewById(R.id.bookTripButton);
         cancelTripButton = view.findViewById(R.id.cancel_trip_btn);
@@ -126,12 +128,13 @@ public class TripDetailViewFragment extends Fragment {
 
                 //Set the components
                 if (displayedTrip != null) {
-                    textViewFrom.setText(displayedTrip.getFrom());
-                    textViewTo.setText(displayedTrip.getTo());
-                    textViewDate.setText(displayedTrip.getDate());
-                    textViewTime.setText(displayedTrip.getTime());
-                    textViewTotalNumOfSeats.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
-                    textViewNumOfBookedSeats.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
+                    fromTextView.setText(displayedTrip.getFrom());
+                    toTextView.setText(displayedTrip.getTo());
+                    dateTextView.setText(displayedTrip.getDate());
+                    timeTextView.setText(displayedTrip.getTime());
+                    driverNameTextView.setText(displayedTrip.getDriver().getDisplayName());
+                    totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
+                    numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
                 }
 
 
@@ -149,7 +152,7 @@ public class TripDetailViewFragment extends Fragment {
                     mTripRef.set(displayedTrip);
                     hideBookTripButton();
                 } else {
-                    Toast.makeText(getContext(), "The trip is full", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -160,7 +163,7 @@ public class TripDetailViewFragment extends Fragment {
                 if (displayedTrip.removePassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
                     showBookTripButton();
-                    Toast.makeText(getContext(), "User removed from trip", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
                 }
             }
         });

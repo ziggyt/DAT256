@@ -16,12 +16,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.muk.sami.model.Trip;
+import com.muk.sami.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +44,14 @@ public class SearchTripFragment extends Fragment {
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
 
+    private User activeUser;
+    private DocumentReference mUserRef;
+
     private ListView listViewTrips;
     private List<Trip> trips;
 
     private View view;
+
 
     @Nullable
     @Override
@@ -69,6 +77,26 @@ public class SearchTripFragment extends Fragment {
                 }
             }
         });
+
+        // Inflate the layout for this fragment
+        mDatabase = FirebaseFirestore.getInstance();
+
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mUserRef = mDatabase.document("users/" + userId);
+        mUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    //Listen failed
+                    return;
+                }
+
+                //Convert the snapshot to a trip object
+                activeUser = documentSnapshot.toObject(User.class);
+            }
+        });
+
 
         trips = new ArrayList<>();
 
@@ -103,15 +131,15 @@ public class SearchTripFragment extends Fragment {
     private void createTripDialog() {
         //Create a dialog and set the title
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Ny resa");
+        builder.setTitle("Ny resa"); //TODO replace with string value
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.layout_dialog, (ViewGroup) getView(), false);
 
         //Initialize the components
-        final EditText editTextFrom = dialogView.findViewById(R.id.edit_From);
-        final EditText editTextTo = dialogView.findViewById(R.id.edit_To);
-        final EditText editTextSeats = dialogView.findViewById(R.id.edit_Seats);
-        final TextView textViewDate = dialogView.findViewById(R.id.textViewDate);
+        final EditText fromEditText = dialogView.findViewById(R.id.edit_From);
+        final EditText toEditText = dialogView.findViewById(R.id.edit_To);
+        final EditText seatsEditText = dialogView.findViewById(R.id.edit_Seats);
+        final TextView dateTextView = dialogView.findViewById(R.id.textViewDate);
         final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
 
@@ -121,10 +149,10 @@ public class SearchTripFragment extends Fragment {
         // Set up the OK-button
         builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String from = editTextFrom.getText().toString();
-                String to = editTextTo.getText().toString();
-                String seats = editTextSeats.getText().toString();
+            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+                String from = fromEditText.getText().toString();
+                String to = toEditText.getText().toString();
+                String seats = seatsEditText.getText().toString();
 
                 String year = Integer.toString(datePicker.getYear());
                 String month = Integer.toString(datePicker.getMonth() + 1);
@@ -158,7 +186,7 @@ public class SearchTripFragment extends Fragment {
         //Set up the Cancel-button
         builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
                 dialog.cancel();
             }
         });
@@ -170,10 +198,10 @@ public class SearchTripFragment extends Fragment {
     private void createTrip(String from, String to, String date, int seats, String time) {
 
         String tripId = mTripsRef.document().getId();
-        Trip trip = new Trip(tripId, from, to, date, time, seats);
+        Trip trip = new Trip(tripId, from, to, date, time,0 , seats, activeUser);
         mTripsRef.document(tripId).set(trip);
 
-        Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
     }
 
     /* private void addTrip(){

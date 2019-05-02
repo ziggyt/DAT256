@@ -31,14 +31,27 @@ public class Trip {
         // Required empty public constructor
     }
 
-    public Trip(String tripId, String from, String to, String date, String time, int seats) {
+    public Trip(String tripId, String from, String to, String date, String time, int numberOfBookedSeats, int totalNumberOfSeats, List<User> passengers, User driver) {
         this.tripId = tripId;
         this.from = from;
         this.to = to;
         this.date = date;
         this.time = time;
-        this.totalNumberOfSeats = seats;
-        this.numberOfBookedSeats = 0;
+        this.numberOfBookedSeats = numberOfBookedSeats;
+        this.totalNumberOfSeats = totalNumberOfSeats;
+        this.passengers = passengers;
+        this.driver = driver;
+    }
+
+    public Trip(String tripId, String from, String to, String date, String time, int numberOfBookedSeats, int totalNumberOfSeats, User driver) {
+        this.tripId = tripId;
+        this.from = from;
+        this.to = to;
+        this.date = date;
+        this.time = time;
+        this.numberOfBookedSeats = numberOfBookedSeats;
+        this.totalNumberOfSeats = totalNumberOfSeats;
+        this.driver = driver;
     }
 
     public boolean fullTrip() {
