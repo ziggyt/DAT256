@@ -35,11 +35,6 @@ public class SearchTripFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
-    private TextView textViewFrom;
-    private TextView textViewTo;
-    private TextView textViewDate;
-    private TextView textViewSeats;
-    private TextView textViewTime;
     private Button button;
 
     private FirebaseFirestore mDatabase;
@@ -78,11 +73,6 @@ public class SearchTripFragment extends Fragment {
         trips = new ArrayList<>();
 
         listViewTrips = view.findViewById(R.id.listView_Trips);
-        textViewFrom = view.findViewById(R.id.textview_from);
-        textViewTo = view.findViewById(R.id.textview_to);
-        textViewDate = view.findViewById(R.id.textview_date);
-        textViewSeats = view.findViewById(R.id.textview_seats);
-        textViewTime = view.findViewById(R.id.textview_time);
 
         button = view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -102,11 +92,7 @@ public class SearchTripFragment extends Fragment {
                 action.setTripId(trip.getTripId());
                 Navigation.findNavController(view).navigate(action);
 
-                /*textViewFrom.setText(trip.getFrom());
-                textViewTo.setText(trip.getTo());
-                textViewDate.setText(trip.getDate());
-                textViewSeats.setText(trip.getSeats());
-                textViewTime.setText(trip.getTime());*/
+
             }
         });
 
@@ -182,11 +168,6 @@ public class SearchTripFragment extends Fragment {
     }
 
     private void createTrip(String from, String to, String date, int seats, String time) {
-        /* textViewFrom.setText(from);
-        textViewTo.setText(to);
-        textViewDate.setText(date);
-        textViewSeats.setText(seats);
-        textViewTime.setText(time); */
 
         String tripId = mTripsRef.document().getId();
         Trip trip = new Trip(tripId, from, to, date, time, seats);
