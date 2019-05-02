@@ -9,7 +9,7 @@ public class Trip {
     private @Getter String to;
     private @Getter String date;
     private @Getter String time;
-    private @Getter int availableNumberOfSeats;
+    private @Getter int numberOfBookedSeats;
     private @Getter int totalNumberOfSeats;
 
     public Trip(){
@@ -23,8 +23,22 @@ public class Trip {
         this.date = date;
         this.time = time;
         this.totalNumberOfSeats = seats;
-        this.availableNumberOfSeats = 0;
+        this.numberOfBookedSeats = 0;
     }
+
+    public boolean FullTrip() {
+        if(numberOfBookedSeats < totalNumberOfSeats) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void addPassenger() {
+        numberOfBookedSeats++;
+    }
+
+
 
 
 }
