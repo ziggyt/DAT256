@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.muk.sami.model.Trip;
+
 import java.util.ArrayList;
 import java.util.List;
 
