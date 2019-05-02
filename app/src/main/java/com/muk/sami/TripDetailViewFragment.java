@@ -118,8 +118,7 @@ public class TripDetailViewFragment extends Fragment {
         //Retrieve the tripId string that was passed along from SearchTripFragment
         String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
-        //Get the database instance and a reference to the selected trip
-
+        //Get a reference to the selected trip
         mTripRef = mDatabase.document("trips/" + tripId);
         mTripRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

@@ -82,12 +82,10 @@ public class SearchTripFragment extends Fragment {
         // Inflate the layout for this fragment
         mDatabase = FirebaseFirestore.getInstance();
 
-
-        //Initialize listener for user login
-        FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+        //Add listener for login
+        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 if(user != null){
@@ -114,7 +112,7 @@ public class SearchTripFragment extends Fragment {
                     //User is not signed in yet
                 }
             }
-        };
+        });
 
 
         trips = new ArrayList<>();
