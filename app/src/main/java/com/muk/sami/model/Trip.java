@@ -1,7 +1,10 @@
 package com.muk.sami.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import lombok.Getter;
 
@@ -14,14 +17,11 @@ public class Trip {
     private @Getter
     String to;
     private @Getter
-    String date;
-    private @Getter
-    String time;
+    Date date;
     private @Getter
     int numberOfBookedSeats;
     private @Getter
     int totalNumberOfSeats;
-
     private @Getter
     List<User> passengers = new ArrayList<>();
     private @Getter
@@ -31,23 +31,12 @@ public class Trip {
         // Required empty public constructor
     }
 
-    public Trip(String tripId, String from, String to, String date, String time, int seats) {
+
+    public Trip(String tripId, String from, String to, Date date, int numberOfBookedSeats, int totalNumberOfSeats, User driver) {
         this.tripId = tripId;
         this.from = from;
         this.to = to;
         this.date = date;
-        this.time = time;
-        this.totalNumberOfSeats = seats;
-        this.numberOfBookedSeats = 0;
-    }
-
-
-    public Trip(String tripId, String from, String to, String date, String time, int numberOfBookedSeats, int totalNumberOfSeats, User driver) {
-        this.tripId = tripId;
-        this.from = from;
-        this.to = to;
-        this.date = date;
-        this.time = time;
         this.numberOfBookedSeats = numberOfBookedSeats;
         this.totalNumberOfSeats = totalNumberOfSeats;
         this.driver = driver;
@@ -101,4 +90,15 @@ public class Trip {
         }
         return false;
     }
+
+    public String getDateString(){
+        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
+        return simpleDateFormatDate.format(date);
+    }
+
+    public String getTimeString(){
+        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH-mm", Locale.GERMAN);
+        return simpleDateFormatDate.format(date);
+    }
 }
+
