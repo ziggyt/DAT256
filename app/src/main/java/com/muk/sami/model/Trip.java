@@ -9,7 +9,8 @@ public class Trip {
     private @Getter String to;
     private @Getter String date;
     private @Getter String time;
-    private @Getter int availableSeats;
+    private @Getter int availableNumberOfSeats;
+    private @Getter int totalNumberOfSeats;
 
     public Trip(){
         // Required empty public constructor
@@ -21,7 +22,8 @@ public class Trip {
         this.to = to;
         this.date = date;
         this.time = time;
-        this.availableSeats = seats;
+        this.totalNumberOfSeats = seats;
+        this.availableNumberOfSeats = 0;
     }
 
 
