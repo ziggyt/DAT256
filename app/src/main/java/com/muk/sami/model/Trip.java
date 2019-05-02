@@ -41,16 +41,24 @@ public class Trip {
         this.numberOfBookedSeats = 0;
     }
 
-    public boolean FullTrip() {
-        if(numberOfBookedSeats < totalNumberOfSeats) {
-            return false;
-        } else {
-            return true;
-        }
+    public boolean fullTrip() {
+        return numberOfBookedSeats == totalNumberOfSeats;
     }
 
-    public void addPassenger() {
-        numberOfBookedSeats++;
+    /**
+     * Checks if there are available seats and adds a user to the passenger list if a seat is available
+     *
+     * @param user user to add to the passenger list
+     * @return if the user was added successfully
+     */
+
+    public boolean addPassenger(User user) {
+        if (!fullTrip()) {
+            numberOfBookedSeats++;
+            passengers.add(user);
+            return true;
+        }
+        return false;
     }
 
     /**
