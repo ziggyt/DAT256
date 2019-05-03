@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.Getter;
 
@@ -22,7 +23,7 @@ public class Trip {
     int numberOfBookedSeats;
     private @Getter
     int totalNumberOfSeats;
-    private @Getter
+    private
     Map<String, Boolean> passengers = new HashMap<>();
     private @Getter
     String driver;
@@ -94,6 +95,13 @@ public class Trip {
     public String getTimeString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH:mm", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
+    }
+
+    /**
+     * @return a set of the passenger's UIDs
+     */
+    public Set<String> getPassengers() {
+        return passengers.keySet();
     }
 
     /*
