@@ -6,41 +6,41 @@
 
 
     <TextView
-        android:id="@+id/textView_From"
+        android:id="@+id/from_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Från - "
         android:textSize="20dp"/>
 
     <TextView
-        android:id="@+id/textView_To"
+        android:id="@+id/to_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/textView_From"
+        android:layout_toRightOf="@id/from_text_view"
         android:text="Till"
         android:textSize="20dp"/>
 
     <TextView
-        android:id="@+id/textView_Date"
+        android:id="@+id/date_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView_From"
+        android:layout_below="@id/from_text_view"
         android:text="Datum"
         android:textSize="20dp"/>
 
     <TextView
-        android:id="@+id/textView_Time"
+        android:id="@+id/time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@id/textView_Date"
-        android:layout_below="@id/textView_To"
+        android:layout_toRightOf="@id/date_text_view"
+        android:layout_below="@id/to_text_view"
         android:text="Tid"
         android:textSize="20dp"/>
 
     <TextView
-        android:id="@+id/textView_Seats"
+        android:id="@+id/seats_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

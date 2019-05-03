@@ -28,11 +28,11 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listitem = inflater.inflate(R.layout.listitem_trip, null, true);
 
-        TextView textViewFrom  = listitem.findViewById(R.id.textView_From);
-        TextView textViewTo    = listitem.findViewById(R.id.textView_To);
-        TextView textViewDate  = listitem.findViewById(R.id.textView_Date);
-        TextView textViewTime  = listitem.findViewById(R.id.textView_Time);
-        TextView textViewSeats = listitem.findViewById(R.id.textView_Seats);
+        TextView textViewFrom  = listitem.findViewById(R.id.from_text_view);
+        TextView textViewTo    = listitem.findViewById(R.id.to_text_view);
+        TextView textViewDate  = listitem.findViewById(R.id.date_text_view);
+        TextView textViewTime  = listitem.findViewById(R.id.time_text_view);
+        TextView textViewSeats = listitem.findViewById(R.id.seats_text_view);
 
         Trip trip = trips.get(position);
 
