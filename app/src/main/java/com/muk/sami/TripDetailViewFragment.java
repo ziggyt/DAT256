@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -46,8 +47,7 @@ public class TripDetailViewFragment extends Fragment {
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
 
-    private User activeUser;
-    private DocumentReference mUserRef;
+    private FirebaseUser activeUser;
 
     private Trip displayedTrip;
 
@@ -68,10 +68,8 @@ public class TripDetailViewFragment extends Fragment {
         timeTextView = view.findViewById(R.id.time_text_view);
         driverTextView = view.findViewById(R.id.driver_text_view);
 
-
         totalNumOfSeatsTextView = view.findViewById(R.id.total_number_of_seats_text_view);
         numOfBookedSeatsTextView = view.findViewById(R.id.number_of_booked_seats_text_view);
-
 
         bookTripButton = view.findViewById(R.id.book_trip_button);
         cancelTripButton = view.findViewById(R.id.cancel_trip_button);
@@ -81,7 +79,6 @@ public class TripDetailViewFragment extends Fragment {
 
         initFirebaseSetup();
         initListeners();
-
 
         return view;
     }
@@ -140,45 +137,45 @@ public class TripDetailViewFragment extends Fragment {
         mTripRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    //Listen failed
-                    return;
-                }
+            if (e != null) {
+                //Listen failed
+                return;
+            }
 
-                //Convert the snapshot to a trip object
-                displayedTrip = documentSnapshot.toObject(Trip.class);
+            //Convert the snapshot to a trip object
+            displayedTrip = documentSnapshot.toObject(Trip.class);
 
-                //Set the components
-                if (displayedTrip != null) {
-                    fromTextView.setText(displayedTrip.getFrom());
-                    toTextView.setText(displayedTrip.getTo());
-                    dateTextView.setText(displayedTrip.getDateString());
-                    timeTextView.setText(displayedTrip.getTimeString());
+            //Set the components
+            if (displayedTrip != null) {
+                fromTextView.setText(displayedTrip.getFrom());
+                toTextView.setText(displayedTrip.getTo());
+                dateTextView.setText(displayedTrip.getDateString());
+                timeTextView.setText(displayedTrip.getTimeString());
 
-                    mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot user = task.getResult();
-                                if (user != null) {
-                                    driverTextView.setText(user.getString("displayName"));
-                                    driverRatingBar.setRating(4);
-                                }
+                mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot user = task.getResult();
+                            if (user != null) {
+                                driverTextView.setText(user.getString("displayName"));
+                                driverRatingBar.setRating(4);
                             }
                         }
-                    });
-                    totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
-                    numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
-                }
+                    }
+                });
+                totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
+                numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
 
                 //Check if the user is a passenger
                 if (activeUser != null){
-                    if (displayedTrip.userInTrip(activeUser)) {
+                    if (displayedTrip.userInTrip(activeUser.getUid())) {
                         showViewForBookedUser();
                     } else {
                         showViewForUnbookedUser();
                     }
                 }
+            }
             }
         });
 
@@ -189,7 +186,8 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (displayedTrip.addPassenger(activeUser)) {
+                if (activeUser == null) return;
+                if (displayedTrip.addPassenger(activeUser.getUid())) {
                     mTripRef.set(displayedTrip);
                     showViewForBookedUser();
                     Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
@@ -202,7 +200,8 @@ public class TripDetailViewFragment extends Fragment {
         cancelTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (displayedTrip.removePassenger(activeUser)) {
+                if (activeUser == null) return;
+                if (displayedTrip.removePassenger(activeUser.getUid())) {
                     mTripRef.set(displayedTrip);
                     showViewForUnbookedUser();
                     Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
