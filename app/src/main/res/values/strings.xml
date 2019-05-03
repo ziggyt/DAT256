@@ -39,6 +39,8 @@
 
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Topplista</string>
+    <string name="show_qr_code_string">Visa QR-kod för resan</string>
+    <string name="show_info_active_trip_string">Visa koden nedanför för din förare när resan är färdig</string>
 
 
 </resources>

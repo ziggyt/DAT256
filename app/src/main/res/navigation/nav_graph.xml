@@ -39,6 +39,10 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
+        <action
+            android:id="@+id/action_tripDetailViewFragment_to_activeTripFragment"
+            app:destination="@id/activeTripFragment"
+            app:enterAnim="@anim/fui_slide_in_right" />
     </fragment>
 
     <fragment
@@ -46,4 +50,14 @@
         android:name="com.muk.sami.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/activeTripFragment"
+        android:name="com.muk.sami.ActiveTripFragment"
+        android:label="fragment_active_trip"
+        tools:layout="@layout/fragment_active_trip" >
+        <argument
+            android:name="tripId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
