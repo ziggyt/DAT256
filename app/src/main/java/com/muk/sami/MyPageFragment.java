@@ -114,30 +114,11 @@ public class MyPageFragment extends Fragment {
         });
 
 
-
-
-
         initListeners();
         return view;
     }
 
-    private Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private void initListeners(){
+    private void initListeners() {
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +165,7 @@ public class MyPageFragment extends Fragment {
 
     public interface OnAccountManageListener {
         void onSignOut();
+
         void onDeleteAccount();
     }
 
