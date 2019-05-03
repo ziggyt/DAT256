@@ -1,10 +1,10 @@
 package com.muk.sami.model;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import lombok.Getter;
 
@@ -23,7 +23,7 @@ public class Trip {
     private @Getter
     int totalNumberOfSeats;
     private @Getter
-    List<String> passengers = new ArrayList<>();
+    Map<String, Boolean> passengers = new HashMap<>();
     private @Getter
     String driver;
 
@@ -56,7 +56,7 @@ public class Trip {
     public boolean addPassenger(String uid) {
         if (!fullTrip()) {
             numberOfBookedSeats++;
-            passengers.add(uid);
+            passengers.put(uid, true);
             return true;
         }
         return false;
@@ -64,6 +64,7 @@ public class Trip {
 
     /**
      * Checks if the user has a seat in the current trip and removes it if it has
+     *
      * @param uid ID of the user to remove from the passenger list
      * @return if the user was removed successfully
      */
@@ -82,15 +83,15 @@ public class Trip {
      * @return if the user is a passenger in this trip
      */
     public boolean userInTrip(String uid) {
-        return passengers.contains(uid);
+        return passengers.keySet().contains(uid);
     }
 
-    public String getDateString(){
+    public String getDateString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
     }
 
-    public String getTimeString(){
+    public String getTimeString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH:mm", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
     }
