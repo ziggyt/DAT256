@@ -42,7 +42,7 @@ public class Trip {
         this.driver = driver;
     }
 
-    public boolean fullTrip() {
+    private boolean fullTrip() {
         return numberOfBookedSeats == totalNumberOfSeats;
     }
 
@@ -83,12 +83,7 @@ public class Trip {
      */
 
     public boolean userInTrip(User user) {
-        for (User u : passengers) {
-            if (u.equals(user)) {
-                return true;
-            }
-        }
-        return false;
+        return passengers.contains(user);
     }
 
     public String getDateString(){
@@ -97,7 +92,7 @@ public class Trip {
     }
 
     public String getTimeString(){
-        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH-mm", Locale.GERMAN);
+        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH:mm", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
     }
 
