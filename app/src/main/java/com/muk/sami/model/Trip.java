@@ -23,7 +23,7 @@ public class Trip {
     int numberOfBookedSeats;
     private @Getter
     int totalNumberOfSeats;
-    private
+    private @Getter
     Map<String, Boolean> passengers = new HashMap<>();
     private @Getter
     String driver;
@@ -100,7 +100,7 @@ public class Trip {
     /**
      * @return a set of the passenger's UIDs
      */
-    public Set<String> getPassengers() {
+    public Set<String> getPassengerUids() {
         return passengers.keySet();
     }
 
