@@ -13,6 +13,8 @@ public class User {
     private @Getter
     String phoneNumber;
     //private @Getter String address;
+    private @Getter
+    int driverRating;
 
     public User() {
         // Required empty public constructor
@@ -22,6 +24,7 @@ public class User {
         this.email = email;
         this.displayName = displayName;
         this.phoneNumber = phoneNumber;
+        this.driverRating = 3;
         // this.address = address;
     }
 

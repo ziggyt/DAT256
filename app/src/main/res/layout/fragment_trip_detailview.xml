@@ -192,56 +192,6 @@
         android:layout_toEndOf="@+id/driver_text_view"
         app:srcCompat="@drawable/ic_directions_car_black_24dp" />
 
-    <ImageView
-        android:id="@+id/star1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/driver"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/car"
-        app:srcCompat="@drawable/ic_star_black_full__24dp" />
-
-    <ImageView
-        android:id="@+id/star2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/driver"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/star1"
-        app:srcCompat="@drawable/ic_star_black_full__24dp" />
-
-    <ImageView
-        android:id="@+id/star3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/driver"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/star2"
-        app:srcCompat="@drawable/ic_star_black_full__24dp" />
-
-    <ImageView
-        android:id="@+id/star4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/driver"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/star3"
-        app:srcCompat="@drawable/ic_star_black_full__24dp" />
-
-    <ImageView
-        android:id="@+id/star5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/driver"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/star4"
-        app:srcCompat="@drawable/ic_star_half_black_24dp" />
-
     <TextView
         android:id="@+id/passengers"
         android:layout_width="wrap_content"
@@ -309,6 +259,17 @@
         android:text="4"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <RatingBar
+        android:id="@+id/driver_rating_bar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="true"
+        android:layout_below="@+id/textview_time"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="87dp" />
 
 
 </RelativeLayout>

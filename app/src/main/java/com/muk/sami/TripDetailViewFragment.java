@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,8 @@ public class TripDetailViewFragment extends Fragment {
     private Button cancelTripButton;
     private Button showQrCodeButton;
 
+    private RatingBar driverRatingBar;
+
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
 
@@ -78,6 +81,8 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton = view.findViewById(R.id.bookTripButton);
         cancelTripButton = view.findViewById(R.id.cancel_trip_btn);
         showQrCodeButton = view.findViewById(R.id.show_qr_code_btn);
+
+        driverRatingBar = view.findViewById(R.id.driver_rating_bar);
 
         initFirebaseSetup();
         initListeners();
@@ -162,6 +167,7 @@ public class TripDetailViewFragment extends Fragment {
                                 DocumentSnapshot user = task.getResult();
                                 if (user != null) {
                                     driverTextView.setText(user.getString("displayName"));
+                                    driverRatingBar.setRating(4);
                                 }
                             }
                         }
@@ -203,7 +209,7 @@ public class TripDetailViewFragment extends Fragment {
             public void onClick(View v) {
                 if (displayedTrip.removePassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
-                    showViewForUnbookedUser();;
+                    showViewForUnbookedUser();
                     Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
                 }
             }
