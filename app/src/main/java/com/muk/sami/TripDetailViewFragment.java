@@ -1,10 +1,12 @@
 package com.muk.sami;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,15 +18,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import androidx.navigation.Navigation;
 
 public class TripDetailViewFragment extends Fragment {
 
@@ -38,6 +43,7 @@ public class TripDetailViewFragment extends Fragment {
 
     private Button bookTripButton;
     private Button cancelTripButton;
+    private Button showQrCodeButton;
 
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
@@ -64,28 +70,34 @@ public class TripDetailViewFragment extends Fragment {
         timeTextView = view.findViewById(R.id.textview_time);
         driverTextView = view.findViewById(R.id.driver_text_view);
 
+
         totalNumOfSeatsTextView = view.findViewById(R.id.totalNumberOfSeats);
         numOfBookedSeatsTextView = view.findViewById(R.id.numberOfBookedSeats);
 
 
         bookTripButton = view.findViewById(R.id.bookTripButton);
         cancelTripButton = view.findViewById(R.id.cancel_trip_btn);
+        showQrCodeButton = view.findViewById(R.id.show_qr_code_btn);
 
         initFirebaseSetup();
         initListeners();
 
+
         return view;
     }
 
-    private void hideBookTripButton() {
-        bookTripButton.setVisibility(View.INVISIBLE);
-        cancelTripButton.setVisibility(View.VISIBLE);
-    }
-
-    private void showBookTripButton() {
+    private void showViewForUnbookedUser() {
         bookTripButton.setVisibility(View.VISIBLE);
         cancelTripButton.setVisibility(View.INVISIBLE);
+        showQrCodeButton.setVisibility(View.INVISIBLE);
     }
+
+    private void showViewForBookedUser() {
+        bookTripButton.setVisibility(View.INVISIBLE);
+        cancelTripButton.setVisibility(View.VISIBLE);
+        showQrCodeButton.setVisibility(View.VISIBLE);
+    }
+
 
 
     private void initFirebaseSetup() {
@@ -111,9 +123,9 @@ public class TripDetailViewFragment extends Fragment {
                 //Check if the user is a passenger
                 if (displayedTrip != null){
                     if (displayedTrip.userInTrip(activeUser)) {
-                        hideBookTripButton();
+                        showViewForUnbookedUser();
                     } else {
-                        showBookTripButton();
+                        showViewForBookedUser();
                     }
                 }
             }
@@ -161,9 +173,9 @@ public class TripDetailViewFragment extends Fragment {
                 //Check if the user is a passenger
                 if (activeUser != null){
                     if (displayedTrip.userInTrip(activeUser)) {
-                        hideBookTripButton();
+                        showViewForBookedUser();
                     } else {
-                        showBookTripButton();
+                        showViewForUnbookedUser();
                     }
                 }
             }
@@ -178,7 +190,7 @@ public class TripDetailViewFragment extends Fragment {
             public void onClick(View v) {
                 if (displayedTrip.addPassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
-                    hideBookTripButton();
+                    showViewForBookedUser();
                     Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
@@ -191,9 +203,19 @@ public class TripDetailViewFragment extends Fragment {
             public void onClick(View v) {
                 if (displayedTrip.removePassenger(activeUser)) {
                     mTripRef.set(displayedTrip);
-                    showBookTripButton();
+                    showViewForUnbookedUser();;
                     Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        showQrCodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TripDetailViewFragmentDirections.ActionTripDetailViewFragmentToActiveTripFragment action = TripDetailViewFragmentDirections.actionTripDetailViewFragmentToActiveTripFragment(displayedTrip.getTripId());
+                Navigation.findNavController(view).navigate(action);
+
+
             }
         });
 
