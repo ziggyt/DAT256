@@ -8,7 +8,7 @@
 
 
     <TextView
-        android:id="@+id/textview_title"
+        android:id="@+id/title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -22,10 +22,10 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textview_from"
+        android:id="@+id/from_text_view"
         android:layout_width="163dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_title"
+        android:layout_below="@+id/title_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="21dp"
         android:layout_marginLeft="100dp"
@@ -37,10 +37,10 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textview_to"
+        android:id="@+id/to_text_view"
         android:layout_width="174dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_from"
+        android:layout_below="@+id/from_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="21dp"
         android:layout_marginLeft="10dp"
@@ -52,7 +52,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textview_date"
+        android:id="@+id/date_text_view"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
@@ -65,7 +65,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textview_time"
+        android:id="@+id/time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/time"
@@ -90,7 +90,7 @@
         android:id="@+id/from"
         android:layout_width="30dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_title"
+        android:layout_below="@+id/title_text_view"
         android:layout_alignParentStart="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="48dp"
@@ -100,8 +100,8 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_to"
-        android:layout_alignStart="@+id/textview_to"
+        android:layout_below="@+id/to_text_view"
+        android:layout_alignStart="@+id/to_text_view"
         android:layout_marginStart="0dp"
         android:layout_marginTop="30dp"
         android:text="@string/date" />
@@ -110,14 +110,14 @@
         android:id="@+id/time"
         android:layout_width="46dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_to"
+        android:layout_below="@+id/to_text_view"
         android:layout_marginStart="58dp"
         android:layout_marginTop="30dp"
-        android:layout_toEndOf="@+id/textview_date"
+        android:layout_toEndOf="@+id/date_text_view"
         android:text="@string/time" />
 
     <Button
-        android:id="@+id/bookTripButton"
+        android:id="@+id/book_trip_button"
         android:layout_width="171dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -129,17 +129,17 @@
         android:text="@string/book_trip" />
 
     <Button
-        android:id="@+id/show_qr_code_btn"
+        android:id="@+id/show_qr_code_button"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/imageView"
-        android:layout_alignBottom="@+id/textview_to"
+        android:layout_alignBottom="@+id/to_text_view"
         android:layout_marginEnd="-92dp"
         android:layout_marginBottom="73dp"
         android:text="@string/show_qr_code_string" />
 
     <Button
-        android:id="@+id/cancel_trip_btn"
+        android:id="@+id/cancel_trip_button"
         android:layout_width="171dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -157,15 +157,15 @@
         android:layout_below="@+id/time"
         android:layout_marginStart="10dp"
         android:layout_marginTop="12dp"
-        android:layout_toEndOf="@+id/textview_time"
+        android:layout_toEndOf="@+id/time_text_view"
         app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
     <TextView
         android:id="@+id/driver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_date"
-        android:layout_alignStart="@+id/textview_date"
+        android:layout_below="@+id/date_text_view"
+        android:layout_alignStart="@+id/date_text_view"
         android:layout_marginStart="1dp"
         android:layout_marginTop="35dp"
         android:text="@string/driver" />
@@ -203,7 +203,7 @@
         android:text="@string/passengers" />
 
     <TextView
-        android:id="@+id/textview_passenger"
+        android:id="@+id/passenger_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passengers"
@@ -221,11 +221,11 @@
         android:layout_below="@+id/passengers"
         android:layout_marginStart="80dp"
         android:layout_marginTop="14dp"
-        android:layout_toEndOf="@+id/textview_passenger"
+        android:layout_toEndOf="@+id/passenger_text_view"
         app:srcCompat="@drawable/ic_person_black_24dp" />
 
     <TextView
-        android:id="@+id/numberOfBookedSeats"
+        android:id="@+id/number_of_booked_seats_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passengers"
@@ -243,13 +243,13 @@
         android:layout_below="@+id/passengers"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/numberOfBookedSeats"
+        android:layout_toEndOf="@+id/number_of_booked_seats_text_view"
         android:text="/"
         android:textSize="24sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/totalNumberOfSeats"
+        android:id="@+id/total_number_of_seats_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passengers"
@@ -266,7 +266,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:isIndicator="true"
-        android:layout_below="@+id/textview_time"
+        android:layout_below="@+id/time_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="70dp"
         android:layout_marginEnd="87dp" />

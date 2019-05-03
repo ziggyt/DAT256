@@ -62,20 +62,20 @@ public class TripDetailViewFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_trip_detailview, container, false);
 
-        fromTextView = view.findViewById(R.id.textview_from);
-        toTextView = view.findViewById(R.id.textview_to);
-        dateTextView = view.findViewById(R.id.textview_date);
-        timeTextView = view.findViewById(R.id.textview_time);
+        fromTextView = view.findViewById(R.id.from_text_view);
+        toTextView = view.findViewById(R.id.to_text_view);
+        dateTextView = view.findViewById(R.id.date_text_view);
+        timeTextView = view.findViewById(R.id.time_text_view);
         driverTextView = view.findViewById(R.id.driver_text_view);
 
 
-        totalNumOfSeatsTextView = view.findViewById(R.id.totalNumberOfSeats);
-        numOfBookedSeatsTextView = view.findViewById(R.id.numberOfBookedSeats);
+        totalNumOfSeatsTextView = view.findViewById(R.id.total_number_of_seats_text_view);
+        numOfBookedSeatsTextView = view.findViewById(R.id.number_of_booked_seats_text_view);
 
 
-        bookTripButton = view.findViewById(R.id.bookTripButton);
-        cancelTripButton = view.findViewById(R.id.cancel_trip_btn);
-        showQrCodeButton = view.findViewById(R.id.show_qr_code_btn);
+        bookTripButton = view.findViewById(R.id.book_trip_button);
+        cancelTripButton = view.findViewById(R.id.cancel_trip_button);
+        showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
 
         driverRatingBar = view.findViewById(R.id.driver_rating_bar);
 
