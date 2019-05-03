@@ -16,7 +16,7 @@ public class User {
     String phoneNumber;
     //private @Getter String address;
     private @Getter
-    List<Integer> driverRating = new ArrayList<>();
+    List<Integer> samiRating = new ArrayList<>();
 
     public User() {
         // Required empty public constructor
@@ -39,19 +39,19 @@ public class User {
     }
 
     public void addRating(int rating){
-        driverRating.add(rating);
+        samiRating.add(rating);
     }
 
 
     public double getDriverAverageRating() {
-        if (driverRating.size()== 0) {
+        if (samiRating.size()== 0) {
             return 0;
         }
 
         int total = 0;
-        int nRatings = driverRating.size();
+        int nRatings = samiRating.size();
 
-        for (int rating : driverRating) {
+        for (int rating : samiRating) {
             total += rating;
         }
 
