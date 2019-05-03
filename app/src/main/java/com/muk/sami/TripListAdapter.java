@@ -42,7 +42,13 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
         textViewTime.setText(trip.getTimeString());
 
         int remainingSeats = trip.getTotalNumberOfSeats() - trip.getNumberOfBookedSeats();
-        textViewSeats.setText(remainingSeats + " platser kvar");
+        if(remainingSeats == 0) {
+            textViewSeats.setText("Resan är fullbokad");
+        } else if(remainingSeats == 1){
+            textViewSeats.setText(remainingSeats + " plats kvar");
+        } else {
+            textViewSeats.setText(remainingSeats + " platser kvar");
+        }
 
         return listitem;
     }
