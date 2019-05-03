@@ -32,10 +32,12 @@ dependencies {
     implementation "androidx.navigation:navigation-ui:$nav_version"
     apply plugin: "androidx.navigation.safeargs"
 
-
     // QR
     implementation 'com.google.zxing:core:3.2.1'
     implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+
+    // Images
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
