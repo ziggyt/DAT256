@@ -45,7 +45,7 @@ public class Trip {
         this.driver = driver;
     }
 
-    private boolean fullTrip() {
+    public boolean tripIsFull() {
         return numberOfBookedSeats == totalNumberOfSeats;
     }
 
@@ -57,7 +57,7 @@ public class Trip {
      */
 
     public boolean addPassenger(String uid) {
-        if (!fullTrip()) {
+        if (!tripIsFull()) {
             numberOfBookedSeats++;
             passengers.put(uid, true);
             return true;

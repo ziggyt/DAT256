@@ -147,11 +147,22 @@ public class TripDetailViewFragment extends Fragment {
                     } else {
                         showViewForUnbookedUser();
                     }
+                    checkIfTripIsFull();
                 }
             }
             }
         });
 
+    }
+
+    private void checkIfTripIsFull(){
+        if(displayedTrip.tripIsFull()){
+            bookTripButton.setAlpha(.5f);
+            bookTripButton.setClickable(false);
+        } else{
+            bookTripButton.setAlpha(1);
+            bookTripButton.setClickable(true);
+        }
     }
 
     private void initListeners() {
@@ -167,6 +178,7 @@ public class TripDetailViewFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 }
+                checkIfTripIsFull();
             }
         });
 
@@ -179,6 +191,7 @@ public class TripDetailViewFragment extends Fragment {
                     showViewForUnbookedUser();
                     Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
                 }
+                checkIfTripIsFull();
             }
         });
 
