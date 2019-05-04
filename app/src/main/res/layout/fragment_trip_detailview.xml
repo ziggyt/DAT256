@@ -14,7 +14,6 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/navigation_trip_detailview"
         android:textColor="@color/browser_actions_text_color"
@@ -28,7 +27,6 @@
         android:layout_below="@+id/title_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="21dp"
-        android:layout_marginLeft="100dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="190dp"
         android:layout_toEndOf="@+id/from"
@@ -43,7 +41,6 @@
         android:layout_below="@+id/from_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="21dp"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="190dp"
         android:layout_toEndOf="@+id/to"
@@ -58,7 +55,6 @@
         android:layout_below="@+id/date"
         android:layout_alignStart="@+id/date"
         android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginTop="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -265,11 +261,11 @@
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:isIndicator="true"
         android:layout_below="@+id/time_text_view"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="70dp"
-        android:layout_marginEnd="87dp" />
+        android:layout_marginEnd="87dp"
+        android:isIndicator="true" />
 
 
 </RelativeLayout>

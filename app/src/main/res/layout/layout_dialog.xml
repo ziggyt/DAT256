@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edit_Seats"
         android:text="Välj datum:"
-        android:textSize="18dp"/>
+        android:textSize="18dp" />
 
     <DatePicker
         android:id="@+id/datePicker"
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/datePicker"
         android:text="Välj tid:"
-        android:textSize="18dp"/>
+        android:textSize="18dp" />
 
     <TimePicker
         android:id="@+id/timePicker"
