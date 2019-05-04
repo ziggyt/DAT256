@@ -1,5 +1,7 @@
 package com.muk.sami.model;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -100,6 +102,7 @@ public class Trip {
     /**
      * @return a set of the passenger's UIDs
      */
+    @Exclude
     public Set<String> getPassengerUids() {
         return passengers.keySet();
     }
