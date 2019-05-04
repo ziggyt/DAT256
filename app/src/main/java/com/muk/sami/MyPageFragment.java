@@ -40,6 +40,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +53,7 @@ public class MyPageFragment extends Fragment {
     private Button deleteAccountButton;
 
     private RatingBar userRatingBar;
-    private ImageView profilePictureImageView;
+    private CircleImageView circleImageView;
     private TextView userNameTextView;
 
     private String profilePictureUrl = "";
@@ -78,7 +80,7 @@ public class MyPageFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_my_page, container, false);
 
         userRatingBar = view.findViewById(R.id.user_rating_ratingbar);
-        profilePictureImageView = view.findViewById(R.id.profile_picture_imageview);
+        circleImageView = view.findViewById(R.id.profile_picture_circleimageview);
         userNameTextView = view.findViewById(R.id.user_name_textview);
 
 
@@ -107,7 +109,7 @@ public class MyPageFragment extends Fragment {
                 imageLoader.loadImage(profilePictureUrl, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        profilePictureImageView.setImageBitmap(loadedImage);
+                        circleImageView.setImageBitmap(loadedImage);
                     }
                 });
             }
