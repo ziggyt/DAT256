@@ -6,14 +6,12 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="placeholder">TextView</string>
-    <string name="placeholder_date">12-05-2019</string>
-    <string name="placeholder_time">08:48</string>
 
 
     <!-- SearchTrip -->
     <string name="navigation_trip_search">Search Trip</string>
     <string name="navigation_trip_detailview">Booking info</string>
+    <string name="add_new_trip">Add new trip</string>
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="date">Date</string>
@@ -41,7 +39,8 @@
 
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Leaderboard</string>
-
+    <string name="show_qr_code_string">Show QR-code for the trip</string>
+    <string name="show_info_active_trip_string">Show the code below to your driver when the trip is finished</string>
 
 
 </resources>

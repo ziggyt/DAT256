@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- MainStrings -->
@@ -5,14 +6,12 @@
     <string name="title_home">Hem</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Aviseringar</string>
-    <string name="placeholder">TextView</string>
-    <string name="placeholder_date">12-05-2019</string>
-    <string name="placeholder_time">08:48</string>
 
 
     <!-- SearchTrip -->
     <string name="navigation_trip_search">Sök resa</string>
     <string name="navigation_trip_detailview">Bokningsinformation</string>
+    <string name="add_new_trip">Lägg till ny resa</string>
     <string name="from">Från</string>
     <string name="to">Till</string>
     <string name="date">Datum</string>
@@ -24,6 +23,7 @@
     <string name="trip_full_message">Resan är fullbokad</string>
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Du har nu avbokat din plats på resan</string>
+
 
     <!-- My Page -->
     <string name="navigation_my_page">Min sida</string>

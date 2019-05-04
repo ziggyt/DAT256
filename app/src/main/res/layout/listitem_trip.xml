@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp">
@@ -9,8 +10,8 @@
         android:id="@+id/from_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Från - "
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        tools:text="From - " />
 
     <TextView
         android:id="@+id/to_text_view"
@@ -18,26 +19,26 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/from_text_view"
-        android:text="Till"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        tools:text="To" />
 
     <TextView
         android:id="@+id/date_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/from_text_view"
-        android:text="Datum"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        tools:text="Date" />
 
     <TextView
         android:id="@+id/time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/to_text_view"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/date_text_view"
-        android:layout_below="@id/to_text_view"
-        android:text="Tid"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        tools:text="Time" />
 
     <TextView
         android:id="@+id/seats_text_view"
@@ -47,5 +48,5 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="25dp"
-        android:text="Antal lediga platser" />
+        tools:text="2 platser kvar" />
 </RelativeLayout>
