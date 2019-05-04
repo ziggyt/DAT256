@@ -6,9 +6,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="placeholder">TextView</string>
-    <string name="placeholder_date">12-05-2019</string>
-    <string name="placeholder_time">08:48</string>
 
 
     <!-- SearchTrip -->
