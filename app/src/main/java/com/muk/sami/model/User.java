@@ -1,5 +1,7 @@
 package com.muk.sami.model;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +45,8 @@ public class User {
     }
 
 
-    public double getDriverAverageRating() {
+    @Exclude
+    public double getAverageSamiRating() {
         if (samiRating.size()== 0) {
             return 0;
         }
