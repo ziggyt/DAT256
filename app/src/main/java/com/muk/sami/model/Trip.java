@@ -89,11 +89,21 @@ public class Trip {
         return passengers.keySet().contains(uid);
     }
 
+    /**
+     *
+     * @return "yyyy-MM-dd" formatted string from the Date object in the trip
+     */
+    @Exclude
     public String getDateString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
     }
 
+    /**
+     *
+     * @return "HH:mm" formatted string from the Date object in the trip
+     */
+    @Exclude
     public String getTimeString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH:mm", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
