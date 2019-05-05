@@ -240,9 +240,9 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/number_of_booked_seats_text_view"
+        android:text="/"
         android:textSize="24sp"
-        android:textStyle="bold"
-        tools:text="/" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/total_number_of_seats_text_view"
