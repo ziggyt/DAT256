@@ -52,6 +52,7 @@ public class SearchTripFragment extends Fragment {
     private CollectionReference mTripsRef;
 
     private User activeUser;
+    private String userID;
     private DocumentReference mUserRef;
 
     private ListView listViewTrips;
@@ -85,12 +86,11 @@ public class SearchTripFragment extends Fragment {
                     }
                 });
 
-
-
                 if (getActivity() != null) {
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
+                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
                     listViewTrips.setAdapter(adapter);
                 }
+
             }
         });
 
@@ -105,10 +105,10 @@ public class SearchTripFragment extends Fragment {
 
                 if(user != null){
                     //User is signed in
-                    String userId = user.getUid();
+                    userID = user.getUid();
 
                     //Retrieve the user
-                    mUserRef = mDatabase.document("users/" + userId);
+                    mUserRef = mDatabase.document("users/" + userID);
                     mUserRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
                         public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
