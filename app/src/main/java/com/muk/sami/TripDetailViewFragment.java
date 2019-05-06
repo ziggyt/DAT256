@@ -1,6 +1,7 @@
 package com.muk.sami;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +23,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class TripDetailViewFragment extends Fragment {
 
@@ -49,6 +57,8 @@ public class TripDetailViewFragment extends Fragment {
     private DocumentReference mTripRef;
 
     private FirebaseUser activeUser;
+
+    private static BroadcastReceiver tickReceiver;
 
     private Trip displayedTrip;
 
@@ -83,6 +93,28 @@ public class TripDetailViewFragment extends Fragment {
         initListeners();
 
         return view;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        tickReceiver=new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
+                    checkIfPastStartTime();
+                }
+            }
+        };
+        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(tickReceiver!=null)
+            getActivity().unregisterReceiver(tickReceiver);
     }
 
     private void showViewForUnbookedUser() {
@@ -160,6 +192,7 @@ public class TripDetailViewFragment extends Fragment {
                         showViewForUnbookedUser();
                     }
                     checkIfTripIsFull();
+                    checkIfPastStartTime();
                 }
             }
             }
@@ -177,6 +210,26 @@ public class TripDetailViewFragment extends Fragment {
         }
     }
 
+    private void checkIfPastStartTime() {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(new Date());
+        cal1.set(Calendar.MILLISECOND, 0);
+        cal1.set(Calendar.SECOND, 0);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(displayedTrip.getDate());
+        cal2.set(Calendar.MILLISECOND, 0);
+        cal2.set(Calendar.SECOND, 0);
+
+        if(cal2.getTime().compareTo(cal1.getTime()) > 0) {
+            startTripButton.setBackgroundColor(Color.GRAY);
+            startTripButton.setClickable(false);
+        } else {
+            startTripButton.setBackgroundColor(Color.rgb(2,255,114));
+            startTripButton.setClickable(true);
+        }
+    }
+
     private void initListeners() {
 
         bookTripButton.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +244,7 @@ public class TripDetailViewFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 }
                 checkIfTripIsFull();
+                checkIfPastStartTime();
             }
         });
 
