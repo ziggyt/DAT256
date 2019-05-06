@@ -109,6 +109,33 @@ public class MyTripsFragment extends Fragment {
             }
         });
 
+        //Create a query against the collection to find trips
+        Query passengerQuery = mTripsRef.whereEqualTo("passengers." + userID , true );
+
+        passengerQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    //Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
+
+                Collections.sort(trips, new Comparator<Trip>() {
+                    @Override
+                    public int compare(Trip o1, Trip o2) {
+                        return o1.getDate().compareTo(o2.getDate());
+                    }
+                });
+
+                if (getActivity() != null) {
+                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
+                    tripsListView.setAdapter(adapter);
+                }
+            }
+        });
+
 
     }
 
