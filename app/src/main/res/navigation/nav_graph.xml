@@ -50,8 +50,12 @@
     <fragment
         android:id="@+id/myTripsFragment"
         android:name="com.muk.sami.MyTripsFragment"
-        android:label="fragment_myTrips"
-        tools:layout="@layout/fragment_my_trips"/>
+        android:label="fragment_my_trips"
+        tools:layout="@layout/fragment_my_trips">
+        <action
+            android:id="@+id/detailViewAction"
+            app:destination="@id/tripDetailViewFragment"/>
+    </fragment>
 
     <fragment
         android:id="@+id/editProfileFragment"
