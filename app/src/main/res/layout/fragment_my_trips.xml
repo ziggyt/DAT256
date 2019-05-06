@@ -19,5 +19,12 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <ListView
+        android:id="@+id/listView_Trips"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_below="@+id/title_text_view"
+        android:layout_marginTop="18dp" />
+
 
 </RelativeLayout>
