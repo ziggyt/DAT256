@@ -43,9 +43,11 @@ public class MyTripsFragment extends Fragment {
 
 
     private ListView tripsListView;
-    private List<Trip> trips;
+    private List<Trip> driverTrips;
+    private List<Trip> passengerTrips;
 
     private String userID;
+    private boolean firstListenerDone;
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
@@ -66,7 +68,9 @@ public class MyTripsFragment extends Fragment {
 
         //Initialize components
         tripsListView = view.findViewById(R.id.listView_Trips);
-        trips = new ArrayList<>();
+        driverTrips = new ArrayList<>();
+        passengerTrips = new ArrayList<>();
+        firstListenerDone = false;
 
         //Initialize Firebase and Listeners
         initFirebaseSetup();
@@ -84,7 +88,7 @@ public class MyTripsFragment extends Fragment {
         mTripsRef = mDatabase.collection("trips");
 
         //Create a query against the collection to find trips where the user is a driver
-        Query driverQuery = mTripsRef.whereEqualTo("driver", userID);
+        final Query driverQuery = mTripsRef.whereEqualTo("driver", userID);
 
         driverQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -94,18 +98,23 @@ public class MyTripsFragment extends Fragment {
                     return;
                 }
 
-                trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
+                driverTrips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
 
-                Collections.sort(trips, new Comparator<Trip>() {
+                Collections.sort(driverTrips, new Comparator<Trip>() {
                     @Override
                     public int compare(Trip o1, Trip o2) {
                         return o1.getDate().compareTo(o2.getDate());
                     }
                 });
 
-                if (getActivity() != null) {
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips, userID);
+                if (getActivity() != null && firstListenerDone) {
+                    driverTrips.addAll(passengerTrips);
+                    TripListAdapter adapter = new TripListAdapter(getActivity(),driverTrips , userID);
                     tripsListView.setAdapter(adapter);
+                }
+
+                if (!firstListenerDone){
+                    firstListenerDone = true;
                 }
             }
         });
@@ -121,18 +130,23 @@ public class MyTripsFragment extends Fragment {
                     return;
                 }
 
-                trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
+                passengerTrips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
 
-                Collections.sort(trips, new Comparator<Trip>() {
+                Collections.sort(passengerTrips, new Comparator<Trip>() {
                     @Override
                     public int compare(Trip o1, Trip o2) {
                         return o1.getDate().compareTo(o2.getDate());
                     }
                 });
 
-                if (getActivity() != null) {
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips, userID);
+                if (getActivity() != null && firstListenerDone) {
+                    driverTrips.addAll(passengerTrips);
+                    TripListAdapter adapter = new TripListAdapter(getActivity(), driverTrips, userID);
                     tripsListView.setAdapter(adapter);
+                }
+
+                if (!firstListenerDone){
+                    firstListenerDone = true;
                 }
             }
         });
@@ -146,7 +160,7 @@ public class MyTripsFragment extends Fragment {
         tripsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Trip trip = trips.get(position);
+                Trip trip = driverTrips.get(position);
 
                 MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
                 action.setTripId(trip.getTripId());
