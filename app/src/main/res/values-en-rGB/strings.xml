@@ -20,6 +20,7 @@
     <string name="passengers">Passengers</string>
     <string name="book_trip">Book Trip</string>
     <string name="cancel_trip">Cancel Trip</string>
+    <string name="start_trip">Start Trip</string>
     <string name="trip_full_message">No seats available</string>
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Removed user from trip</string>

@@ -20,6 +20,7 @@
     <string name="passengers">Passagerare</string>
     <string name="book_trip">Boka resa</string>
     <string name="cancel_trip">Avboka Resa</string>
+    <string name="start_trip">Starta Resa</string>
     <string name="trip_full_message">Resan är fullbokad</string>
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Du har nu avbokat din plats på resan</string>

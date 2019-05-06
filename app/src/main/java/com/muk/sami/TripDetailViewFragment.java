@@ -41,6 +41,7 @@ public class TripDetailViewFragment extends Fragment {
     private Button bookTripButton;
     private Button cancelTripButton;
     private Button showQrCodeButton;
+    private Button startTripButton;
 
     private RatingBar driverRatingBar;
 
@@ -74,6 +75,7 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton = view.findViewById(R.id.book_trip_button);
         cancelTripButton = view.findViewById(R.id.cancel_trip_button);
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
+        startTripButton = view.findViewById(R.id.start_trip_button);
 
         driverRatingBar = view.findViewById(R.id.driver_rating_bar);
 
@@ -87,12 +89,20 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton.setVisibility(View.VISIBLE);
         cancelTripButton.setVisibility(View.INVISIBLE);
         showQrCodeButton.setVisibility(View.INVISIBLE);
+        startTripButton.setVisibility(View.INVISIBLE);
     }
 
     private void showViewForBookedUser() {
         bookTripButton.setVisibility(View.INVISIBLE);
         cancelTripButton.setVisibility(View.VISIBLE);
         showQrCodeButton.setVisibility(View.VISIBLE);
+        startTripButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void showViewForDriver() {
+        bookTripButton.setVisibility(View.INVISIBLE);
+        cancelTripButton.setVisibility(View.INVISIBLE);
+        startTripButton.setVisibility(View.VISIBLE);
     }
 
 
@@ -142,7 +152,9 @@ public class TripDetailViewFragment extends Fragment {
 
                 //Check if the user is a passenger
                 if (activeUser != null){
-                    if (displayedTrip.userInTrip(activeUser.getUid())) {
+                    if(displayedTrip.getDriver().equals(activeUser.getUid())) {
+                        showViewForDriver();
+                    } else if (displayedTrip.userInTrip(activeUser.getUid())) {
                         showViewForBookedUser();
                     } else {
                         showViewForUnbookedUser();
