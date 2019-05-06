@@ -3,12 +3,19 @@
 
     <item
         android:id="@id/searchTripFragment"
-        android:icon="@drawable/ic_directions_car_black_24dp"
+        android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/navigation_trip_search" />
+
+    <item
+        android:id="@+id/myTripsFragment"
+        android:icon="@drawable/ic_directions_car_black_24dp"
+        android:title="Mina Resor"/>
+
     <item
         android:id="@id/myPageFragment"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="@string/navigation_my_page" />
+
     <item
         android:id="@id/leaderboardFragment"
         android:icon="@drawable/ic_stars_black_24dp"
