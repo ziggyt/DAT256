@@ -103,13 +103,13 @@ public class MyTripsFragment extends Fragment {
                 });
 
                 if (getActivity() != null) {
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
+                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips, userID);
                     tripsListView.setAdapter(adapter);
                 }
             }
         });
 
-        //Create a query against the collection to find trips
+        //Create a query against the collection to find trips where the user is a passenger
         Query passengerQuery = mTripsRef.whereEqualTo("passengers." + userID , true );
 
         passengerQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -130,7 +130,7 @@ public class MyTripsFragment extends Fragment {
                 });
 
                 if (getActivity() != null) {
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips);
+                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips, userID);
                     tripsListView.setAdapter(adapter);
                 }
             }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,6 +11,10 @@
         android:id="@+id/from_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/driverOrNot"
         android:textSize="20dp"
         tools:text="From - " />
 
@@ -17,7 +22,10 @@
         android:id="@+id/to_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/from_text_view"
         android:layout_toRightOf="@id/from_text_view"
         android:textSize="20dp"
         tools:text="To" />
@@ -26,7 +34,10 @@
         android:id="@+id/date_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/from_text_view"
+        android:layout_below="@+id/from_text_view"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_toEndOf="@+id/driverOrNot"
         android:textSize="20dp"
         tools:text="Date" />
 
@@ -35,7 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/to_text_view"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/date_text_view"
         android:textSize="20dp"
         tools:text="Time" />
@@ -49,4 +61,14 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="25dp"
         tools:text="2 platser kvar" />
+
+    <ImageView
+        android:id="@+id/driverOrNot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="20dp"
+        app:srcCompat="@android:drawable/ic_menu_info_details" />
 </RelativeLayout>

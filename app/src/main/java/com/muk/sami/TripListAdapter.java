@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.muk.sami.model.Trip;
@@ -14,11 +15,13 @@ import java.util.List;
 public class TripListAdapter extends ArrayAdapter <Trip> {
     private Activity context;
     List<Trip> trips;
+    private String userID;
 
-    public TripListAdapter(Activity context, List<Trip> trips) {
+    public TripListAdapter(Activity context, List<Trip> trips, String userID) {
         super(context, 0, trips);
         this.context = context;
         this.trips = trips;
+        this.userID = userID;
     }
 
 
@@ -28,6 +31,8 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
         LayoutInflater inflater = context.getLayoutInflater();
         View listitem = inflater.inflate(R.layout.listitem_trip, null, true);
 
+
+        ImageView driverOrNot  = listitem.findViewById(R.id.driverOrNot);
         TextView textViewFrom  = listitem.findViewById(R.id.from_text_view);
         TextView textViewTo    = listitem.findViewById(R.id.to_text_view);
         TextView textViewDate  = listitem.findViewById(R.id.date_text_view);
@@ -35,6 +40,14 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
         TextView textViewSeats = listitem.findViewById(R.id.seats_text_view);
 
         Trip trip = trips.get(position);
+
+        if( trip.getDriver().equals(userID) ){
+            //If the user is the driver of this trip, set the image to a car
+            driverOrNot.setImageResource(R.drawable.ic_directions_car_black_24dp);
+        }else if( userID != null ) {
+            //If the person is a passenger, set the image to passengers
+            driverOrNot.setImageResource(R.drawable.ic_passengers_black_24dp);
+        }
 
         textViewFrom.setText(trip.getFrom());
         textViewTo.setText(trip.getTo());
