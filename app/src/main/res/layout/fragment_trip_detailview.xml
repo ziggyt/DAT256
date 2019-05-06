@@ -16,7 +16,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/navigation_trip_detailview"
-        android:textColor="@color/browser_actions_text_color"
+        android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold" />
 
