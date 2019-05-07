@@ -19,6 +19,8 @@ public class User {
     //private @Getter String address;
     private @Getter
     List<Integer> samiRating = new ArrayList<>();
+    private @Getter
+    BankCard bankCard;
 
     public User() {
         // Required empty public constructor
