@@ -46,7 +46,8 @@ public class SearchTripFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
-    private Button button;
+    private Button addButton;
+    private Button filterButton;
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
@@ -57,6 +58,7 @@ public class SearchTripFragment extends Fragment {
 
     private ListView listViewTrips;
     private List<Trip> trips;
+    private List<Trip> filteredTrips;
 
     private View view;
 
@@ -131,15 +133,25 @@ public class SearchTripFragment extends Fragment {
 
 
         trips = new ArrayList<>();
+        filteredTrips = new ArrayList<>();
 
         listViewTrips = view.findViewById(R.id.listView_Trips);
 
-        button = view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        addButton = view.findViewById(R.id.addTripButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Opens the tripCreator-dialog
                 createTripDialog();
+            }
+        });
+
+        filterButton = view.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Opens the filter dialog
+                filterTripDialog();
             }
         });
 
@@ -165,7 +177,7 @@ public class SearchTripFragment extends Fragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Ny resa"); //TODO replace with string value
 
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.layout_dialog, (ViewGroup) getView(), false);
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.create_trip_dialog, (ViewGroup) getView(), false);
 
         //Initialize the components
         final EditText fromEditText = dialogView.findViewById(R.id.edit_From);
@@ -239,6 +251,43 @@ public class SearchTripFragment extends Fragment {
         alertDialog.show();
     }
 
+    private void filterTripDialog() {
+
+        //Create a dialog and set the title
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Filtrera Resor"); //TODO replace with string value
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.filter_trip_dialog, (ViewGroup) getView(), false);
+
+        //Initialize the components
+        final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
+        final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+
+        //Set the content of the main dialog view
+        builder.setView(dialogView);
+
+        // Set up the OK-button
+        builder.setPositiveButton("Filtrera", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+
+                Date date = dateFromDatePicker(datePicker, timePicker);
+
+                applyFilter(date);
+            }
+        });
+
+        //Set up the Cancel-button
+        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+                // dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     private boolean noFieldsEmpty(EditText from, EditText to, EditText seats){
         return !from.getText().toString().equals("")
                 && !to.getText().toString().equals("")
@@ -267,6 +316,32 @@ public class SearchTripFragment extends Fragment {
         mTripsRef.document(tripId).set(trip);
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
+    }
+
+    private void applyFilter(Date date){
+
+        filteredTrips.clear();
+
+        for ( int i = 0; i < trips.size(); i++){
+            if( date.compareTo(trips.get(i).getDate()) <= 0){
+                filteredTrips.add(trips.get(i));
+            }
+        }
+
+        /*Collections.sort(trips, new Comparator<Trip>() {
+            @Override
+            public int compare(Trip o1, Trip o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });*/
+
+        if (getActivity() != null) {
+            TripListAdapter adapter = new TripListAdapter(getActivity(), filteredTrips, null);
+            listViewTrips.setAdapter(adapter);
+        }
+
+
+
     }
 
     private class TextWatcherSami implements TextWatcher {

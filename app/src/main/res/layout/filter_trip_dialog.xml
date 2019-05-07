@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Välj datum:"
+        android:textSize="18dp" />
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="378dp"
+        android:layout_height="131dp"
+        android:layout_below="@id/textViewDate"
+        android:layout_alignStart="@+id/textViewDate"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="13dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/datePicker"
+        android:text="Välj tid:"
+        android:textSize="18dp" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="393dp"
+        android:layout_height="97dp"
+        android:layout_below="@id/textViewTime"
+        android:timePickerMode="spinner" />
+
+
+
+
+</RelativeLayout>
