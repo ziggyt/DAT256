@@ -8,10 +8,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
@@ -54,6 +56,11 @@ public class EditProfileFragment extends Fragment {
         builder.setTitle("Hantera kort");
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.manage_bank_card_dialog, (ViewGroup) getView(), false);
+
+        EditText cardNumberEditText = dialogView.findViewById(R.id.card_number_edit_text);
+        EditText cardDateEditText = dialogView.findViewById(R.id.card_date_edit_text);
+        EditText cardCVCEditText = dialogView.findViewById(R.id.card_cvc_edit_text);
+
 
         //Set the content of the main dialog view
         builder.setView(dialogView);
