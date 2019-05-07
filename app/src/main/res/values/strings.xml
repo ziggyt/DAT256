@@ -34,6 +34,9 @@
     <string name="delete_account">Radera konto</string>
     <string name="deletion_failed_message">Radering misslyckades. Återautentisering nödvändig för att radera konto.</string>
 
+    <!-- Edit Profile -->
+    <string name="manage_bank_card_button">Hantera bankkort</string>
+
 
     <!-- MyTrips -->
     <string name="navigation_my_trips">Mina Resor</string>
