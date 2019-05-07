@@ -30,12 +30,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -305,8 +307,10 @@ public class SearchTripFragment extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
-
                 filterDate = dateFromDatePicker(datePicker, timePicker);
+                String dateAndTime = getDateAndTimeString();
+
+                timeTextView.setText("Avgångstid: " + dateAndTime); //TODO replace with string value
                 //applyFilter();
             }
         });
@@ -417,6 +421,16 @@ public class SearchTripFragment extends Fragment {
         public void afterTextChanged(Editable s) {
 
         }
+    }
+
+
+    public String getDateAndTimeString() {
+        SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
+        SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm", Locale.GERMAN);
+
+        String dateAndTime = simpleDateFormatDate.format(filterDate) + "  " + simpleDateFormatTime.format(filterDate);
+
+        return dateAndTime;
     }
 
 
