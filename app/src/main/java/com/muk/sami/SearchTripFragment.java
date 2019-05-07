@@ -48,6 +48,7 @@ public class SearchTripFragment extends Fragment {
 
     private Button addButton;
     private Button filterButton;
+    private Button revertFilterButton;
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
@@ -161,6 +162,18 @@ public class SearchTripFragment extends Fragment {
                 filterTripDialog();
             }
         });
+
+        revertFilterButton = view.findViewById(R.id.revertFilterButton);
+        revertFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Revert the filtering
+                revertFilter();
+            }
+        });
+
+        //Visibility for filter buttons
+        showFilterButton();
 
         listViewTrips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -335,13 +348,6 @@ public class SearchTripFragment extends Fragment {
             }
         }
 
-        /*Collections.sort(trips, new Comparator<Trip>() {
-            @Override
-            public int compare(Trip o1, Trip o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });*/
-
         if (getActivity() != null) {
             TripListAdapter adapter = new TripListAdapter(getActivity(), filteredTrips, null);
             listViewTrips.setAdapter(adapter);
@@ -349,6 +355,32 @@ public class SearchTripFragment extends Fragment {
 
         filterisOn = true;
 
+        showRevertFilterButton();
+
+    }
+
+    private void revertFilter(){
+
+        filteredTrips.clear();
+
+        if (getActivity() != null) {
+            TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
+            listViewTrips.setAdapter(adapter);
+        }
+
+        filterisOn = false;
+
+        showFilterButton();
+    }
+
+    private void showFilterButton(){
+        filterButton.setVisibility(View.VISIBLE);
+        revertFilterButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void showRevertFilterButton(){
+        filterButton.setVisibility(View.INVISIBLE);
+        revertFilterButton.setVisibility(View.VISIBLE);
     }
 
     private class TextWatcherSami implements TextWatcher {
