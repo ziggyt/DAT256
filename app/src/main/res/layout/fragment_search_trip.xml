@@ -25,6 +25,12 @@
         android:layout_height="262dp"
         android:layout_below="@+id/filterButton"
         android:layout_marginTop="23dp" />
+        android:layout_height="330dp"
+        android:layout_below="@+id/filterButton"
+        android:layout_marginTop="25dp" />
+        android:layout_height="262dp"
+        android:layout_below="@+id/filterButton"
+        android:layout_marginTop="40dp" />
 
     <Button
         android:id="@+id/addTripButton"
@@ -36,26 +42,78 @@
         android:layout_marginTop="33dp"
         android:layout_marginEnd="33dp"
         android:text="@string/add_new_trip" />
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="33dp"
+        android:text="@string/add_new_trip" />
 
     <Button
         android:id="@+id/filterButton"
         android:layout_width="171dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title_text_view"
+        android:layout_below="@+id/timeTextView"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="207dp"
         android:text="Lägg till filter" />
 
     <Button
         android:id="@+id/revertFilterButton"
-        android:layout_width="171dp"
+        android:layout_width="129dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timeTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
+        android:text="Återställ" />
+
+    <EditText
+        android:id="@+id/whereFromEditText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_text_view"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="45dp"
-        android:text="Återställ" />
+        android:layout_alignStart="@+id/title_text_view"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Var åker du från?" />
+
+    <EditText
+        android:id="@+id/whereToEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/whereFromEditText"
+        android:layout_alignStart="@+id/whereFromEditText"
+        android:layout_marginStart="-1dp"
+        android:layout_marginTop="6dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Vart ska du åka?" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/whereFromEditText"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/whereFromEditText"
+        android:src="@android:drawable/ic_menu_mylocation" />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="360dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/whereToEditText"
+        android:layout_alignStart="@+id/whereToEditText"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="6dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        android:text="Avgångstid: Nu"
+        android:textSize="18sp"
+        tools:text="Avgångstid: Idag 22:08" />
 
 
 </RelativeLayout>

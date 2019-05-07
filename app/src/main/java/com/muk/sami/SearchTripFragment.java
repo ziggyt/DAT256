@@ -46,6 +46,10 @@ public class SearchTripFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
+    private EditText whereFromEditText;
+    private EditText whereToEditText;
+    private TextView timeTextView;
+
     private Button addButton;
     private Button filterButton;
     private Button revertFilterButton;
@@ -71,6 +75,10 @@ public class SearchTripFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
+
+        whereFromEditText = view.findViewById(R.id.whereFromEditText);
+        whereToEditText = view.findViewById(R.id.whereToEditText);
+        timeTextView = view.findViewById(R.id.timeTextView);
 
         filterisOn = false;
 
@@ -159,7 +167,7 @@ public class SearchTripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Opens the filter dialog
-                filterTripDialog();
+                applyFilter();
             }
         });
 
@@ -169,6 +177,13 @@ public class SearchTripFragment extends Fragment {
             public void onClick(View v) {
                 //Revert the filtering
                 revertFilter();
+            }
+        });
+
+        timeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterTripDialog();
             }
         });
 
@@ -275,7 +290,7 @@ public class SearchTripFragment extends Fragment {
 
         //Create a dialog and set the title
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Filtrera Resor"); //TODO replace with string value
+        builder.setTitle("Välj tidigast avgångstid"); //TODO replace with string value
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.filter_trip_dialog, (ViewGroup) getView(), false);
 
@@ -287,13 +302,12 @@ public class SearchTripFragment extends Fragment {
         builder.setView(dialogView);
 
         // Set up the OK-button
-        builder.setPositiveButton("Filtrera", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
 
                 filterDate = dateFromDatePicker(datePicker, timePicker);
-
-                applyFilter();
+                //applyFilter();
             }
         });
 
@@ -339,6 +353,10 @@ public class SearchTripFragment extends Fragment {
     }
 
     private void applyFilter(){
+
+        if(filterDate == null){
+            return;
+        }
 
         filteredTrips.clear();
 
