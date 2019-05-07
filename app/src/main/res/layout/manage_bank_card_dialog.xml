@@ -19,14 +19,27 @@
 
 
     <EditText
-        android:id="@+id/card_date_edit_text"
+        android:id="@+id/card_month_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/card_number_edit_text"
         android:layout_alignStart="@+id/card_number_edit_text"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
-        android:hint="mm/YY"
+        android:hint="MM"
+        android:inputType="numberDecimal"
+        android:maxLength="4"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/card_year_edit_text"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_number_edit_text"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/card_month_edit_text"
+        android:hint="YY"
         android:inputType="numberDecimal"
         android:maxLength="4"
         android:textAlignment="center" />
@@ -35,8 +48,8 @@
         android:id="@+id/card_cvc_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/card_date_edit_text"
-        android:layout_alignStart="@+id/card_date_edit_text"
+        android:layout_below="@+id/card_month_edit_text"
+        android:layout_alignStart="@+id/card_month_edit_text"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:hint="CVC"

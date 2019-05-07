@@ -58,7 +58,8 @@ public class EditProfileFragment extends Fragment {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.manage_bank_card_dialog, (ViewGroup) getView(), false);
 
         EditText cardNumberEditText = dialogView.findViewById(R.id.card_number_edit_text);
-        EditText cardDateEditText = dialogView.findViewById(R.id.card_date_edit_text);
+        EditText cardYearEditText = dialogView.findViewById(R.id.card_year_edit_text);
+        EditText cardMonthEditText = dialogView.findViewById(R.id.card_month_edit_text);
         EditText cardCVCEditText = dialogView.findViewById(R.id.card_cvc_edit_text);
 
 
