@@ -60,6 +60,9 @@ public class SearchTripFragment extends Fragment {
     private List<Trip> trips;
     private List<Trip> filteredTrips;
 
+    private Date filterDate;
+    private boolean filterisOn;
+
     private View view;
 
 
@@ -67,6 +70,8 @@ public class SearchTripFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
+
+        filterisOn = false;
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
@@ -88,7 +93,9 @@ public class SearchTripFragment extends Fragment {
                     }
                 });
 
-                if (getActivity() != null) {
+                if(filterisOn){
+                    applyFilter();
+                }else if(getActivity() != null){
                     TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
                     listViewTrips.setAdapter(adapter);
                 }
@@ -271,9 +278,9 @@ public class SearchTripFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
 
-                Date date = dateFromDatePicker(datePicker, timePicker);
+                filterDate = dateFromDatePicker(datePicker, timePicker);
 
-                applyFilter(date);
+                applyFilter();
             }
         });
 
@@ -318,12 +325,12 @@ public class SearchTripFragment extends Fragment {
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
     }
 
-    private void applyFilter(Date date){
+    private void applyFilter(){
 
         filteredTrips.clear();
 
         for ( int i = 0; i < trips.size(); i++){
-            if( date.compareTo(trips.get(i).getDate()) <= 0){
+            if( filterDate.compareTo(trips.get(i).getDate()) <= 0){
                 filteredTrips.add(trips.get(i));
             }
         }
@@ -340,7 +347,7 @@ public class SearchTripFragment extends Fragment {
             listViewTrips.setAdapter(adapter);
         }
 
-
+        filterisOn = true;
 
     }
 
