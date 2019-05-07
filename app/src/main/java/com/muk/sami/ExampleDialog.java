@@ -30,7 +30,7 @@ public class ExampleDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_dialog, null);
+        View view = inflater.inflate(R.layout.create_trip_dialog, null);
 
         builder.setView(view)
                 .setTitle("Ny Resa")
