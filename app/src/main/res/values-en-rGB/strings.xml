@@ -36,7 +36,7 @@
 
     <!-- Edit Profile -->
     <string name="manage_bank_card_button">Manage bankcard</string>
-
+    <string name="card_number">Card number</string>
 
     <!-- MyTrips -->
     <string name="navigation_my_trips">My Trips</string>

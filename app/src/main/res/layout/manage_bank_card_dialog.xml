@@ -13,7 +13,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
-        android:hint="Kortnummer"
+        android:hint="@string/card_number"
         android:inputType="numberDecimal"
         android:maxLength="16" />
 
@@ -28,7 +28,7 @@
         android:layout_marginTop="10dp"
         android:hint="MM"
         android:inputType="numberDecimal"
-        android:maxLength="4"
+        android:maxLength="2"
         android:textAlignment="center" />
 
     <EditText
@@ -41,7 +41,7 @@
         android:layout_toEndOf="@+id/card_month_edit_text"
         android:hint="YY"
         android:inputType="numberDecimal"
-        android:maxLength="4"
+        android:maxLength="2"
         android:textAlignment="center" />
 
     <EditText
