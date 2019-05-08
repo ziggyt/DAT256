@@ -1,24 +1,39 @@
 package com.muk.sami.model;
 
+import java.util.HashMap;
+
 import lombok.Getter;
 
 public class BankCard {
     private @Getter
-    int cardNumber;
+    String cardNumber;
 
     private @Getter
-    int expiringYear;
+    String expiringYear;
 
     private @Getter
-    int expiringMonth;
+    String expiringMonth;
 
     private @Getter
-    int cvcNumber;
+    String cvcNumber;
 
-    public BankCard(int cardNumber, int expiringYear, int expiringMonth, int cvcNumber) {
+    public BankCard() {
+        //Required empty public constructor
+    }
+
+    public BankCard(String cardNumber, String expiringYear, String expiringMonth, String cvcNumber) {
         this.cardNumber = cardNumber;
         this.expiringYear = expiringYear;
         this.expiringMonth = expiringMonth;
         this.cvcNumber = cvcNumber;
+    }
+
+    public HashMap toHashMap() {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("cardNumber", cardNumber);
+        map.put("expiringYear", expiringYear);
+        map.put("expiringMonth", expiringMonth);
+        map.put("cvcNumber", cvcNumber);
+        return map;
     }
 }

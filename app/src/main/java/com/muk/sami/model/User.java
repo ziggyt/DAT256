@@ -3,10 +3,13 @@ package com.muk.sami.model;
 import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class User {
 
@@ -20,6 +23,8 @@ public class User {
     private @Getter
     List<Integer> samiRating = new ArrayList<>();
     private @Getter
+    String photoURL;
+    private @Getter @Setter
     BankCard bankCard;
 
     public User() {
