@@ -50,6 +50,7 @@ public class EditProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        mDatabase = FirebaseFirestore.getInstance();
 
 
         manageBankCardButton = view.findViewById(R.id.manage_bank_card_button);
@@ -84,7 +85,6 @@ public class EditProfileFragment extends Fragment {
         builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mDatabase = FirebaseFirestore.getInstance();
 
                 final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
