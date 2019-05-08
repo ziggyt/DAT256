@@ -69,4 +69,4 @@ fastlane/readme.md
 
 # secrets
 
-res/values/secrets.xml
+secrets.xml
