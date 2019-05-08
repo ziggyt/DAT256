@@ -15,6 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.muk.sami.model.BankCard;
+import com.muk.sami.model.User;
+
+import javax.annotation.Nullable;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,8 +36,13 @@ public class EditProfileFragment extends Fragment {
 
     private Button manageBankCardButton;
 
+    private FirebaseFirestore mDatabase;
+    private DocumentReference mUserRef;
+
     private View view;
 
+    private String userId;
+    private User user;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -36,7 +54,22 @@ public class EditProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        mDatabase = FirebaseFirestore.getInstance();
 
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        // Get a document reference for the active User
+
+        mUserRef = mDatabase.collection("users").document(userId);
+
+        mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot dsUser = task.getResult();
+                assert dsUser != null;
+
+                user = dsUser.toObject(User.class);
+            }
+        });
 
         manageBankCardButton = view.findViewById(R.id.manage_bank_card_button);
         manageBankCardButton.setOnClickListener(new View.OnClickListener() {
@@ -57,10 +90,10 @@ public class EditProfileFragment extends Fragment {
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.manage_bank_card_dialog, (ViewGroup) getView(), false);
 
-        EditText cardNumberEditText = dialogView.findViewById(R.id.card_number_edit_text);
-        EditText cardYearEditText = dialogView.findViewById(R.id.card_year_edit_text);
-        EditText cardMonthEditText = dialogView.findViewById(R.id.card_month_edit_text);
-        EditText cardCVCEditText = dialogView.findViewById(R.id.card_cvc_edit_text);
+        final EditText cardNumberEditText = dialogView.findViewById(R.id.card_number_edit_text);
+        final EditText cardYearEditText = dialogView.findViewById(R.id.card_year_edit_text);
+        final EditText cardMonthEditText = dialogView.findViewById(R.id.card_month_edit_text);
+        final EditText cardCVCEditText = dialogView.findViewById(R.id.card_cvc_edit_text);
 
 
         //Set the content of the main dialog view
@@ -71,6 +104,15 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                // Create a bankcard from fields
+                String cardNumber = cardNumberEditText.getText().toString();
+                String cardYear = cardYearEditText.getText().toString();
+                String cardMonth = cardMonthEditText.getText().toString();
+                String cardCvc = cardCVCEditText.getText().toString();
+                BankCard bankCard = new BankCard(cardNumber, cardYear, cardMonth, cardCvc);
+                user.setBankCard(bankCard);
+
+                mDatabase.collection("users").document(userId).set(user);
             }
         });
 

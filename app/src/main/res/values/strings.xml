@@ -36,6 +36,7 @@
 
     <!-- Edit Profile -->
     <string name="manage_bank_card_button">Hantera bankkort</string>
+    <string name="card_number">Kortnummer</string>
 
 
     <!-- MyTrips -->
