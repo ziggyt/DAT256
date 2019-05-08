@@ -223,6 +223,7 @@ public class SearchTripFragment extends Fragment {
         final TextView dateTextView = dialogView.findViewById(R.id.textViewDate);
         final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
 
         //Set the content of the main dialog view
         builder.setView(dialogView);
@@ -299,6 +300,7 @@ public class SearchTripFragment extends Fragment {
         //Initialize the components
         final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
+        timePicker.setIs24HourView(true);
 
         //Set the content of the main dialog view
         builder.setView(dialogView);
