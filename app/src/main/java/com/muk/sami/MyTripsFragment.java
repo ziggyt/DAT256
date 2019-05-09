@@ -49,8 +49,6 @@ public class MyTripsFragment extends Fragment {
     private String userID;
     private boolean firstListenerDone;
 
-    private FirebaseUser activeUser;
-
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
 
@@ -73,8 +71,6 @@ public class MyTripsFragment extends Fragment {
         driverTrips = new ArrayList<>();
         passengerTrips = new ArrayList<>();
         firstListenerDone = false;
-
-        activeUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //Initialize Firebase and Listeners
         initFirebaseSetup();
@@ -165,6 +161,7 @@ public class MyTripsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = driverTrips.get(position);
+                FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
 
                 if(trip.getDriver().equals(activeUser.getUid())) {
                     MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();
