@@ -58,7 +58,6 @@ public class SearchTripFragment extends Fragment {
     private CollectionReference mTripsRef;
 
     private User activeUser;
-    private FirebaseUser activeFireBaseUser;
     private String userID;
     private DocumentReference mUserRef;
 
@@ -79,7 +78,6 @@ public class SearchTripFragment extends Fragment {
 
         timeTextView = view.findViewById(R.id.timeTextView);
 
-        activeFireBaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         filterisOn = false;
 
@@ -194,8 +192,9 @@ public class SearchTripFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Trip trip = trips.get(position);
+                FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                if(trip.getDriver().equals(activeFireBaseUser.getUid())) {
+                if(trip.getDriver().equals(activeUser.getUid())) {
                     MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();
                     action.setTripId(trip.getTripId());
                     Navigation.findNavController(view).navigate(action);
