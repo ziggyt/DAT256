@@ -68,7 +68,7 @@ public class CreateTripFragment extends Fragment {
             }
         });
 
-        return inflater.inflate(R.layout.fragment_create_trip, container, false);
+        return view;
     }
 
     private Date dateFromDatePicker(DatePicker p, TimePicker t){
