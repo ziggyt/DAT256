@@ -1,5 +1,7 @@
 package com.muk.sami;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -246,6 +248,36 @@ public class TripDetailViewFragment extends Fragment {
         }
     }
 
+    private void payTripDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Betala resan");
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.pay_trip_dialog, (ViewGroup) getView(), false);
+
+        //Set the content of the main dialog view
+        builder.setView(dialogView);
+
+        // Set up the OK-button
+        builder.setPositiveButton("Betala", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mTripRef.set(displayedTrip);
+                showViewForBookedUser();
+                Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Set up the Cancel-button
+        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     private void initListeners() {
 
         bookTripButton.setOnClickListener(new View.OnClickListener() {
@@ -258,9 +290,7 @@ public class TripDetailViewFragment extends Fragment {
                     return;
                 }
                 if (displayedTrip.addPassenger(activeUser.getUid())) {
-                    mTripRef.set(displayedTrip);
-                    showViewForBookedUser();
-                    Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
+                    payTripDialog();
                 } else {
                     Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 }
