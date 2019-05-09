@@ -180,8 +180,8 @@ public class TripDetailViewFragment extends Fragment {
 
             //Set the components
             if (displayedTrip != null) {
-                fromTextView.setText(displayedTrip.getFrom());
-                toTextView.setText(displayedTrip.getTo());
+                fromTextView.setText(displayedTrip.getStartAddress());
+                toTextView.setText(displayedTrip.getDestinationAddress());
                 dateTextView.setText(displayedTrip.getDateString());
                 timeTextView.setText(displayedTrip.getTimeString());
 
