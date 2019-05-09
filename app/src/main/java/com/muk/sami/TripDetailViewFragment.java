@@ -317,8 +317,6 @@ public class TripDetailViewFragment extends Fragment {
             public void onClick(View v) {
                 TripDetailViewFragmentDirections.ActionTripDetailViewFragmentToActiveTripFragment action = TripDetailViewFragmentDirections.actionTripDetailViewFragmentToActiveTripFragment(displayedTrip.getTripId());
                 Navigation.findNavController(view).navigate(action);
-
-
             }
         });
 
