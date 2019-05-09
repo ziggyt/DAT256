@@ -6,6 +6,8 @@
     <string name="title_home">Hem</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Aviseringar</string>
+    <string name="msg_subscribed">Subscribed to message</string>
+    <string name="msg_subscribe_failed">Failed subscribing to message</string>
 
 
     <!-- SearchTrip -->
