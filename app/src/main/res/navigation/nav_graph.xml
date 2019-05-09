@@ -29,6 +29,9 @@
         <action
             android:id="@+id/detailViewAction"
             app:destination="@id/tripDetailViewFragment" />
+        <action
+            android:id="@+id/action_searchTripFragment_to_createTripFragment"
+            app:destination="@id/createTripFragment" />
     </fragment>
 
     <fragment
@@ -72,5 +75,10 @@
             android:name="tripId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/createTripFragment"
+        android:name="com.muk.sami.CreateTripFragment"
+        android:label="fragment_create_trip"
+        tools:layout="@layout/fragment_create_trip" />
 
 </navigation>

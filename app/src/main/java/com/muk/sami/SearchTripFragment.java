@@ -146,6 +146,7 @@ public class SearchTripFragment extends Fragment {
                 }else{
                     //User is not signed in yet
                 }
+
             }
         });
 
@@ -159,8 +160,8 @@ public class SearchTripFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Opens the tripCreator-dialog
-                createTripDialog();
+                // opens fragment for creating a trip
+                Navigation.findNavController(v).navigate(R.id.action_searchTripFragment_to_createTripFragment);
             }
         });
 
@@ -204,6 +205,7 @@ public class SearchTripFragment extends Fragment {
 
             }
         });
+
 
 
         return view;
