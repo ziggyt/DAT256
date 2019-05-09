@@ -165,8 +165,6 @@ public class MyTripsFragment extends Fragment {
                 MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
                 action.setTripId(trip.getTripId());
                 Navigation.findNavController(view).navigate(action);
-
-
             }
         });
 
