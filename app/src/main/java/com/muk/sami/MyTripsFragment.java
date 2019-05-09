@@ -161,10 +161,17 @@ public class MyTripsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = driverTrips.get(position);
+                FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
-                action.setTripId(trip.getTripId());
-                Navigation.findNavController(view).navigate(action);
+                if(trip.getDriver().equals(activeUser.getUid())) {
+                    MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                } else {
+                    MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                }
             }
         });
 

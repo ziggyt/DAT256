@@ -40,9 +40,16 @@ public class SearchTripFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
+
         // Initialize the AutocompleteSupportFragment.
         startAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.start_autocomplete_fragment);
+
+        timeTextView = view.findViewById(R.id.timeTextView);
+
+
+        filterisOn = false;
+
 
         startAutocompleteFragment.setCountry("SE");
 
@@ -80,9 +87,25 @@ public class SearchTripFragment extends Fragment {
         // Set up a PlaceSelectionListener to handle the response.
         destinationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
+
             public void onPlaceSelected(Place place) {
                 destinationPlace = place;
                 destinationAutocompleteFragment.setHint(place.getAddress());  // SetText är buggad https://stackoverflow.com/questions/54499335/android-place-autocomplete-fragment-unable-to-set-text
+
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Trip trip = trips.get(position);
+                FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                if(trip.getDriver().equals(activeUser.getUid())) {
+                    MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                } else {
+                    MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                }
             }
 
             @Override
