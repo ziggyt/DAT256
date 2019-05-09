@@ -27,13 +27,4 @@ public class BankCard {
         this.expiringMonth = expiringMonth;
         this.cvcNumber = cvcNumber;
     }
-
-    public HashMap toHashMap() {
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("cardNumber", cardNumber);
-        map.put("expiringYear", expiringYear);
-        map.put("expiringMonth", expiringMonth);
-        map.put("cvcNumber", cvcNumber);
-        return map;
-    }
 }
