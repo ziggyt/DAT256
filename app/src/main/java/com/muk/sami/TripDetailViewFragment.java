@@ -55,12 +55,15 @@ public class TripDetailViewFragment extends Fragment {
 
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
+    private DocumentReference mUserRef;
 
     private FirebaseUser activeUser;
 
     private static BroadcastReceiver tickReceiver;
 
     private Trip displayedTrip;
+
+    private User user;
 
     private View view;
 
@@ -91,6 +94,19 @@ public class TripDetailViewFragment extends Fragment {
 
         initFirebaseSetup();
         initListeners();
+
+        String userId = activeUser.getUid();
+        mUserRef = mDatabase.collection("users").document(userId);
+
+        mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot dsUser = task.getResult();
+                assert dsUser != null;
+
+                user = dsUser.toObject(User.class);
+            }
+        });
 
         return view;
     }
@@ -236,6 +252,11 @@ public class TripDetailViewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (activeUser == null) return;
+
+                if(user.getBankCard() == null) {
+                    Toast.makeText(getContext(), "Finns inget giltigt bankkort", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (displayedTrip.addPassenger(activeUser.getUid())) {
                     mTripRef.set(displayedTrip);
                     showViewForBookedUser();
