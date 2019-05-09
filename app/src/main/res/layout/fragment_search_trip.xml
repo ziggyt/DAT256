@@ -22,7 +22,7 @@
     <ListView
         android:id="@+id/listView_Trips"
         android:layout_width="match_parent"
-        android:layout_height="262dp"
+        android:layout_height="196dp"
         android:layout_below="@+id/filterButton"
         android:layout_marginTop="23dp" />
         android:layout_height="330dp"
