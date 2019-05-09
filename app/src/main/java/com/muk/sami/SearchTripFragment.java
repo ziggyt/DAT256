@@ -48,8 +48,6 @@ public class SearchTripFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
-    private EditText whereFromEditText;
-    private EditText whereToEditText;
     private TextView timeTextView;
 
     private Button addButton;
@@ -78,8 +76,6 @@ public class SearchTripFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
-        whereFromEditText = view.findViewById(R.id.whereFromEditText);
-        whereToEditText = view.findViewById(R.id.whereToEditText);
         timeTextView = view.findViewById(R.id.timeTextView);
 
         filterisOn = false;
@@ -110,7 +106,6 @@ public class SearchTripFragment extends Fragment {
                     TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
                     listViewTrips.setAdapter(adapter);
                 }
-
             }
         });
 
@@ -146,10 +141,8 @@ public class SearchTripFragment extends Fragment {
                 }else{
                     //User is not signed in yet
                 }
-
             }
         });
-
 
         trips = new ArrayList<>();
         filteredTrips = new ArrayList<>();
@@ -205,90 +198,7 @@ public class SearchTripFragment extends Fragment {
 
             }
         });
-
-
-
         return view;
-    }
-
-    private void createTripDialog() {
-        //Create a dialog and set the title
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Ny resa"); //TODO replace with string value
-
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.create_trip_dialog, (ViewGroup) getView(), false);
-
-        //Initialize the components
-        final EditText fromEditText = dialogView.findViewById(R.id.edit_From);
-        final EditText toEditText = dialogView.findViewById(R.id.edit_To);
-        final EditText seatsEditText = dialogView.findViewById(R.id.edit_Seats);
-        final TextView dateTextView = dialogView.findViewById(R.id.textViewDate);
-        final DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
-        final TimePicker timePicker = dialogView.findViewById(R.id.timePicker);
-        timePicker.setIs24HourView(true);
-
-        //Set the content of the main dialog view
-        builder.setView(dialogView);
-
-
-
-
-        // Set up the OK-button
-        builder.setPositiveButton("Lägg till", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
-
-                String from = fromEditText.getText().toString();
-                String to = toEditText.getText().toString();
-                String seats = seatsEditText.getText().toString();
-                Date date = dateFromDatePicker(datePicker, timePicker);
-
-                createTrip(from, to, date, Integer.parseInt(seats));
-            }
-        });
-
-        //Set up the Cancel-button
-        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
-               // dialog.cancel();
-            }
-        });
-
-
-        final AlertDialog alertDialog = builder.show();
-
-        fromEditText.addTextChangedListener(new TextWatcherSami() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(noFieldsEmpty(fromEditText, toEditText, seatsEditText)){
-                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-
-            }
-        });
-
-        toEditText.addTextChangedListener(new TextWatcherSami() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(noFieldsEmpty(fromEditText, toEditText, seatsEditText)){
-                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-
-            }
-        });
-
-        seatsEditText.addTextChangedListener(new TextWatcherSami() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(noFieldsEmpty(fromEditText, toEditText, seatsEditText)){
-                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
-                }
-            }
-        });
-
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
-        alertDialog.show();
     }
 
     private void filterTripDialog() {
@@ -330,12 +240,6 @@ public class SearchTripFragment extends Fragment {
         builder.show();
     }
 
-    private boolean noFieldsEmpty(EditText from, EditText to, EditText seats){
-        return !from.getText().toString().equals("")
-                && !to.getText().toString().equals("")
-                && !seats.getText().toString().equals("");
-    }
-
     private Date dateFromDatePicker(DatePicker p, TimePicker t){
         int year = p.getYear();
         int month = p.getMonth();
@@ -348,16 +252,6 @@ public class SearchTripFragment extends Fragment {
         calendar.set(year, month, day, hour, min);
 
         return calendar.getTime();
-    }
-
-    private void createTrip(String from, String to, Date date, int seats) {
-
-        String tripId = mTripsRef.document().getId();
-        String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Trip trip = new Trip(tripId, from, to, date,0 , seats, driverId);
-        mTripsRef.document(tripId).set(trip);
-
-        Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
     }
 
     private void applyFilter(){
@@ -382,7 +276,6 @@ public class SearchTripFragment extends Fragment {
         filterisOn = true;
 
         showRevertFilterButton();
-
     }
 
     private void revertFilter(){
@@ -409,25 +302,6 @@ public class SearchTripFragment extends Fragment {
         revertFilterButton.setVisibility(View.VISIBLE);
     }
 
-    private class TextWatcherSami implements TextWatcher {
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    }
-
-
     public String getDateAndTimeString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);
         SimpleDateFormat simpleDateFormatTime = new SimpleDateFormat("HH:mm", Locale.GERMAN);
@@ -436,7 +310,5 @@ public class SearchTripFragment extends Fragment {
 
         return dateAndTime;
     }
-
-
 }
 
