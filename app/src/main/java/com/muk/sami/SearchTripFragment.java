@@ -58,6 +58,7 @@ public class SearchTripFragment extends Fragment {
     private CollectionReference mTripsRef;
 
     private User activeUser;
+    private FirebaseUser activeFireBaseUser;
     private String userID;
     private DocumentReference mUserRef;
 
@@ -77,6 +78,8 @@ public class SearchTripFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
         timeTextView = view.findViewById(R.id.timeTextView);
+
+        activeFireBaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         filterisOn = false;
 
@@ -189,11 +192,18 @@ public class SearchTripFragment extends Fragment {
         listViewTrips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Trip trip = trips.get(position);
 
-                SearchTripFragmentDirections.DetailViewAction action = SearchTripFragmentDirections.detailViewAction();
-                action.setTripId(trip.getTripId());
-                Navigation.findNavController(view).navigate(action);
+                if(trip.getDriver().equals(activeFireBaseUser.getUid())) {
+                    MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                } else {
+                    MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                }
 
 
             }
