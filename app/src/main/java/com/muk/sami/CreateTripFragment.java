@@ -51,6 +51,7 @@ public class CreateTripFragment extends Fragment {
         datePicker = view.findViewById(R.id.datePicker);
         timePicker = view.findViewById(R.id.timePicker);
         addTripButton = view.findViewById(R.id.addTripButton);
+        timePicker.setIs24HourView(true);
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
