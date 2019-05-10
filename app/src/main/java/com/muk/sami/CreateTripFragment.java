@@ -99,9 +99,11 @@ public class CreateTripFragment extends Fragment {
 
         String tripId = mTripsRef.document().getId();
         String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         Trip trip = new Trip(tripId, from, to, date,0 , seats, driverId);
         mTripsRef.document(tripId).set(trip);
-        SimpleNotification message = new SimpleNotification("This is the message");
+
+        SimpleNotification message = new SimpleNotification("Trip created");
         mNotificationRef.document(tripId).set(message);
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
@@ -115,7 +117,7 @@ public class CreateTripFragment extends Fragment {
                             msg = getString(R.string.msg_subscribe_failed);
                         }
                         //Log.d(TAG, msg);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

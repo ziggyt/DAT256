@@ -20,12 +20,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 import android.content.BroadcastReceiver;
@@ -63,6 +65,7 @@ public class TripDetailViewFragment extends Fragment {
     private RatingBar driverRatingBar;
 
     private FirebaseFirestore mDatabase;
+    private CollectionReference mNotificationRef;
     private DocumentReference mTripRef;
     private DocumentReference mUserRef;
 
@@ -224,6 +227,9 @@ public class TripDetailViewFragment extends Fragment {
             }
         });
 
+        //Get the reference to the notifications collection
+        mNotificationRef = mDatabase.collection("tripBookingNotification");
+
     }
 
     private void checkIfTripIsFull(){
@@ -272,7 +278,7 @@ public class TripDetailViewFragment extends Fragment {
                 mTripRef.set(displayedTrip);
                 showViewForBookedUser();
                 initTripMessaging();
-                //sendTripBookedMessage();
+                sendTripBookedMessage();
                 Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
             }
         });
@@ -344,9 +350,24 @@ public class TripDetailViewFragment extends Fragment {
                             msg = getString(R.string.msg_subscribe_failed);
                         }
                         //Log.d(TAG, msg);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+
+    /**
+     * Changes the document at tripBookingNotification/tripId, which triggers a cloud function,
+     * sending a notification to the driver/passengers telling them that a passenger has joined
+     */
+    private void sendTripBookedMessage(){
+        //The topic name, which equals the tripId
+        String topic = tripId;
+
+        //Creates a message to be sent via Firestore Cloud Messaging
+        SimpleNotification message = new SimpleNotification("Passenger joined");
+        mNotificationRef.document(topic).set(message);
+
     }
 
     /*private void sendTripBookedMessage(){
