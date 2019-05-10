@@ -61,7 +61,6 @@ public class CreateTripFragment extends Fragment {
 
     private AutocompleteSupportFragment startAutocompleteFragment;
     private AutocompleteSupportFragment destinationAutocompleteFragment;
-    private CollectionReference mNotificationRef;
 
     private View view;
 
