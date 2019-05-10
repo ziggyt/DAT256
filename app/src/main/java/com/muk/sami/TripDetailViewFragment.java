@@ -77,6 +77,7 @@ public class TripDetailViewFragment extends Fragment {
     private String tripId;
 
     private User user;
+    private String userId;
 
     private View view;
 
@@ -108,7 +109,7 @@ public class TripDetailViewFragment extends Fragment {
         initFirebaseSetup();
         initListeners();
 
-        String userId = activeUser.getUid();
+        userId = activeUser.getUid();
         mUserRef = mDatabase.collection("users").document(userId);
 
         mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -362,8 +363,11 @@ public class TripDetailViewFragment extends Fragment {
         //The topic name, which equals the tripId
         String topic = tripId;
 
+        //The userId to send with the message
+
+
         //Creates a message to be sent via Firestore Cloud Messaging
-        SimpleNotification message = new SimpleNotification("Passenger joined");
+        SimpleNotification message = new SimpleNotification("Passenger joined," + userId);
         mNotificationRef.document(topic).set(message);
 
     }

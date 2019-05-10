@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.muk.sami.MainActivity;
@@ -64,16 +65,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        String typeOfChange = data.get("typeOfChange");
+        String notificationData = data.get("typeOfChange");
 
         String title = "";
         String body = "";
         final String toastMessage;
 
-        if( typeOfChange.equals("Passenger joined")){
-            title = "Ny passagerare inbokad";//TODO replace with string values
-            body = "En passagerare har gått med en resa du är inbokad på";
-            toastMessage = "Ny passagerare inbokad";
+        String loggedInUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        String[] typeOfChange = notificationData.split(",");
+        String change = typeOfChange[0];
+        String userId = typeOfChange[1];
+
+        if( change.equals("Passenger joined")){
+
+            if(userId.equals(loggedInUserId)){
+                title = "Inbokad på resa";//TODO replace with string values
+                body = "Du är nu inbokad på resan";
+                toastMessage = "Inbokad på resa";
+            }else {
+                title = "Ny passagerare inbokad";//TODO replace with string values
+                body = "En passagerare har gått med en resa du är inbokad på";
+                toastMessage = "Ny passagerare inbokad";
+            }
+
         }else{
             toastMessage = "";
         }
