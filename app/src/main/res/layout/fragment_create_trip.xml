@@ -1,130 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <EditText
+        android:id="@+id/edit_From"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Var åker du ifrån?"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="395dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <EditText
+        android:id="@+id/edit_To"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edit_From"
+        android:hint="Var åker du till?"
+        android:imeOptions="actionNext"
+        android:inputType="textCapWords" />
 
-        <fragment
-            android:id="@+id/start_autocomplete_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
-        android:layout_width="395dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView">
-
-        <fragment
-            android:id="@+id/destination_autocomplete_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </androidx.cardview.widget.CardView>
 
     <EditText
         android:id="@+id/edit_Seats"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
+        android:layout_below="@id/edit_To"
         android:hint="Antal passagerare?"
         android:imeOptions="actionDone"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.004"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+        android:inputType="number" />
 
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="92dp"
+        android:layout_below="@id/edit_Seats"
         android:text="Välj datum:"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewTime"
-        app:layout_constraintEnd_toStartOf="@+id/datePicker"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="18dp" />
 
     <DatePicker
         android:id="@+id/datePicker"
-        android:layout_width="268dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="378dp"
+        android:layout_height="131dp"
+        android:layout_below="@id/textViewDate"
         android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        app:layout_constraintBottom_toTopOf="@+id/timePicker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:datePickerMode="spinner" />
 
     <TextView
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="8dp"
+        android:layout_below="@id/datePicker"
         android:text="Välj tid:"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.023"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/timePicker" />
+        android:textSize="18dp" />
 
     <TimePicker
         android:id="@+id/timePicker"
-        android:layout_width="268dp"
-        android:layout_height="110dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
-        android:timePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_width="393dp"
+        android:layout_height="97dp"
+        android:layout_below="@id/textViewTime"
+        android:timePickerMode="spinner" />
 
     <Button
         android:id="@+id/addTripButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Lägg till resa"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.939"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.988" />
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/timePicker"
+        android:layout_marginTop="51dp"
+        android:text="Lägg till resa" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
