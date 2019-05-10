@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,11 +42,6 @@ public class SearchTripFragment extends Fragment {
         // Initialize the AutocompleteSupportFragment.
         startAutocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.start_autocomplete_fragment);
-
-        timeTextView = view.findViewById(R.id.timeTextView);
-
-
-        filterisOn = false;
 
 
         startAutocompleteFragment.setCountry("SE");
@@ -92,20 +85,6 @@ public class SearchTripFragment extends Fragment {
                 destinationPlace = place;
                 destinationAutocompleteFragment.setHint(place.getAddress());  // SetText är buggad https://stackoverflow.com/questions/54499335/android-place-autocomplete-fragment-unable-to-set-text
 
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Trip trip = trips.get(position);
-                FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                if(trip.getDriver().equals(activeUser.getUid())) {
-                    MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();
-                    action.setTripId(trip.getTripId());
-                    Navigation.findNavController(view).navigate(action);
-                } else {
-                    MyTripsFragmentDirections.DetailViewAction action = MyTripsFragmentDirections.detailViewAction();
-                    action.setTripId(trip.getTripId());
-                    Navigation.findNavController(view).navigate(action);
-                }
             }
 
             @Override
@@ -123,7 +102,6 @@ public class SearchTripFragment extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.action_searchTripFragment_to_createTripFragment);
             }
         });
-
         return view;
     }
 }
