@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.muk.sami.model.Coordinates;
 import com.muk.sami.model.Trip;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -44,21 +36,13 @@ public class CreateTripFragment extends Fragment {
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
 
-    private Place startPlace;
-    private Place destinationPlace;
-
-    private AutocompleteSupportFragment startAutocompleteFragment;
-    private AutocompleteSupportFragment destinationAutocompleteFragment;
-
     private View view;
-
-    private static final String TAG = "CreateTripFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_create_trip, container, false);
+        view=inflater.inflate(R.layout.fragment_create_trip, container, false);
 
         fromEditText = view.findViewById(R.id.edit_From);
         toEditText = view.findViewById(R.id.edit_To);
@@ -75,74 +59,19 @@ public class CreateTripFragment extends Fragment {
         addTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String from = fromEditText.getText().toString();
+                String to = toEditText.getText().toString();
                 String seats = seatsEditText.getText().toString();
                 Date date = dateFromDatePicker(datePicker, timePicker);
 
-                if (seats.equals("")) {
-                    Toast.makeText(getContext(), "VÄLJ ANTAL PASSAGERARE", Toast.LENGTH_SHORT).show();
-                } else {
-                    createTrip(date, Integer.parseInt(seats));
-                }
+                createTrip(from, to, date, Integer.parseInt(seats));
             }
         });
-
-
-        startAutocompleteFragment = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.start_autocomplete_fragment);
-
-        startAutocompleteFragment.setCountry("SE");
-
-        // Specify the types of place data to return.
-        startAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.ADDRESS));
-        startAutocompleteFragment.setHint("Startplats");
-
-
-        // Set up a PlaceSelectionListener to handle the response.
-        startAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                startPlace = place;
-                startAutocompleteFragment.setHint(place.getAddress()); // SetText är buggad https://stackoverflow.com/questions/54499335/android-place-autocomplete-fragment-unable-to-set-text
-
-            }
-
-            @Override
-            public void onError(Status status) {
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
-        // Initialize the AutocompleteSupportFragment.
-        destinationAutocompleteFragment = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.destination_autocomplete_fragment);
-
-
-        destinationAutocompleteFragment.setCountry("SE");
-        destinationAutocompleteFragment.setHint("Destination");
-
-        // Specify the types of place data to return.
-        destinationAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.ADDRESS));
-
-        // Set up a PlaceSelectionListener to handle the response.
-        destinationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                destinationPlace = place;
-                destinationAutocompleteFragment.setHint(place.getAddress());  // SetText är buggad https://stackoverflow.com/questions/54499335/android-place-autocomplete-fragment-unable-to-set-text
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
 
         return view;
     }
 
-    private Date dateFromDatePicker(DatePicker p, TimePicker t) {
+    private Date dateFromDatePicker(DatePicker p, TimePicker t){
         int year = p.getYear();
         int month = p.getMonth();
         int day = p.getDayOfMonth();
@@ -156,22 +85,12 @@ public class CreateTripFragment extends Fragment {
         return calendar.getTime();
     }
 
-    private void createTrip(Date date, int seats) {
+    private void createTrip(String from, String to, Date date, int seats) {
 
         String tripId = mTripsRef.document().getId();
         String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        String startAddress = startPlace.getAddress();
-        String destinationAddress = destinationPlace.getAddress();
-
-        Coordinates startCoordinates = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
-        Coordinates destinationCoordinates = new Coordinates(destinationPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
-
-        Trip trip = new Trip(tripId, date, seats, driverId, startCoordinates, destinationCoordinates, startAddress, destinationAddress);
-
+        Trip trip = new Trip(tripId, from, to, date,0 , seats, driverId);
         mTripsRef.document(tripId).set(trip);
-
-        System.out.println(trip.toString());
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
     }
