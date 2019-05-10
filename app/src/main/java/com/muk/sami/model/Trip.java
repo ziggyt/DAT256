@@ -1,7 +1,6 @@
 package com.muk.sami.model;
 
 import com.google.firebase.firestore.Exclude;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,13 +10,15 @@ import java.util.Map;
 import java.util.Set;
 
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
 public class Trip {
 
     private @Getter
     String tripId;
+    private @Getter
+    String from;
+    private @Getter
+    String to;
     private @Getter
     Date date;
     private @Getter
@@ -28,30 +29,20 @@ public class Trip {
     Map<String, Boolean> passengers = new HashMap<>();
     private @Getter
     String driver;
-    @Getter private
-    Coordinates startCoordinates;
-    @Getter private
-    Coordinates destinationCoordinates;
-    @Getter private
-    String startAddress;
-    @Getter private
-    String destinationAddress;
-
 
     public Trip() {
         // Required empty public constructor
     }
 
-    public Trip(String tripId, Date date, int totalNumberOfSeats, String driver, Coordinates startCoordinates, Coordinates destinationCoordinates, String startAddress, String destinationAddress) {
+
+    public Trip(String tripId, String from, String to, Date date, int numberOfBookedSeats, int totalNumberOfSeats, String driver) {
         this.tripId = tripId;
+        this.from = from;
+        this.to = to;
         this.date = date;
+        this.numberOfBookedSeats = numberOfBookedSeats;
         this.totalNumberOfSeats = totalNumberOfSeats;
-        numberOfBookedSeats = 0;
         this.driver = driver;
-        this.startCoordinates = startCoordinates;
-        this.destinationCoordinates = destinationCoordinates;
-        this.startAddress = startAddress;
-        this.destinationAddress = destinationAddress;
     }
 
     public boolean tripIsFull() {
@@ -99,6 +90,7 @@ public class Trip {
     }
 
     /**
+     *
      * @return "yyyy-MM-dd" formatted string from the Date object in the trip
      */
     @Exclude
@@ -108,6 +100,7 @@ public class Trip {
     }
 
     /**
+     *
      * @return "HH:mm" formatted string from the Date object in the trip
      */
     @Exclude
