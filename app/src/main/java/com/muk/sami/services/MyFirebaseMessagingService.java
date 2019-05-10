@@ -65,12 +65,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channel_id")
-                .setContentTitle(notification.getTitle())
-                .setContentText(notification.getBody())
+                .setContentTitle("TestA")
+                .setContentText("TestB")
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
-                .setContentInfo(notification.getTitle())
+                .setContentInfo("Testet fungerar")
                 .setLargeIcon(icon)
                 .setColor(Color.RED)
                 .setLights(Color.RED, 1000, 300)
@@ -110,7 +110,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(0, notificationBuilder.build());
 
         if(data != null){
-            final String message = data.get("message");
+            final String message = data.get("typeOfChange");
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override

@@ -30,6 +30,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.Coordinates;
+import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 
 import java.util.Arrays;
@@ -49,6 +50,7 @@ public class CreateTripFragment extends Fragment {
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
+    private CollectionReference mNotificationRef;
 
     private Place startPlace;
     private Place destinationPlace;
@@ -77,6 +79,7 @@ public class CreateTripFragment extends Fragment {
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
+        mNotificationRef = mDatabase.collection("tripBookingNotification");
 
         addTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +179,8 @@ public class CreateTripFragment extends Fragment {
         Trip trip = new Trip(tripId, date, seats, driverId, startCoordinates, destinationCoordinates, startAddress, destinationAddress);
 
         mTripsRef.document(tripId).set(trip);
+        SimpleNotification message = new SimpleNotification("This is the message");
+        mNotificationRef.document(tripId).set(message);
 
         System.out.println(trip.toString());
 
