@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 
 import java.util.Calendar;
@@ -42,6 +43,7 @@ public class CreateTripFragment extends Fragment {
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
+    private CollectionReference mNotificationRef;
 
     private View view;
 
@@ -62,6 +64,7 @@ public class CreateTripFragment extends Fragment {
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
+        mNotificationRef = mDatabase.collection("tripBookingNotification");
 
         addTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +101,8 @@ public class CreateTripFragment extends Fragment {
         String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Trip trip = new Trip(tripId, from, to, date,0 , seats, driverId);
         mTripsRef.document(tripId).set(trip);
+        SimpleNotification message = new SimpleNotification("This is the message");
+        mNotificationRef.document(tripId).set(message);
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
 
