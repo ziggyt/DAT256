@@ -25,11 +25,15 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.Coordinates;
+import com.muk.sami.model.SimpleNotification;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 
@@ -57,6 +61,7 @@ public class CreateTripFragment extends Fragment {
 
     private AutocompleteSupportFragment startAutocompleteFragment;
     private AutocompleteSupportFragment destinationAutocompleteFragment;
+    private CollectionReference mNotificationRef;
 
     private View view;
 
