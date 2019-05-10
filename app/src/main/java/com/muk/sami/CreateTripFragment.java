@@ -179,7 +179,8 @@ public class CreateTripFragment extends Fragment {
         Trip trip = new Trip(tripId, date, seats, driverId, startCoordinates, destinationCoordinates, startAddress, destinationAddress);
 
         mTripsRef.document(tripId).set(trip);
-        SimpleNotification message = new SimpleNotification("This is the message");
+
+        SimpleNotification message = new SimpleNotification("Trip created");
         mNotificationRef.document(tripId).set(message);
 
         System.out.println(trip.toString());
@@ -195,7 +196,7 @@ public class CreateTripFragment extends Fragment {
                             msg = getString(R.string.msg_subscribe_failed);
                         }
                         //Log.d(TAG, msg);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
     }

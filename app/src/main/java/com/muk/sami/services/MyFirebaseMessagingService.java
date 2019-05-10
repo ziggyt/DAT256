@@ -58,24 +58,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param data FCM data payload received.
      */
     private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_directions_car_black_24dp);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
+        String typeOfChange = data.get("typeOfChange");
+
+        String title = "";
+        String body = "";
+        final String toastMessage;
+
+        if( typeOfChange.equals("Passenger joined")){
+            title = "Ny passagerare inbokad";//TODO replace with string values
+            body = "En passagerare har gått med en resa du är inbokad på";
+            toastMessage = "Ny passagerare inbokad";
+        }else{
+            toastMessage = "";
+        }
+
+
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channel_id")
-                .setContentTitle("TestA")
-                .setContentText("TestB")
+                .setContentTitle(title)
+                .setContentText(body)
                 .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
-                .setContentInfo("Testet fungerar")
+                .setContentInfo("Ny passagerare")
                 .setLargeIcon(icon)
                 .setColor(Color.RED)
                 .setLights(Color.RED, 1000, 300)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setSmallIcon(R.drawable.ic_directions_car_black_24dp);
 
         try {
             String picture_url = data.get("picture_url");
@@ -109,18 +125,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         notificationManager.notify(0, notificationBuilder.build());
 
-        if(data != null){
-            final String message = data.get("typeOfChange");
-
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                }
-            });
+                    Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show(); }
+        });
 
 
-        }
+
     }
 
 
