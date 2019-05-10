@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.muk.sami.SearchTripFragment">
@@ -10,110 +11,74 @@
         android:id="@+id/title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/navigation_trip_search"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_wrapHeight="85"
+        tools:layout_conversion_wrapWidth="245" />
 
-    <ListView
-        android:id="@+id/listView_Trips"
-        android:layout_width="match_parent"
-        android:layout_height="262dp"
-        android:layout_below="@+id/filterButton"
-        android:layout_marginTop="23dp" />
-        android:layout_height="330dp"
-        android:layout_below="@+id/filterButton"
-        android:layout_marginTop="25dp" />
-        android:layout_height="262dp"
-        android:layout_below="@+id/filterButton"
-        android:layout_marginTop="40dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="395dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.845">
+
+        <fragment
+            android:id="@+id/start_autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="395dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.558">
+
+        <fragment
+            android:id="@+id/destination_autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/addTripButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/listView_Trips"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="33dp"
-        android:text="@string/add_new_trip" />
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="33dp"
-        android:text="@string/add_new_trip" />
-
-    <Button
-        android:id="@+id/filterButton"
-        android:layout_width="171dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timeTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="207dp"
-        android:text="Lägg till filter" />
-
-    <Button
-        android:id="@+id/revertFilterButton"
-        android:layout_width="129dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/timeTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="48dp"
-        android:text="Återställ" />
-
-    <EditText
-        android:id="@+id/whereFromEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title_text_view"
-        android:layout_alignStart="@+id/title_text_view"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Var åker du från?" />
-
-    <EditText
-        android:id="@+id/whereToEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/whereFromEditText"
-        android:layout_alignStart="@+id/whereFromEditText"
-        android:layout_marginStart="-1dp"
-        android:layout_marginTop="6dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Vart ska du åka?" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/whereFromEditText"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/whereFromEditText"
-        android:src="@android:drawable/ic_menu_mylocation" />
-
-    <TextView
-        android:id="@+id/timeTextView"
-        android:layout_width="360dp"
-        android:layout_height="35dp"
-        android:layout_below="@+id/whereToEditText"
-        android:layout_alignStart="@+id/whereToEditText"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="6dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:text="Avgångstid: Nu"
-        android:textSize="18sp"
-        tools:text="Avgångstid: Idag 22:08" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/add_new_trip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        tools:layout_conversion_wrapHeight="126"
+        tools:layout_conversion_wrapWidth="397" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

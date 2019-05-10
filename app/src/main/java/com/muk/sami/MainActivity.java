@@ -11,6 +11,8 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +46,13 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation_bar);
         NavController navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
         NavigationUI.setupWithNavController(navigation, navController);
+
+
+        // Initialize Places.
+        Places.initialize(getApplicationContext(), getString(R.string.google_places_api_key));
+
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
 
         mDatabase = FirebaseFirestore.getInstance();
         signIn();

@@ -49,8 +49,8 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
             driverOrNot.setImageResource(R.drawable.ic_passengers_black_24dp);
         }
 
-        textViewFrom.setText(trip.getFrom());
-        textViewTo.setText(trip.getTo());
+        textViewFrom.setText(trip.getStartAddress());
+        textViewTo.setText(trip.getDestinationAddress());
         textViewDate.setText(trip.getDateString());
         textViewTime.setText(trip.getTimeString());
 
