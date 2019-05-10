@@ -76,17 +76,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String[] typeOfChange = notificationData.split(",");
         String change = typeOfChange[0];
         String userId = typeOfChange[1];
+        String driverId = typeOfChange[2];
 
         if( change.equals("Passenger joined")){
 
-            if(userId.equals(loggedInUserId)){
+            if( userId.equals(loggedInUserId) ){
+
                 title = "Inbokad på resa";//TODO replace with string values
                 body = "Du är nu inbokad på resan";
                 toastMessage = "Inbokad på resa";
-            }else {
-                title = "Ny passagerare inbokad";//TODO replace with string values
+
+            }else if( driverId.equals(loggedInUserId)){
+
+                title = "Ny passagerare";//TODO replace with string values
+                body = "En passagerare har bokat in sig på din resa";
+                toastMessage = "Ny passagerare";
+
+            } else {
+
+                title = "Ny passagerare";//TODO replace with string values
                 body = "En passagerare har gått med en resa du är inbokad på";
-                toastMessage = "Ny passagerare inbokad";
+                toastMessage = "Ny passagerare";
             }
 
         }else{

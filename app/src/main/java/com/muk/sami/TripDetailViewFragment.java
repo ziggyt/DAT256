@@ -363,11 +363,12 @@ public class TripDetailViewFragment extends Fragment {
         //The topic name, which equals the tripId
         String topic = tripId;
 
-        //The userId to send with the message
+        //The driverId to send with the message
+        String driverId = displayedTrip.getDriver();
 
 
         //Creates a message to be sent via Firestore Cloud Messaging
-        SimpleNotification message = new SimpleNotification("Passenger joined," + userId);
+        SimpleNotification message = new SimpleNotification("Passenger joined," + userId + "," + driverId);
         mNotificationRef.document(topic).set(message);
 
     }
