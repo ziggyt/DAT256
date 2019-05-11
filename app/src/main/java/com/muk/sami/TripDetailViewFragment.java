@@ -323,6 +323,7 @@ public class TripDetailViewFragment extends Fragment {
                 if (displayedTrip.removePassenger(activeUser.getUid())) {
                     mTripRef.set(displayedTrip);
                     showViewForUnbookedUser();
+                    cancelTripMessaging();
                     Toast.makeText(getContext(), R.string.user_removed_from_trip, Toast.LENGTH_SHORT).show();
                 }
                 checkIfTripIsFull();
@@ -354,6 +355,21 @@ public class TripDetailViewFragment extends Fragment {
                 });
     }
 
+    private void cancelTripMessaging(){
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(tripId)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = getString(R.string.msg_unsubscribed);
+                        if (!task.isSuccessful()) {
+                            msg = getString(R.string.msg_unsubscribe_failed);
+                        }
+                        //Log.d(TAG, msg);
+                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     /**
      * Changes the document at tripBookingNotification/tripId, which triggers a cloud function,
@@ -372,31 +388,5 @@ public class TripDetailViewFragment extends Fragment {
         mNotificationRef.document(topic).set(message);
 
     }
-
-    /*private void sendTripBookedMessage(){
-        // The topic name
-        String topic = tripId;
-
-        Map<String,String> data = new HashMap<>();
-        data.put("message", "this is the message shown");
-
-        // See documentation on defining a message payload.
-        //RemoteMessage message = new RemoteMessage.Builder("message").setMessageId(tripId).setData(data).build();
-
-        /*NotificationCompat.MessagingStyle.Message message = Message.builder()
-                .putData("score", "850")
-                .putData("time", "2:45")
-                .setTopic(topic)
-                .build();
-                            */
-
-// Send a message to devices subscribed to the combination of topics
-// specified by the provided condition.
-       // FirebaseMessaging.getInstance().send(message);
-// Response is a message ID string.
-        //System.out.println("Successfully sent message: " + response);
-   // }
-
-
 
 }
