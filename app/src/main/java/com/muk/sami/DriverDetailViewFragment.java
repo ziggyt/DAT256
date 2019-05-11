@@ -21,12 +21,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.muk.sami.model.BankCard;
+import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 
@@ -46,12 +48,15 @@ public class DriverDetailViewFragment extends Fragment {
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
     private DocumentReference mUserRef;
+    private CollectionReference mNotificationRef;
 
     private FirebaseUser activeUser;
+    private String userId;
 
     private static BroadcastReceiver tickReceiver;
 
     private Trip displayedTrip;
+    private String tripId;
 
     View view;
 
@@ -103,9 +108,10 @@ public class DriverDetailViewFragment extends Fragment {
 
         mDatabase = FirebaseFirestore.getInstance();
         activeUser = FirebaseAuth.getInstance().getCurrentUser();
+        userId = activeUser.getUid();
 
         //Retrieve the tripId string that was passed along from SearchTripFragment
-        String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
+        tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
         //Get a reference to the selected trip
         mTripRef = mDatabase.collection("trips").document(tripId);
@@ -129,6 +135,9 @@ public class DriverDetailViewFragment extends Fragment {
                 }
             }
         });
+
+        //Get the reference to the notifications collection
+        mNotificationRef = mDatabase.collection("tripBookingNotification");
     }
 
     private void initListeners() {
@@ -139,6 +148,31 @@ public class DriverDetailViewFragment extends Fragment {
                 Navigation.findNavController(view).navigate(action);
             }
         });
+
+        startTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendTripStartedMessage();
+            }
+        });
+    }
+
+    /**
+     * Changes the document at tripBookingNotification/tripId, which triggers a cloud function,
+     * sending a notification to the passengers confirming that the trip has started
+     */
+    private void sendTripStartedMessage(){
+        //The topic name, which equals the tripId
+        String topic = tripId;
+
+        //The driverId to send with the message
+        String driverId = displayedTrip.getDriver();
+
+
+        //Creates a message to be sent via Firestore Cloud Messaging
+        SimpleNotification message = new SimpleNotification("Trip started," + userId + "," + driverId);
+        mNotificationRef.document(topic).set(message);
+
     }
 
     private void checkIfPastStartTime() {

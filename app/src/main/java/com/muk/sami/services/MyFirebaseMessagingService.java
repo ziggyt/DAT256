@@ -99,6 +99,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 toastMessage = "Ny passagerare";
             }
 
+        }else if( change.equals("Trip started")) {
+
+            title = "Resan har börjat";
+            body = "Nu är resan igång";
+            toastMessage = "Resan startad";
+
         }else{
             toastMessage = "";
         }
