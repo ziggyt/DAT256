@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -22,15 +23,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.Coordinates;
+import com.muk.sami.model.SimpleNotification;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class CreateTripFragment extends Fragment {
     private EditText fromEditText;
@@ -43,6 +54,7 @@ public class CreateTripFragment extends Fragment {
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
+    private CollectionReference mNotificationRef;
 
     private Place startPlace;
     private Place destinationPlace;
@@ -71,6 +83,7 @@ public class CreateTripFragment extends Fragment {
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
+        mNotificationRef = mDatabase.collection("tripBookingNotification");
 
         addTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,9 +184,25 @@ public class CreateTripFragment extends Fragment {
 
         mTripsRef.document(tripId).set(trip);
 
+        SimpleNotification message = new SimpleNotification("Trip created");
+        mNotificationRef.document(tripId).set(message);
+
         System.out.println(trip.toString());
 
         Toast.makeText(getContext(), "Resa tillagd", Toast.LENGTH_LONG).show(); //TODO replace with string value
+
+        FirebaseMessaging.getInstance().subscribeToTopic(tripId)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = getString(R.string.msg_subscribed);
+                        if (!task.isSuccessful()) {
+                            msg = getString(R.string.msg_subscribe_failed);
+                        }
+                        //Log.d(TAG, msg);
+                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

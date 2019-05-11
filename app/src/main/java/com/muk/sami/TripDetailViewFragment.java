@@ -1,10 +1,12 @@
 package com.muk.sami;
 
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 import android.content.BroadcastReceiver;
@@ -30,13 +35,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TripDetailViewFragment extends Fragment {
 
@@ -56,6 +65,7 @@ public class TripDetailViewFragment extends Fragment {
     private RatingBar driverRatingBar;
 
     private FirebaseFirestore mDatabase;
+    private CollectionReference mNotificationRef;
     private DocumentReference mTripRef;
     private DocumentReference mUserRef;
 
@@ -64,8 +74,10 @@ public class TripDetailViewFragment extends Fragment {
     private static BroadcastReceiver tickReceiver;
 
     private Trip displayedTrip;
+    private String tripId;
 
     private User user;
+    private String userId;
 
     private View view;
 
@@ -97,7 +109,7 @@ public class TripDetailViewFragment extends Fragment {
         initFirebaseSetup();
         initListeners();
 
-        String userId = activeUser.getUid();
+        userId = activeUser.getUid();
         mUserRef = mDatabase.collection("users").document(userId);
 
         mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -163,7 +175,7 @@ public class TripDetailViewFragment extends Fragment {
         activeUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //Retrieve the tripId string that was passed along from SearchTripFragment
-        String tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
+        tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
         //Get a reference to the selected trip
         mTripRef = mDatabase.collection("trips").document(tripId);
@@ -216,6 +228,9 @@ public class TripDetailViewFragment extends Fragment {
             }
         });
 
+        //Get the reference to the notifications collection
+        mNotificationRef = mDatabase.collection("tripBookingNotification");
+
     }
 
     private void checkIfTripIsFull(){
@@ -263,6 +278,8 @@ public class TripDetailViewFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 mTripRef.set(displayedTrip);
                 showViewForBookedUser();
+                initTripMessaging();
+                sendTripBookedMessage();
                 Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
             }
         });
@@ -321,5 +338,65 @@ public class TripDetailViewFragment extends Fragment {
         });
 
     }
+
+    private void initTripMessaging(){
+        FirebaseMessaging.getInstance().subscribeToTopic(tripId)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = getString(R.string.msg_subscribed);
+                        if (!task.isSuccessful()) {
+                            msg = getString(R.string.msg_subscribe_failed);
+                        }
+                        //Log.d(TAG, msg);
+                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
+    /**
+     * Changes the document at tripBookingNotification/tripId, which triggers a cloud function,
+     * sending a notification to the driver/passengers telling them that a passenger has joined
+     */
+    private void sendTripBookedMessage(){
+        //The topic name, which equals the tripId
+        String topic = tripId;
+
+        //The driverId to send with the message
+        String driverId = displayedTrip.getDriver();
+
+
+        //Creates a message to be sent via Firestore Cloud Messaging
+        SimpleNotification message = new SimpleNotification("Passenger joined," + userId + "," + driverId);
+        mNotificationRef.document(topic).set(message);
+
+    }
+
+    /*private void sendTripBookedMessage(){
+        // The topic name
+        String topic = tripId;
+
+        Map<String,String> data = new HashMap<>();
+        data.put("message", "this is the message shown");
+
+        // See documentation on defining a message payload.
+        //RemoteMessage message = new RemoteMessage.Builder("message").setMessageId(tripId).setData(data).build();
+
+        /*NotificationCompat.MessagingStyle.Message message = Message.builder()
+                .putData("score", "850")
+                .putData("time", "2:45")
+                .setTopic(topic)
+                .build();
+                            */
+
+// Send a message to devices subscribed to the combination of topics
+// specified by the provided condition.
+       // FirebaseMessaging.getInstance().send(message);
+// Response is a message ID string.
+        //System.out.println("Successfully sent message: " + response);
+   // }
+
+
 
 }
