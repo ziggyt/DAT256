@@ -120,7 +120,7 @@ public class MyTripsFragment extends Fragment {
             });
 
             //Create a query against the collection to find trips where the user is a passenger
-            Query passengerQuery = mTripsRef.whereEqualTo("passengers." + userID, true);
+            Query passengerQuery = mTripsRef.whereArrayContains("passengers", userID);
 
             passengerQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override

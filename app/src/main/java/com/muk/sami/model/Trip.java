@@ -4,11 +4,10 @@ import com.google.firebase.firestore.Exclude;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -16,17 +15,17 @@ import lombok.ToString;
 @ToString
 public class Trip {
 
-    private @Getter
+    @Getter private
     String tripId;
-    private @Getter
+    @Getter private
     Date date;
-    private @Getter
+    @Getter private
     int numberOfBookedSeats;
-    private @Getter
+    @Getter private
     int totalNumberOfSeats;
-    private @Getter
-    Map<String, Boolean> passengers = new HashMap<>();
-    private @Getter
+    @Getter private
+    List<String> passengers = new ArrayList<>();
+    @Getter private
     String driver;
     @Getter private
     Coordinates startCoordinates;
@@ -46,7 +45,7 @@ public class Trip {
         this.tripId = tripId;
         this.date = date;
         this.totalNumberOfSeats = totalNumberOfSeats;
-        numberOfBookedSeats = 0;
+        this.numberOfBookedSeats = 0;
         this.driver = driver;
         this.startCoordinates = startCoordinates;
         this.destinationCoordinates = destinationCoordinates;
@@ -68,7 +67,7 @@ public class Trip {
     public boolean addPassenger(String uid) {
         if (!tripIsFull()) {
             numberOfBookedSeats++;
-            passengers.put(uid, true);
+            passengers.add(uid);
             return true;
         }
         return false;
@@ -95,7 +94,7 @@ public class Trip {
      * @return if the user is a passenger in this trip
      */
     public boolean userInTrip(String uid) {
-        return passengers.keySet().contains(uid);
+        return passengers.contains(uid);
     }
 
     /**
@@ -114,14 +113,6 @@ public class Trip {
     public String getTimeString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("HH:mm", Locale.GERMAN);
         return simpleDateFormatDate.format(date);
-    }
-
-    /**
-     * @return a set of the passenger's UIDs
-     */
-    @Exclude
-    public Set<String> getPassengerUids() {
-        return passengers.keySet();
     }
 
 
