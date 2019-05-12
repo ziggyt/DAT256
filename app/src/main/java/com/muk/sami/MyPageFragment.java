@@ -65,6 +65,7 @@ public class MyPageFragment extends Fragment {
     private DocumentReference mUserRef;
 
     private OnAccountManageListener mAccountManageListener;
+    private SignInListener mSignInListener;
 
     public MyPageFragment() {
         // Required empty public constructor
@@ -74,6 +75,17 @@ public class MyPageFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) { // If not signed in
+            view = inflater.inflate(R.layout.sign_in_prompt, container, false);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mSignInListener != null) mSignInListener.signIn();
+                }
+            });
+            return view;
+        }
 
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(getActivity()));
 
@@ -155,7 +167,14 @@ public class MyPageFragment extends Fragment {
             mAccountManageListener = (OnAccountManageListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnAccountManageListener");
+        }
+
+        if (context instanceof SignInListener) {
+            mSignInListener = (SignInListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement SignInListener");
         }
     }
 
@@ -163,6 +182,7 @@ public class MyPageFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mAccountManageListener = null;
+        mSignInListener = null;
     }
 
     public interface OnAccountManageListener {
