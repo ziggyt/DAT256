@@ -28,7 +28,6 @@
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Removed user from trip</string>
 
-
     <!-- My Page -->
     <string name="navigation_my_page">My Page</string>
     <string name="edit_profile">Edit Profile</string>
@@ -44,11 +43,12 @@
     <!-- MyTrips -->
     <string name="navigation_my_trips">My Trips</string>
 
-
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Leaderboard</string>
     <string name="show_qr_code_string">Show QR-code for the trip</string>
     <string name="show_info_active_trip_string">Show the code below to your driver when the trip is finished</string>
 
+    <!-- SignInPrompt -->
+    <string name="click_to_sign_in">Click to sign in/register</string>
 
 </resources>
