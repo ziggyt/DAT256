@@ -31,7 +31,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity implements MyPageFragment.OnAccountManageListener {
+public class MainActivity extends AppCompatActivity implements SignInListener, MyPageFragment.OnAccountManageListener {
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 0;
@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
      * Checks if there is a FirebaseAuth instance with an already signed in user, and if not,
      * starts a new activity with the sign in screen.
      */
-    private void signIn() {
+    @Override
+    public void signIn() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) { // Already signed in
 
