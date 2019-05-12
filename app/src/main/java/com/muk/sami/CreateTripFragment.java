@@ -179,7 +179,7 @@ public class CreateTripFragment extends Fragment {
         String destinationAddress = destinationPlace.getAddress();
 
         Coordinates startCoordinates = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
-        Coordinates destinationCoordinates = new Coordinates(destinationPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
+        Coordinates destinationCoordinates = new Coordinates(destinationPlace.getLatLng().latitude, destinationPlace.getLatLng().longitude);
 
         Trip trip = new Trip(tripId, date, seats, driverId, startCoordinates, destinationCoordinates, startAddress, destinationAddress);
 

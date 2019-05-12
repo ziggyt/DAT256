@@ -38,6 +38,7 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
         TextView textViewDate  = listitem.findViewById(R.id.date_text_view);
         TextView textViewTime  = listitem.findViewById(R.id.time_text_view);
         TextView textViewSeats = listitem.findViewById(R.id.seats_text_view);
+        TextView tripLengthTextView = listitem.findViewById(R.id.trip_length_text_view);
 
         Trip trip = trips.get(position);
 
@@ -53,6 +54,7 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
         textViewTo.setText(trip.getDestinationAddress());
         textViewDate.setText(trip.getDateString());
         textViewTime.setText(trip.getTimeString());
+        tripLengthTextView.setText(Math.round(trip.getDistanceBetweenStartAndDestination()/1000) + "km");
 
         int remainingSeats = trip.getTotalNumberOfSeats() - trip.getNumberOfBookedSeats();
         if(remainingSeats == 0) {

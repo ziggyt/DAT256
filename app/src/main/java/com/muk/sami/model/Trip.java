@@ -125,12 +125,12 @@ public class Trip {
     }
 
 
-    public double distanceBetweenCoordinates(Coordinates c1, Coordinates c2) {
+    private double distanceBetweenCoordinates(Coordinates c1, Coordinates c2) {
 
         double lat1 = c1.getLat();
         double lon1 = c1.getLon();
         double lat2 = c2.getLat();
-        double lon2 = c2.getLat();
+        double lon2 = c2.getLon();
 
         final int R = 6371; // Radius of the earth
 
@@ -142,12 +142,13 @@ public class Trip {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // convert to meters
 
+
         distance = Math.pow(distance, 2);
 
         return Math.sqrt(distance);
     }
-    
-    private double getDistanceBetweenStartAndDestination(){
+
+    public double getDistanceBetweenStartAndDestination(){
         return distanceBetweenCoordinates(startCoordinates, destinationCoordinates);
     }
 }
