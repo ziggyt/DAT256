@@ -11,7 +11,6 @@
     <string name="msg_subscribe_failed">Failed subscribing to message</string>
     <string name="msg_unsubscribe_failed">Failed unsubscribing from message</string>
 
-
     <!-- SearchTrip -->
     <string name="navigation_trip_search">Sök resa</string>
     <string name="navigation_trip_detailview">Bokningsinformation</string>
@@ -29,7 +28,6 @@
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Du har nu avbokat din plats på resan</string>
 
-
     <!-- My Page -->
     <string name="navigation_my_page">Min sida</string>
     <string name="edit_profile">Ändra profil</string>
@@ -42,15 +40,15 @@
     <string name="manage_bank_card_button">Hantera bankkort</string>
     <string name="card_number">Kortnummer</string>
 
-
     <!-- MyTrips -->
     <string name="navigation_my_trips">Mina Resor</string>
-
 
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Topplista</string>
     <string name="show_qr_code_string">Visa QR-kod för resan</string>
     <string name="show_info_active_trip_string">Visa koden nedanför för din förare när resan är färdig</string>
 
+    <!-- SignInPrompt -->
+    <string name="click_to_sign_in">Klicka för att logga in/registrera</string>
 
 </resources>
