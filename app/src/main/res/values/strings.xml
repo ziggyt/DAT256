@@ -51,5 +51,6 @@
 
     <!-- SignInPrompt -->
     <string name="click_to_sign_in">Klicka för att logga in/registrera</string>
+    <string name="search_trip_hint_textview">Välj startplats och destination och klicka på \"Sök Resa\"</string>
 
 </resources>
