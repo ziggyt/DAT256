@@ -77,9 +77,10 @@ public class TripDetailViewFragment extends Fragment {
     private String tripId;
 
     private User user;
-    private String userId;
 
     private View view;
+
+    private SignInListener mSignInListener;
 
     public TripDetailViewFragment() {
 
@@ -108,19 +109,6 @@ public class TripDetailViewFragment extends Fragment {
 
         initFirebaseSetup();
         initListeners();
-
-        userId = activeUser.getUid();
-        mUserRef = mDatabase.collection("users").document(userId);
-
-        mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot dsUser = task.getResult();
-                assert dsUser != null;
-
-                user = dsUser.toObject(User.class);
-            }
-        });
 
         return view;
     }
@@ -174,6 +162,19 @@ public class TripDetailViewFragment extends Fragment {
         mDatabase = FirebaseFirestore.getInstance();
         activeUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        if (activeUser != null) {
+            mUserRef = mDatabase.collection("users").document(activeUser.getUid());
+            mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot dsUser = task.getResult();
+                    assert dsUser != null;
+
+                    user = dsUser.toObject(User.class);
+                }
+            });
+        }
+
         //Retrieve the tripId string that was passed along from SearchTripFragment
         tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();
 
@@ -213,17 +214,13 @@ public class TripDetailViewFragment extends Fragment {
                 numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
 
                 //Check if the user is a passenger
-                if (activeUser != null){
-                    if(displayedTrip.getDriver().equals(activeUser.getUid())) {
-                        showViewForDriver();
-                    } else if (displayedTrip.userInTrip(activeUser.getUid())) {
-                        showViewForBookedUser();
-                    } else {
-                        showViewForUnbookedUser();
-                    }
-                    checkIfTripIsFull();
-                    checkIfPastStartTime();
+                if (activeUser != null && displayedTrip.userInTrip(activeUser.getUid())) {
+                    showViewForBookedUser();
+                } else {
+                    showViewForUnbookedUser();
                 }
+                checkIfTripIsFull();
+                checkIfPastStartTime();
             }
             }
         });
@@ -300,7 +297,11 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (activeUser == null) return;
+                // Sign in first if not signed in
+                if (activeUser == null) {
+                    if (mSignInListener != null) mSignInListener.signIn();
+                    return;
+                }
 
                 if(user.getBankCard() == null) {
                     Toast.makeText(getContext(), "Finns inget giltigt bankkort", Toast.LENGTH_SHORT).show();
@@ -319,7 +320,7 @@ public class TripDetailViewFragment extends Fragment {
         cancelTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (activeUser == null) return;
+                if (activeUser == null) throw new IllegalStateException("user should be signed in");
                 if (displayedTrip.removePassenger(activeUser.getUid())) {
                     mTripRef.set(displayedTrip);
                     showViewForUnbookedUser();
@@ -382,11 +383,29 @@ public class TripDetailViewFragment extends Fragment {
         //The driverId to send with the message
         String driverId = displayedTrip.getDriver();
 
-
+        if (activeUser == null) throw new IllegalStateException("user should be signed in");
         //Creates a message to be sent via Firestore Cloud Messaging
-        SimpleNotification message = new SimpleNotification("Passenger joined," + userId + "," + driverId);
+        SimpleNotification message = new SimpleNotification("Passenger joined," + activeUser.getUid() + "," + driverId);
         mNotificationRef.document(topic).set(message);
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof SignInListener) {
+            mSignInListener = (SignInListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement SignInListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSignInListener = null;
     }
 
 }

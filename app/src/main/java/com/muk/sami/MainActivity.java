@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -58,29 +56,22 @@ public class MainActivity extends AppCompatActivity implements SignInListener, M
     }
 
     /**
-     * Starts the sign in flow.
-     * Checks if there is a FirebaseAuth instance with an already signed in user, and if not,
-     * starts a new activity with the sign in screen.
+     * Starts the sign in flow in a new activity.
      */
     @Override
     public void signIn() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) { // Already signed in
-
-        } else { // Not signed in
-            // Start AuthUI's sign in flow
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setAvailableProviders(Arrays.asList(
-                                    new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                    new AuthUI.IdpConfig.EmailBuilder().build()))
-                            .setTosAndPrivacyPolicyUrls(
-                                    "https://superapp.example.com/terms-of-service.html",
-                                    "https://superapp.example.com/privacy-policy.html")
-                            .build(),
-                    RC_SIGN_IN);
-        }
+        // Start AuthUI's sign in flow
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(Arrays.asList(
+                                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                new AuthUI.IdpConfig.EmailBuilder().build()))
+                        .setTosAndPrivacyPolicyUrls(
+                                "https://superapp.example.com/terms-of-service.html",
+                                "https://superapp.example.com/privacy-policy.html")
+                        .build(),
+                RC_SIGN_IN);
     }
 
     /**
@@ -98,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements SignInListener, M
             recreate();
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == RESULT_OK) { // Successfully signed in
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
                 //Check if the user is new
                 FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {

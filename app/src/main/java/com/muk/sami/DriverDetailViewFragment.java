@@ -50,7 +50,6 @@ public class DriverDetailViewFragment extends Fragment {
     private DocumentReference mUserRef;
     private CollectionReference mNotificationRef;
 
-    private FirebaseUser activeUser;
     private String userId;
 
     private static BroadcastReceiver tickReceiver;
@@ -107,8 +106,8 @@ public class DriverDetailViewFragment extends Fragment {
     private void initFirebaseSetup() {
 
         mDatabase = FirebaseFirestore.getInstance();
-        activeUser = FirebaseAuth.getInstance().getCurrentUser();
-        userId = activeUser.getUid();
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //Retrieve the tripId string that was passed along from SearchTripFragment
         tripId = TripDetailViewFragmentArgs.fromBundle(getArguments()).getTripId();

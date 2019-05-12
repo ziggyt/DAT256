@@ -1,5 +1,6 @@
 package com.muk.sami;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 
@@ -32,6 +34,8 @@ public class SearchTripFragment extends Fragment {
 
     private AutocompleteSupportFragment startAutocompleteFragment;
     private AutocompleteSupportFragment destinationAutocompleteFragment;
+
+    private SignInListener mSignInListener;
 
     @Nullable
     @Override
@@ -98,11 +102,35 @@ public class SearchTripFragment extends Fragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Sign in first if not signed in
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    if (mSignInListener != null) mSignInListener.signIn();
+                    return;
+                }
+
                 // opens fragment for creating a trip
                 Navigation.findNavController(v).navigate(R.id.action_searchTripFragment_to_createTripFragment);
             }
         });
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof SignInListener) {
+            mSignInListener = (SignInListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement SignInListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSignInListener = null;
     }
 }
 

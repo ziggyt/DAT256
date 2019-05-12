@@ -46,7 +46,6 @@ public class MyTripsFragment extends Fragment {
     private List<Trip> driverTrips;
     private List<Trip> passengerTrips;
 
-    private String userID;
     private boolean firstListenerDone;
 
     private FirebaseFirestore mDatabase;
@@ -82,75 +81,76 @@ public class MyTripsFragment extends Fragment {
     private void initFirebaseSetup() {
 
         mDatabase = FirebaseFirestore.getInstance();
-        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         //Create a reference to the trips collection
         mTripsRef = mDatabase.collection("trips");
 
-        //Create a query against the collection to find trips where the user is a driver
-        final Query driverQuery = mTripsRef.whereEqualTo("driver", userID);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        driverQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    //Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
+            //Create a query against the collection to find trips where the user is a driver
+            final Query driverQuery = mTripsRef.whereEqualTo("driver", userID);
 
-                driverTrips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
-
-                Collections.sort(driverTrips, new Comparator<Trip>() {
-                    @Override
-                    public int compare(Trip o1, Trip o2) {
-                        return o1.getDate().compareTo(o2.getDate());
+            driverQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        //Log.w(TAG, "Listen failed.", e);
+                        return;
                     }
-                });
 
-                if (getActivity() != null && firstListenerDone) {
-                    driverTrips.addAll(passengerTrips);
-                    TripListAdapter adapter = new TripListAdapter(getActivity(),driverTrips , userID);
-                    tripsListView.setAdapter(adapter);
-                }
+                    driverTrips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
 
-                if (!firstListenerDone){
-                    firstListenerDone = true;
-                }
-            }
-        });
+                    Collections.sort(driverTrips, new Comparator<Trip>() {
+                        @Override
+                        public int compare(Trip o1, Trip o2) {
+                            return o1.getDate().compareTo(o2.getDate());
+                        }
+                    });
 
-        //Create a query against the collection to find trips where the user is a passenger
-        Query passengerQuery = mTripsRef.whereEqualTo("passengers." + userID , true );
-
-        passengerQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    //Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-
-                passengerTrips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
-
-                Collections.sort(passengerTrips, new Comparator<Trip>() {
-                    @Override
-                    public int compare(Trip o1, Trip o2) {
-                        return o1.getDate().compareTo(o2.getDate());
+                    if (getActivity() != null && firstListenerDone) {
+                        driverTrips.addAll(passengerTrips);
+                        TripListAdapter adapter = new TripListAdapter(getActivity(), driverTrips, userID);
+                        tripsListView.setAdapter(adapter);
                     }
-                });
 
-                if (getActivity() != null && firstListenerDone) {
-                    driverTrips.addAll(passengerTrips);
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), driverTrips, userID);
-                    tripsListView.setAdapter(adapter);
+                    if (!firstListenerDone) {
+                        firstListenerDone = true;
+                    }
                 }
+            });
 
-                if (!firstListenerDone){
-                    firstListenerDone = true;
+            //Create a query against the collection to find trips where the user is a passenger
+            Query passengerQuery = mTripsRef.whereEqualTo("passengers." + userID, true);
+
+            passengerQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        //Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    passengerTrips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
+
+                    Collections.sort(passengerTrips, new Comparator<Trip>() {
+                        @Override
+                        public int compare(Trip o1, Trip o2) {
+                            return o1.getDate().compareTo(o2.getDate());
+                        }
+                    });
+
+                    if (getActivity() != null && firstListenerDone) {
+                        driverTrips.addAll(passengerTrips);
+                        TripListAdapter adapter = new TripListAdapter(getActivity(), driverTrips, userID);
+                        tripsListView.setAdapter(adapter);
+                    }
+
+                    if (!firstListenerDone) {
+                        firstListenerDone = true;
+                    }
                 }
-            }
-        });
-
+            });
+        }
 
     }
 
@@ -162,6 +162,7 @@ public class MyTripsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = driverTrips.get(position);
                 FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (activeUser == null) throw new IllegalStateException("user should be signed in");
 
                 if(trip.getDriver().equals(activeUser.getUid())) {
                     MyTripsFragmentDirections.DriverDetailViewAction action = MyTripsFragmentDirections.driverDetailViewAction();

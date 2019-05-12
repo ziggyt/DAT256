@@ -56,6 +56,7 @@ public class EditProfileFragment extends Fragment {
         view=inflater.inflate(R.layout.fragment_edit_profile, container, false);
         mDatabase = FirebaseFirestore.getInstance();
 
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Get a document reference for the active User
 
