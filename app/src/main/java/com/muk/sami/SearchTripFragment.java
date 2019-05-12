@@ -18,6 +18,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Arrays;
 
@@ -25,7 +26,7 @@ public class SearchTripFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
-    private Button addButton;
+    private FloatingActionButton addButton;
 
     private View view;
 
