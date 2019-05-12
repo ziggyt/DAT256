@@ -55,26 +55,18 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
         PlacesClient placesClient = Places.createClient(this);
 
         mDatabase = FirebaseFirestore.getInstance();
-        signIn();
     }
 
     /**
      * Starts the sign in flow.
      * Checks if there is a FirebaseAuth instance with an already signed in user, and if not,
      * starts a new activity with the sign in screen.
-     * <p>
-     * If the user is not signed in, screen inputs are disabled to prevent any actions to be
-     * made before the sign in screen has a chance to load.
      */
     private void signIn() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) { // Already signed in
 
         } else { // Not signed in
-            // Disable the screen before successful sign in
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
             // Start AuthUI's sign in flow
             startActivityForResult(
                     AuthUI.getInstance()
@@ -96,47 +88,41 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
      * Firebase cloud functions will handle adding newly created users to the database, but non
      * OAuth registration methods, like email + password, do not update the displayName before
      * the cloud function gets called even though it is a field you can fill in. So after successful
-     * sign in, if it is a new user, manually add the displayName to the database.
+     * sign in, if it is a new user, manually add the displayName to the database (in
+     * {@link #onUserCreation}).
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
+            recreate();
             IdpResponse response = IdpResponse.fromResultIntent(data);
-
             if (resultCode == RESULT_OK) { // Successfully signed in
-                //Re-enable the screen
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                FirebaseUserMetadata metadata = firebaseUser.getMetadata();
+                //Check if the user is new
+                FirebaseUserMetadata metadata = FirebaseAuth.getInstance().getCurrentUser().getMetadata();
                 if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
-                    // The user is new
-                    Map<String, Object> dataMap = new HashMap<>();
-                    dataMap.put("displayName", firebaseUser.getDisplayName());
-                    mDatabase.collection("users").document(firebaseUser.getUid())
-                            .set(dataMap, SetOptions.merge());
+                    onUserCreation();
                 }
             } else { // Sign in failed
-                if (response == null) { // User pressed back button
-                    finish();
-                    return;
-                }
-
-                signIn();
-
-                if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    //Network error
-                    return;
-                }
-
+                // User pressed back button
+                if (response == null) return;
+                //Network error
+                if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) return;
                 //Unknown error
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
         }
     }
 
+    private void onUserCreation() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("displayName", firebaseUser.getDisplayName());
+        mDatabase.collection("users").document(firebaseUser.getUid())
+                .set(dataMap, SetOptions.merge());
+    }
+
     /**
-     * Signs out, and on completing the sign out, starts the sign in process again.
+     * Signs out from Firebase Auth and starts the sign in process again.
      */
     @Override
     public void onSignOut() {
@@ -154,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements MyPageFragment.On
      * If successful, starts the sign in process again.
      * If unsuccessful, reauthentication is required.
      * <p>
-     * To delete an account through AuthUI the user needs to have signed in recently.
+     * To delete an account with Firebase Auth the user needs to have manually signed in recently.
      */
     @Override
     public void onDeleteAccount() {
