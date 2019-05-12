@@ -172,6 +172,7 @@ public class CreateTripFragment extends Fragment {
     private void createTrip(Date date, int seats) {
 
         String tripId = mTripsRef.document().getId();
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
         String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         String startAddress = startPlace.getAddress();
