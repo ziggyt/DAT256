@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_searchTripFragment_to_createTripFragment"
             app:destination="@id/createTripFragment" />
+        <action
+            android:id="@+id/action_searchTripFragment_to_filteredTripsFragment"
+            app:destination="@id/filteredTripsFragment" />
     </fragment>
 
     <fragment
@@ -86,6 +89,12 @@
         android:name="com.muk.sami.CreateTripFragment"
         android:label="fragment_create_trip"
         tools:layout="@layout/fragment_create_trip" />
+    <fragment
+        android:id="@+id/filteredTripsFragment"
+        android:name="com.muk.sami.FilteredTripsFragment"
+        android:label="fragment_filtered_trips"
+        tools:layout="@layout/fragment_filtered_trips" />
+
 
     <fragment
         android:id="@+id/driverDetailViewFragment"
