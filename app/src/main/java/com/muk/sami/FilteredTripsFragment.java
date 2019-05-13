@@ -37,29 +37,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-//import in.madapps.placesautocomplete.PlaceAPI;
-//import in.madapps.placesautocomplete.adapter.PlacesAutoCompleteAdapter;
-//import in.madapps.placesautocomplete.model.Place;
-
-//import com.google.android.libraries.places.api.Places;
 
 public class FilteredTripsFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
-    private AutoCompleteTextView fromAutoCompleteTextView;
-    private AutoCompleteTextView toAutoCompleteTextView;
-
-    //private Place fromPlace;
-    //private Place toPlace;
-    //private PlaceAPI placeAPI;
-
     private TextView timeTextView;
-
 
     private Button filterButton;
     private Button revertFilterButton;
-
 
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
@@ -73,63 +59,13 @@ public class FilteredTripsFragment extends Fragment {
 
     private View view;
 
-
-
+    
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_filtered_trips, container, false);
 
-        //fromAutoCompleteTextView = view.findViewById(R.id.from_autocompleteedittext);
-        //toAutoCompleteTextView = view.findViewById(R.id.to_autocompleteedittext);
         timeTextView = view.findViewById(R.id.timeTextView);
-
-        //String sessionToken = generateNewSessionToken();
-        //String apiKey = getString(R.string.google_places_api_key);
-
-        /*PlaceAPI.Builder placeApiBuilder = new PlaceAPI.Builder();
-
-        placeAPI = placeApiBuilder.apiKey(apiKey).sessionToken(sessionToken).build(getContext());
-
-        fromAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(getContext(), placeAPI));
-        toAutoCompleteTextView.setAdapter(new PlacesAutoCompleteAdapter(getContext(), placeAPI));
-
-        fromAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                fromPlace = (Place) parent.getItemAtPosition(position);
-                fromAutoCompleteTextView.setText(fromPlace.getDescription());
-
-            }
-        }); */
-
-       // toAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        //  @Override
-        //  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //     toPlace = (Place) parent.getItemAtPosition(position);
-        //       toAutoCompleteTextView.setText(toPlace.getDescription());
-
-
-                /*
-
-                placeAPI.fetchPlaceDetails(toPlace.getId(), new OnPlacesDetailsListener() {
-
-                    @Override
-                    public void onPlaceDetailsFetched(PlaceDetails placeDetails) {
-                        //toAutoCompleteTextView.setText(placeDetails.getName());
-                        System.out.println(placeDetails.getLat());
-                    }
-
-                    @Override
-                    public void onError(String s) {
-                        System.out.println(s);
-                    }
-                });
-                */
-        // }
-        // });
-
-
         filterOn = false;
 
         mDatabase = FirebaseFirestore.getInstance();
@@ -169,7 +105,6 @@ public class FilteredTripsFragment extends Fragment {
         filteredTrips = new ArrayList<>();
 
         listViewTrips = view.findViewById(R.id.listView_Trips);
-
 
 
         filterButton = view.findViewById(R.id.filterButton);
@@ -253,23 +188,6 @@ public class FilteredTripsFragment extends Fragment {
         });
 
         builder.show();
-    }
-
-    // Taken from https://www.baeldung.com/java-random-string
-
-    private String generateNewSessionToken() {
-
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 5;
-        Random random = new Random();
-        StringBuilder buffer = new StringBuilder(targetStringLength);
-        for (int i = 0; i < targetStringLength; i++) {
-            int randomLimitedInt = leftLimit + (int)
-                    (random.nextFloat() * (rightLimit - leftLimit + 1));
-            buffer.append((char) randomLimitedInt);
-        }
-        return buffer.toString();
     }
 
     private Date dateFromDatePicker(DatePicker p, TimePicker t) {
