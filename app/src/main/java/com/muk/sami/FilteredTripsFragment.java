@@ -40,7 +40,7 @@ import java.util.Random;
 
 public class FilteredTripsFragment extends Fragment {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "FilteredTripsFragment";
 
     private TextView timeTextView;
 
@@ -141,13 +141,12 @@ public class FilteredTripsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = trips.get(position);
 
-                SearchTripFragmentDirections.DetailViewAction action = SearchTripFragmentDirections.detailViewAction();
+                FilteredTripsFragmentDirections.DetailViewAction action = FilteredTripsFragmentDirections.detailViewAction();
                 action.setTripId(trip.getTripId());
                 Navigation.findNavController(view).navigate(action);
-
-
             }
         });
+
         return view;
     }
 

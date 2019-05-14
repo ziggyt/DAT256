@@ -9,7 +9,7 @@
         android:id="@+id/myPageFragment"
         android:name="com.muk.sami.MyPageFragment"
         android:label="fragment_my_page"
-        tools:layout="@layout/fragment_my_page" >
+        tools:layout="@layout/fragment_my_page">
         <action
             android:id="@+id/editProfileAction"
             app:destination="@id/editProfileFragment" />
@@ -25,13 +25,7 @@
         android:id="@+id/searchTripFragment"
         android:name="com.muk.sami.SearchTripFragment"
         android:label="fragment_search_trip"
-        tools:layout="@layout/fragment_search_trip" >
-        <action
-            android:id="@+id/detailViewAction"
-            app:destination="@id/tripDetailViewFragment" />
-        <action
-            android:id="@+id/driverDetailViewAction"
-            app:destination="@id/driverDetailViewFragment" />
+        tools:layout="@layout/fragment_search_trip">
         <action
             android:id="@+id/action_searchTripFragment_to_createTripFragment"
             app:destination="@id/createTripFragment" />
@@ -47,9 +41,9 @@
         tools:layout="@layout/fragment_trip_detailview">
         <argument
             android:name="tripId"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            app:nullable="true" />
         <action
             android:id="@+id/action_tripDetailViewFragment_to_activeTripFragment"
             app:destination="@id/activeTripFragment"
@@ -63,7 +57,7 @@
         tools:layout="@layout/fragment_my_trips">
         <action
             android:id="@+id/detailViewAction"
-            app:destination="@id/tripDetailViewFragment"/>
+            app:destination="@id/tripDetailViewFragment" />
         <action
             android:id="@+id/driverDetailViewAction"
             app:destination="@id/driverDetailViewFragment" />
@@ -79,7 +73,7 @@
         android:id="@+id/activeTripFragment"
         android:name="com.muk.sami.ActiveTripFragment"
         android:label="fragment_active_trip"
-        tools:layout="@layout/fragment_active_trip" >
+        tools:layout="@layout/fragment_active_trip">
         <argument
             android:name="tripId"
             app:argType="string" />
@@ -99,8 +93,14 @@
         android:id="@+id/filteredTripsFragment"
         android:name="com.muk.sami.FilteredTripsFragment"
         android:label="fragment_filtered_trips"
-        tools:layout="@layout/fragment_filtered_trips" />
-
+        tools:layout="@layout/fragment_filtered_trips">
+        <action
+            android:id="@+id/detailViewAction"
+            app:destination="@id/tripDetailViewFragment" />
+        <action
+            android:id="@+id/driverDetailViewAction"
+            app:destination="@id/driverDetailViewFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/driverDetailViewFragment"
@@ -109,9 +109,9 @@
         tools:layout="@layout/fragment_driver_detail_view">
         <argument
             android:name="tripId"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+            app:nullable="true" />
         <action
             android:id="@+id/action_driverDetailViewFragment_to_activeTripFragment"
             app:destination="@id/activeTripFragment"
