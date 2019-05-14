@@ -190,16 +190,16 @@ public class CreateTripFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        String msg = getString(R.string.msg_subscribed);
+                        /*String msg = getString(R.string.msg_subscribed);
                         if (!task.isSuccessful()) {
                             msg = getString(R.string.msg_subscribe_failed);
                         }
-                        //Log.d(TAG, msg);
-                        //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, msg);
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();*/
                     }
                 });
 
-        Navigation.findNavController(view).navigate(R.id.action_createTripFragment_to_myTripsFragment);
+        Navigation.findNavController(view).popBackStack();
     }
 
 }
