@@ -26,7 +26,7 @@ public class SearchTripFragment extends Fragment {
 
     private static final String TAG = "MainActivity";
 
-    private Button filterTripsButton;
+    private Button searchTripButton;
     private FloatingActionButton addButton;
 
     private View view;
@@ -115,8 +115,8 @@ public class SearchTripFragment extends Fragment {
             }
         });
 
-        filterTripsButton = view.findViewById(R.id.search_trip_button);
-        filterTripsButton.setOnClickListener(new View.OnClickListener() {
+        searchTripButton = view.findViewById(R.id.search_trip_button);
+        searchTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // opens fragment for filtering trips
