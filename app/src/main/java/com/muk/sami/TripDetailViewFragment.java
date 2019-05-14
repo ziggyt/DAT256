@@ -1,17 +1,13 @@
 package com.muk.sami;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,14 +34,11 @@ import android.content.IntentFilter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TripDetailViewFragment extends Fragment {
 
@@ -60,7 +53,7 @@ public class TripDetailViewFragment extends Fragment {
     private Button bookTripButton;
     private Button cancelTripButton;
     private Button showQrCodeButton;
-    private Button startTripButton;
+    private Button finishTripButton;
 
     private RatingBar driverRatingBar;
 
@@ -70,8 +63,6 @@ public class TripDetailViewFragment extends Fragment {
     private DocumentReference mUserRef;
 
     private FirebaseUser activeUser;
-
-    private static BroadcastReceiver tickReceiver;
 
     private Trip displayedTrip;
     private String tripId;
@@ -105,7 +96,7 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton = view.findViewById(R.id.book_trip_button);
         cancelTripButton = view.findViewById(R.id.cancel_trip_button);
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
-        startTripButton = view.findViewById(R.id.start_trip_button);
+        finishTripButton = view.findViewById(R.id.finish_trip_button);
 
         driverRatingBar = view.findViewById(R.id.driver_rating_bar);
 
@@ -115,49 +106,26 @@ public class TripDetailViewFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        tickReceiver=new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
-                    checkIfPastStartTime();
-                }
-            }
-        };
-        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(tickReceiver!=null)
-            getActivity().unregisterReceiver(tickReceiver);
-    }
-
     private void showViewForUnbookedUser() {
         bookTripButton.setVisibility(View.VISIBLE);
         cancelTripButton.setVisibility(View.INVISIBLE);
         showQrCodeButton.setVisibility(View.INVISIBLE);
-        startTripButton.setVisibility(View.INVISIBLE);
+        finishTripButton.setVisibility(View.INVISIBLE);
     }
 
     private void showViewForBookedUser() {
         bookTripButton.setVisibility(View.INVISIBLE);
         cancelTripButton.setVisibility(View.VISIBLE);
         showQrCodeButton.setVisibility(View.VISIBLE);
-        startTripButton.setVisibility(View.INVISIBLE);
+        finishTripButton.setVisibility(View.INVISIBLE);
     }
 
-    private void showViewForDriver() {
+    private void showViewForStartedTrip(){
         bookTripButton.setVisibility(View.INVISIBLE);
         cancelTripButton.setVisibility(View.INVISIBLE);
-        startTripButton.setVisibility(View.VISIBLE);
+        showQrCodeButton.setVisibility(View.INVISIBLE);
+        finishTripButton.setVisibility(View.VISIBLE);
     }
-
-
 
     private void initFirebaseSetup() {
 
@@ -199,6 +167,9 @@ public class TripDetailViewFragment extends Fragment {
                 toTextView.setText(displayedTrip.getDestinationAddress());
                 dateTextView.setText(displayedTrip.getDateString());
                 timeTextView.setText(displayedTrip.getTimeString());
+                totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
+                numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
+
 
                 mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -212,8 +183,11 @@ public class TripDetailViewFragment extends Fragment {
                         }
                     }
                 });
-                totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
-                numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
+
+                if( displayedTrip.isTripStarted()){
+                    showViewForStartedTrip();
+                    return;
+                }
 
                 //Check if the user is a passenger
                 if (activeUser != null && displayedTrip.userInTrip(activeUser.getUid())) {
@@ -222,7 +196,6 @@ public class TripDetailViewFragment extends Fragment {
                     showViewForUnbookedUser();
                 }
                 checkIfTripIsFull();
-                checkIfPastStartTime();
             }
             }
         });
@@ -239,26 +212,6 @@ public class TripDetailViewFragment extends Fragment {
         } else{
             bookTripButton.setAlpha(1);
             bookTripButton.setClickable(true);
-        }
-    }
-
-    private void checkIfPastStartTime() {
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(new Date());
-        cal1.set(Calendar.MILLISECOND, 0);
-        cal1.set(Calendar.SECOND, 0);
-
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(displayedTrip.getDate());
-        cal2.set(Calendar.MILLISECOND, 0);
-        cal2.set(Calendar.SECOND, 0);
-
-        if(cal2.getTime().compareTo(cal1.getTime()) > 0) {
-            startTripButton.setBackgroundColor(Color.GRAY);
-            startTripButton.setClickable(false);
-        } else {
-            startTripButton.setBackgroundColor(Color.rgb(2,255,114));
-            startTripButton.setClickable(true);
         }
     }
 
@@ -315,7 +268,6 @@ public class TripDetailViewFragment extends Fragment {
                     Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
                 }
                 checkIfTripIsFull();
-                checkIfPastStartTime();
             }
         });
 

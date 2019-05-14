@@ -191,6 +191,8 @@ public class DriverDetailViewFragment extends Fragment {
         startTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                displayedTrip.startTrip();
+                mTripRef.set(displayedTrip);
                 sendTripStartedMessage();
             }
         });

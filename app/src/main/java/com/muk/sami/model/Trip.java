@@ -35,6 +35,8 @@ public class Trip {
     String startAddress;
     @Getter private
     String destinationAddress;
+    @Getter private
+    boolean tripStarted;
 
 
     public Trip() {
@@ -51,6 +53,10 @@ public class Trip {
         this.destinationCoordinates = destinationCoordinates;
         this.startAddress = startAddress;
         this.destinationAddress = destinationAddress;
+    }
+
+    public void startTrip(){
+        tripStarted = true;
     }
 
     public boolean tripIsFull() {
