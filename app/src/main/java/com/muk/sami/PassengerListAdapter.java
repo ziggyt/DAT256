@@ -25,7 +25,7 @@ public class PassengerListAdapter extends ArrayAdapter<String> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = mContext.getLayoutInflater();
-        View view = inflater.inflate(R.layout.listitem_trip, null, true);
+        View view = inflater.inflate(R.layout.passenger_list_item, null, true);
         TextView passengerNameTextView = view.findViewById(R.id.passenger_name_text_view);
 
         String passenger = passengers.get(position);
