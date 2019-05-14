@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,13 +30,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.muk.sami.model.BankCard;
 import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 import com.muk.sami.model.User;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class DriverDetailViewFragment extends Fragment {
 
@@ -47,14 +52,15 @@ public class DriverDetailViewFragment extends Fragment {
     private Button startTripButton;
     private Button showQrCodeButton;
 
-    private ListView passengerListvView;
+    private ListView passengerListView;
 
     private PassengerListAdapter adapter;
 
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
-    private DocumentReference mUserRef;
     private CollectionReference mNotificationRef;
+
+    private List<String> passengerList;
 
     private String userId;
 
@@ -80,7 +86,12 @@ public class DriverDetailViewFragment extends Fragment {
 
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
 
-        passengerListvView = view.findViewById(R.id.passengers_list_view);
+        passengerListView = view.findViewById(R.id.passengers_list_view);
+
+
+        passengerList = new ArrayList<>();
+        adapter = new PassengerListAdapter(getActivity(), passengerList);
+        passengerListView.setAdapter(adapter);
 
         initListeners();
         initFirebaseSetup();
@@ -140,16 +151,29 @@ public class DriverDetailViewFragment extends Fragment {
                     dateTextView.setText(displayedTrip.getDateString());
                     timeTextView.setText(displayedTrip.getTimeString());
 
-                    if(getActivity() != null) {
-                        adapter = new PassengerListAdapter(getActivity(), displayedTrip.getPassengers());
-                        passengerListvView.setAdapter(adapter);
-                    }
+                    createPassengerList(displayedTrip);
                 }
             }
         });
 
         //Get the reference to the notifications collection
         mNotificationRef = mDatabase.collection("tripBookingNotification");
+    }
+
+    private void createPassengerList(Trip trip) {
+        for(String passenger : trip.getPassengers()) {
+            DocumentReference mUserRef = mDatabase.collection("users").document(passenger);
+            mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot dsUser = task.getResult();
+                    assert dsUser != null;
+                    passengerList.add(dsUser.getString("displayName"));
+                    passengerListView.setAdapter(adapter);
+                }
+            });
+        }
     }
 
     private void initListeners() {

@@ -145,14 +145,26 @@
         android:layout_toEndOf="@+id/time_text_view"
         app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
+    <TextView
+        android:id="@+id/passengers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/passengers_list_view"
+        android:layout_alignEnd="@+id/date_text_view"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="-75dp"
+        android:text="Passagerare" />
+
     <ListView
         android:id="@+id/passengers_list_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@+id/time_text_view"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="140dp"
-        android:layout_marginEnd="0dp"></ListView>
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="30dp"></ListView>
 
 
 </RelativeLayout>
