@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -41,8 +42,9 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class MyTripsFragment extends Fragment {
 
-
     private ListView tripsListView;
+    private FloatingActionButton createTripButton;
+
     private List<Trip> driverTrips;
     private List<Trip> passengerTrips;
 
@@ -52,6 +54,8 @@ public class MyTripsFragment extends Fragment {
     private CollectionReference mTripsRef;
 
     private View view;
+
+    private SignInListener mSignInListener;
 
 
     public MyTripsFragment() {
@@ -67,6 +71,8 @@ public class MyTripsFragment extends Fragment {
 
         //Initialize components
         tripsListView = view.findViewById(R.id.listView_Trips);
+        createTripButton = view.findViewById(R.id.createTripButton);
+
         driverTrips = new ArrayList<>();
         passengerTrips = new ArrayList<>();
         firstListenerDone = false;
@@ -176,7 +182,38 @@ public class MyTripsFragment extends Fragment {
             }
         });
 
+        createTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Sign in first if not signed in
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    if (mSignInListener != null) mSignInListener.signIn();
+                    return;
+                }
+
+                // opens fragment for creating a trip
+                Navigation.findNavController(v).navigate(R.id.createTripAction);
+            }
+        });
+
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof SignInListener) {
+            mSignInListener = (SignInListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement SignInListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mSignInListener = null;
+    }
 
 }
