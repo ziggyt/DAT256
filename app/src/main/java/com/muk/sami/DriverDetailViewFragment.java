@@ -49,6 +49,8 @@ public class DriverDetailViewFragment extends Fragment {
 
     private ListView passengerListvView;
 
+    private PassengerListAdapter adapter;
+
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
     private DocumentReference mUserRef;
@@ -79,12 +81,6 @@ public class DriverDetailViewFragment extends Fragment {
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
 
         passengerListvView = view.findViewById(R.id.passengers_list_view);
-
-
-        if(getActivity() != null) {
-            PassengerListAdapter adapter = new PassengerListAdapter(getActivity(), displayedTrip.getPassengers());
-            passengerListvView.setAdapter(adapter);
-        }
 
         initListeners();
         initFirebaseSetup();
@@ -143,6 +139,11 @@ public class DriverDetailViewFragment extends Fragment {
                     toTextView.setText(displayedTrip.getDestinationAddress());
                     dateTextView.setText(displayedTrip.getDateString());
                     timeTextView.setText(displayedTrip.getTimeString());
+
+                    if(getActivity() != null) {
+                        adapter = new PassengerListAdapter(getActivity(), displayedTrip.getPassengers());
+                        passengerListvView.setAdapter(adapter);
+                    }
                 }
             }
         });
