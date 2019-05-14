@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +47,8 @@ public class DriverDetailViewFragment extends Fragment {
     private Button startTripButton;
     private Button showQrCodeButton;
 
+    private ListView passengerListvView;
+
     private FirebaseFirestore mDatabase;
     private DocumentReference mTripRef;
     private DocumentReference mUserRef;
@@ -73,6 +77,14 @@ public class DriverDetailViewFragment extends Fragment {
         startTripButton = view.findViewById(R.id.start_trip_button);
 
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
+
+        passengerListvView = view.findViewById(R.id.passengers_list_view);
+
+
+        if(getActivity() != null) {
+            PassengerListAdapter adapter = new PassengerListAdapter(getActivity(), displayedTrip.getPassengers());
+            passengerListvView.setAdapter(adapter);
+        }
 
         initListeners();
         initFirebaseSetup();
