@@ -20,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,7 +42,7 @@ import java.util.Random;
 
 public class FilteredTripsFragment extends Fragment {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "FilteredTripsFragment";
 
     private TextView timeTextView;
 
@@ -140,11 +142,18 @@ public class FilteredTripsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = trips.get(position);
+                FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (activeUser == null) throw new IllegalStateException("user should be signed in");
 
-                SearchTripFragmentDirections.DetailViewAction action = SearchTripFragmentDirections.detailViewAction();
-                action.setTripId(trip.getTripId());
-                Navigation.findNavController(view).navigate(action);
-
+                if(trip.getDriver().equals(activeUser.getUid())) {
+                    FilteredTripsFragmentDirections.DriverDetailViewAction action = FilteredTripsFragmentDirections.driverDetailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                } else {
+                    FilteredTripsFragmentDirections.DetailViewAction action = FilteredTripsFragmentDirections.detailViewAction();
+                    action.setTripId(trip.getTripId());
+                    Navigation.findNavController(view).navigate(action);
+                }
 
             }
         });
