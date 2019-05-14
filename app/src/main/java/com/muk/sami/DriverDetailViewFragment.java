@@ -61,6 +61,7 @@ public class DriverDetailViewFragment extends Fragment {
     private CollectionReference mNotificationRef;
 
     private List<String> passengerList;
+    private List<String> passengersStatus;
 
     private String userId;
 
@@ -93,7 +94,8 @@ public class DriverDetailViewFragment extends Fragment {
 
 
         passengerList = new ArrayList<>();
-        adapter = new PassengerListAdapter(getActivity(), passengerList);
+        passengersStatus = new ArrayList<>();
+        adapter = new PassengerListAdapter(getActivity(), passengerList, passengersStatus);
         passengerListView.setAdapter(adapter);
 
         initListeners();
@@ -153,6 +155,9 @@ public class DriverDetailViewFragment extends Fragment {
                     toTextView.setText(displayedTrip.getDestinationAddress());
                     dateTextView.setText(displayedTrip.getDateString());
                     timeTextView.setText(displayedTrip.getTimeString());
+
+                    passengersStatus.clear();
+                    passengersStatus.addAll( displayedTrip.getPassengerStatus() );
 
                     createPassengerList(displayedTrip);
                 }

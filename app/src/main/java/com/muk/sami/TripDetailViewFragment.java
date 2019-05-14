@@ -293,6 +293,18 @@ public class TripDetailViewFragment extends Fragment {
             }
         });
 
+        finishTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (activeUser == null) throw new IllegalStateException("user should be signed in");
+
+                displayedTrip.finishTripPassenger( activeUser.getUid());
+                mTripRef.set(displayedTrip);
+
+                //When the user has finished the trip, open a dialog for driverRating
+            }
+        });
+
     }
 
     private void initTripMessaging(){

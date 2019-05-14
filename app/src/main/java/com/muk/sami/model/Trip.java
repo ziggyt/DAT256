@@ -26,6 +26,8 @@ public class Trip {
     @Getter private
     List<String> passengers = new ArrayList<>();
     @Getter private
+    List<String> passengerStatus = new ArrayList<>();
+    @Getter private
     String driver;
     @Getter private
     Coordinates startCoordinates;
@@ -59,6 +61,11 @@ public class Trip {
         tripStarted = true;
     }
 
+    public void finishTripPassenger(String passenger){
+        int passengerIndex = passengers.indexOf(passenger);
+        passengerStatus.set( passengerIndex, "Finished trip");
+    }
+
     public boolean tripIsFull() {
         return numberOfBookedSeats == totalNumberOfSeats;
     }
@@ -74,6 +81,8 @@ public class Trip {
         if (!tripIsFull()) {
             numberOfBookedSeats++;
             passengers.add(uid);
+            passengerStatus.add("Joined");
+
             return true;
         }
         return false;
@@ -89,7 +98,9 @@ public class Trip {
     public boolean removePassenger(String uid) {
         if (userInTrip(uid)) {
             numberOfBookedSeats--;
+            passengerStatus.remove( passengers.indexOf(uid) );
             passengers.remove(uid);
+
             return true;
         }
         return false;
