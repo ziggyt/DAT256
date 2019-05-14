@@ -83,11 +83,7 @@
         android:id="@+id/createTripFragment"
         android:name="com.muk.sami.CreateTripFragment"
         android:label="fragment_create_trip"
-        tools:layout="@layout/fragment_create_trip" >
-        <action
-            android:id="@+id/action_createTripFragment_to_myTripsFragment"
-            app:destination="@+id/myTripsFragment"/>
-    </fragment>
+        tools:layout="@layout/fragment_create_trip" />
 
     <fragment
         android:id="@+id/filteredTripsFragment"
