@@ -1,11 +1,10 @@
 package com.muk.sami;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,12 +18,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,8 +28,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.Coordinates;
-import com.muk.sami.model.SimpleNotification;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
 
@@ -204,6 +198,8 @@ public class CreateTripFragment extends Fragment {
                         //Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        Navigation.findNavController(view).navigate(R.id.action_createTripFragment_to_myTripsFragment);
     }
 
 }
