@@ -27,6 +27,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.muk.sami.model.Coordinates;
 import com.muk.sami.model.Trip;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +38,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 
@@ -59,6 +61,12 @@ public class FilteredTripsFragment extends Fragment {
     private Date filterDate;
     private boolean filterOn;
 
+    private String startLocation = "";
+    private String destinationLocation = "";
+
+    private Coordinates enteredDestinationCoordinates;
+
+
     private View view;
 
     
@@ -73,6 +81,14 @@ public class FilteredTripsFragment extends Fragment {
         timeTextView = view.findViewById(R.id.timeTextView);
         filterOn = false;
 
+        double startLatitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLatitude());
+        double startLongitude =  Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLongitude());
+
+        final Coordinates c = new Coordinates(2.3, 2.5);
+
+
+        final Coordinates enteredStartCoordinates = new Coordinates(startLatitude, startLongitude);
+
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
         mTripsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -86,12 +102,22 @@ public class FilteredTripsFragment extends Fragment {
                 trips.clear();
                 trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
 
+
+                Collections.sort(trips, new Comparator<Trip>() {
+                    @Override
+                    public int compare(Trip o1, Trip o2) {
+                        return Double.compare(o1.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates), o2.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates)) ;
+                    }
+                });
+
+                /*
                 Collections.sort(trips, new Comparator<Trip>() {
                     @Override
                     public int compare(Trip o1, Trip o2) {
                         return o1.getDate().compareTo(o2.getDate());
                     }
                 });
+                */
 
                 if (filterOn) {
                     applyFilter();
