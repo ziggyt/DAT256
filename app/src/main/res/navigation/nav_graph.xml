@@ -89,13 +89,33 @@
         android:id="@+id/filteredTripsFragment"
         android:name="com.muk.sami.FilteredTripsFragment"
         android:label="fragment_filtered_trips"
-        tools:layout="@layout/fragment_filtered_trips">
+        tools:layout="@layout/filter_trip_dialog">
         <action
             android:id="@+id/detailViewAction"
             app:destination="@id/tripDetailViewFragment" />
         <action
             android:id="@+id/driverDetailViewAction"
             app:destination="@id/driverDetailViewFragment" />
+        <argument
+            android:name="startLatitude"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="startLongitude"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="startAddress"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="destinationAddress"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
     <fragment
