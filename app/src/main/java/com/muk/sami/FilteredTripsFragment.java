@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +35,7 @@ import com.muk.sami.model.Trip;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,6 +55,8 @@ public class FilteredTripsFragment extends Fragment {
     private Button filterButton;
     private Button revertFilterButton;
 
+    private Spinner startRadiusSpinner;
+
     private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
 
@@ -65,11 +71,14 @@ public class FilteredTripsFragment extends Fragment {
     private String destinationLocation = "";
 
     private Coordinates enteredDestinationCoordinates;
+    private Coordinates enteredStartCoordinates;
+
+    private int startRadiusLimit = 99999;
 
 
     private View view;
 
-    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -79,15 +88,33 @@ public class FilteredTripsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_filtered_trips, container, false);
 
         timeTextView = view.findViewById(R.id.timeTextView);
+        startRadiusSpinner = view.findViewById(R.id.start_km_radius_spinner);
+
         filterOn = false;
 
         double startLatitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLatitude());
-        double startLongitude =  Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLongitude());
+        double startLongitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLongitude());
 
-        final Coordinates c = new Coordinates(2.3, 2.5);
+        enteredStartCoordinates = new Coordinates(startLatitude, startLongitude);
 
+        Integer[] items = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, items);
+        startRadiusSpinner.setAdapter(adapter);
 
-        final Coordinates enteredStartCoordinates = new Coordinates(startLatitude, startLongitude);
+        startRadiusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                startRadiusLimit = Integer.parseInt(startRadiusSpinner.getItemAtPosition(position).toString());
+                adapter.notifyDataSetChanged();
+                showOnlyTripsWithinRadius();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
@@ -106,7 +133,7 @@ public class FilteredTripsFragment extends Fragment {
                 Collections.sort(trips, new Comparator<Trip>() {
                     @Override
                     public int compare(Trip o1, Trip o2) {
-                        return Double.compare(o1.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates), o2.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates)) ;
+                        return Double.compare(o1.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates), o2.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates));
                     }
                 });
 
@@ -174,7 +201,7 @@ public class FilteredTripsFragment extends Fragment {
                 FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (activeUser == null) throw new IllegalStateException("user should be signed in");
 
-                if(trip.getDriver().equals(activeUser.getUid())) {
+                if (trip.getDriver().equals(activeUser.getUid())) {
                     FilteredTripsFragmentDirections.DriverDetailViewAction action = FilteredTripsFragmentDirections.driverDetailViewAction();
                     action.setTripId(trip.getTripId());
                     Navigation.findNavController(view).navigate(action);
@@ -262,9 +289,6 @@ public class FilteredTripsFragment extends Fragment {
         }
 
         filterOn = true;
-
-        showRevertFilterButton();
-
     }
 
     private void revertFilter() {
@@ -281,15 +305,29 @@ public class FilteredTripsFragment extends Fragment {
         showFilterButton();
     }
 
+    private void showOnlyTripsWithinRadius() {
+
+        ArrayList<Trip> tripsWithinRadius = new ArrayList<>();
+        for (Trip t : trips) {
+            if (t.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates) <= startRadiusLimit) {
+                tripsWithinRadius.add(t);
+            }
+
+            TripListAdapter adapter = new TripListAdapter(getActivity(), tripsWithinRadius, null);
+            listViewTrips.setAdapter(adapter);
+
+        }
+
+        if(tripsWithinRadius.size() == 0){
+            Toast.makeText(getContext(), "Du får stanna hemma", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void showFilterButton() {
         filterButton.setVisibility(View.VISIBLE);
         revertFilterButton.setVisibility(View.INVISIBLE);
     }
 
-    private void showRevertFilterButton() {
-        filterButton.setVisibility(View.INVISIBLE);
-        revertFilterButton.setVisibility(View.VISIBLE);
-    }
 
     public String getDateAndTimeString() {
         SimpleDateFormat simpleDateFormatDate = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMAN);

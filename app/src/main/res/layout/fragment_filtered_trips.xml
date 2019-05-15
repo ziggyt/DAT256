@@ -7,34 +7,19 @@
     android:layout_height="match_parent"
     tools:context="com.muk.sami.MyTripsFragment">
 
-    <TextView
-        android:id="@+id/title_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="10dp"
-        android:text="Filtrerade Resor"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_conversion_wrapHeight="85"
-        tools:layout_conversion_wrapWidth="453" />
-
     <ListView
         android:id="@+id/listView_Trips"
-        android:layout_width="406dp"
-        android:layout_height="465dp"
-        android:layout_marginTop="210dp"
+        android:layout_width="408dp"
+        android:layout_height="352dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_text_view"
-        app:layout_constraintVertical_bias="0.619"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintVertical_bias="0.776"
         tools:layout_conversion_wrapHeight="1181"
         tools:layout_conversion_wrapWidth="1080" />
 
@@ -42,10 +27,11 @@
         android:id="@+id/filterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="85dp"
+        android:layout_marginStart="172dp"
+        android:layout_marginTop="56dp"
         android:text="Filtrera"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_text_view"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_conversion_wrapHeight="126"
         tools:layout_conversion_wrapWidth="231" />
 
@@ -53,11 +39,11 @@
         android:id="@+id/revertFilterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginStart="264dp"
+        android:layout_marginTop="56dp"
         android:text="Ta bort filter"
-        app:layout_constraintStart_toEndOf="@+id/filterButton"
-        app:layout_constraintTop_toBottomOf="@+id/title_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_conversion_wrapHeight="126"
         tools:layout_conversion_wrapWidth="340" />
 
@@ -65,13 +51,52 @@
         android:id="@+id/timeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="Välj tid att resa"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_text_view"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_conversion_wrapHeight="85"
         tools:layout_conversion_wrapWidth="421" />
+
+    <Spinner
+        android:id="@+id/start_km_radius_spinner"
+        android:layout_width="59dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.29"
+        app:layout_constraintStart_toStartOf="@+id/timeTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/TextView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="8dp"
+        android:text="km av vald startpunkt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/start_km_radius_spinner"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="116dp"
+        android:layout_marginEnd="8dp"
+        android:text="Startpunkt inom"
+        app:layout_constraintEnd_toStartOf="@+id/start_km_radius_spinner"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
