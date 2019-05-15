@@ -75,6 +75,9 @@ public class DriverDetailViewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        getActivity().setTitle(R.string.navigation_trip_detailview);
+
         view = inflater.inflate(R.layout.fragment_driver_detail_view, container, false);
 
         fromTextView = view.findViewById(R.id.from_text_view);

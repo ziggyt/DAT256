@@ -27,7 +27,6 @@ public class SearchTripFragment extends Fragment {
     private static final String TAG = "MainActivity";
 
     private Button searchTripButton;
-    private FloatingActionButton addButton;
 
     private View view;
 
@@ -37,11 +36,12 @@ public class SearchTripFragment extends Fragment {
     private AutocompleteSupportFragment startAutocompleteFragment;
     private AutocompleteSupportFragment destinationAutocompleteFragment;
 
-    private SignInListener mSignInListener;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+
+        getActivity().setTitle(R.string.navigation_trip_search);
+
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
 
@@ -99,22 +99,6 @@ public class SearchTripFragment extends Fragment {
             }
         });
 
-
-        addButton = view.findViewById(R.id.addTripButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Sign in first if not signed in
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    if (mSignInListener != null) mSignInListener.signIn();
-                    return;
-                }
-
-                // opens fragment for creating a trip
-                Navigation.findNavController(v).navigate(R.id.action_searchTripFragment_to_createTripFragment);
-            }
-        });
-
         searchTripButton = view.findViewById(R.id.search_trip_button);
         searchTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,24 +109,6 @@ public class SearchTripFragment extends Fragment {
 
         });
         return view;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        if (context instanceof SignInListener) {
-            mSignInListener = (SignInListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement SignInListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mSignInListener = null;
     }
 }
 

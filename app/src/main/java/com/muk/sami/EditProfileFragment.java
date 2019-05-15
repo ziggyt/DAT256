@@ -52,6 +52,9 @@ public class EditProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        getActivity().setTitle(R.string.navigation_edit_profile);
+
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_edit_profile, container, false);
         mDatabase = FirebaseFirestore.getInstance();
