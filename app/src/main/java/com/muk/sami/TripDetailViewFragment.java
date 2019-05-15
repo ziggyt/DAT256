@@ -271,6 +271,10 @@ public class TripDetailViewFragment extends Fragment {
         //Set the content of the main dialog view
         builder.setView(dialogView);
 
+        TextView priceTextView = dialogView.findViewById(R.id.price_text_view);
+
+        priceTextView.setText("Din plats kommer att kosta " + String.valueOf(displayedTrip.getSeatPrice()) + " Kr");
+
         // Set up the OK-button
         builder.setPositiveButton("Betala", new DialogInterface.OnClickListener() {
             @Override
