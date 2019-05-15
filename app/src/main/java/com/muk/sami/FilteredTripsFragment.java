@@ -65,6 +65,9 @@ public class FilteredTripsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+
+        getActivity().setTitle(R.string.navigation_filtered_trips);
+
         view = inflater.inflate(R.layout.fragment_filtered_trips, container, false);
 
         timeTextView = view.findViewById(R.id.timeTextView);

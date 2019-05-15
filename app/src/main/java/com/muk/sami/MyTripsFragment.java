@@ -66,6 +66,8 @@ public class MyTripsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getActivity().setTitle(R.string.navigation_my_trips);
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_trips, container, false);
 

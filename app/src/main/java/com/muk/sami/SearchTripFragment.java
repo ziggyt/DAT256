@@ -39,6 +39,9 @@ public class SearchTripFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+
+        getActivity().setTitle(R.string.navigation_trip_search);
+
         view = inflater.inflate(R.layout.fragment_search_trip, container, false);
 
 

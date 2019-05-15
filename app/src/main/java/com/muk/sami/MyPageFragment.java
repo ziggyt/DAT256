@@ -76,6 +76,8 @@ public class MyPageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        getActivity().setTitle(R.string.navigation_my_page);
+
         if (FirebaseAuth.getInstance().getCurrentUser() == null) { // If not signed in
             view = inflater.inflate(R.layout.sign_in_prompt, container, false);
             view.setOnClickListener(new View.OnClickListener() {
