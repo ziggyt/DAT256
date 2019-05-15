@@ -153,6 +153,11 @@ public class DriverDetailViewFragment extends Fragment {
                 //Convert the snapshot to a trip object
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
+                //If the trip is started make the startButton grey
+                if( displayedTrip.isTripStarted() ){
+                    showViewForStartedTrip();
+                }
+
                 //If the trip is finished, display dialog, else continue
                 if( displayedTrip.tripIsFinished() ){
                     tripFinishedDialog();
@@ -208,9 +213,17 @@ public class DriverDetailViewFragment extends Fragment {
             public void onClick(View v) {
                 displayedTrip.startTrip();
                 mTripRef.set(displayedTrip);
+
+                showViewForStartedTrip();
                 sendTripStartedMessage();
             }
         });
+    }
+
+    private void showViewForStartedTrip(){
+        startTripButton.setBackgroundColor(Color.GRAY);
+        startTripButton.setClickable(false);
+        startTripButton.setText("Resa startad");
     }
 
     /**
@@ -232,6 +245,10 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void checkIfPastStartTime() {
+        if( displayedTrip.isTripStarted() ){
+            return;
+        }
+
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(new Date());
         cal1.set(Calendar.MILLISECOND, 0);

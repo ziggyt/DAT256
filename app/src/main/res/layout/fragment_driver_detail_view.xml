@@ -116,8 +116,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="118dp"
         android:layout_marginEnd="122dp"
-        android:background="@color/lightGreen"
         android:layout_marginBottom="25dp"
+        android:background="@color/colorPrimary"
         android:text="@string/start_trip" />
 
     <ImageView
