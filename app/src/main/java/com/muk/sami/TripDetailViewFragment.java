@@ -89,6 +89,8 @@ public class TripDetailViewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        getActivity().setTitle(R.string.navigation_trip_detailview);
+
         view = inflater.inflate(R.layout.fragment_trip_detailview, container, false);
 
         fromTextView = view.findViewById(R.id.from_text_view);

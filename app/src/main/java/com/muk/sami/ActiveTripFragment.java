@@ -27,6 +27,8 @@ public class ActiveTripFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        getActivity().setTitle(R.string.navigation_active_trip);
+
         view = inflater.inflate(R.layout.fragment_active_trip, container, false);
 
         qrImageView = view.findViewById(R.id.qr_image_view);
