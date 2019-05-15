@@ -296,12 +296,7 @@ public class TripDetailViewFragment extends Fragment {
         finishTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (activeUser == null) throw new IllegalStateException("user should be signed in");
-
-                displayedTrip.finishTripPassenger( activeUser.getUid());
-                mTripRef.set(displayedTrip);
-
-                //When the user has finished the trip, open a dialog for driverRating
+                tripFinishedDialog();
             }
         });
 
@@ -354,6 +349,39 @@ public class TripDetailViewFragment extends Fragment {
         SimpleNotification message = new SimpleNotification("Passenger joined," + activeUser.getUid() + "," + driverId);
         mNotificationRef.document(topic).set(message);
 
+    }
+
+    /**
+     * Dialog for the passenger to confirm arrival
+     * TODO: Add Rating of driver
+     */
+    private void tripFinishedDialog() {
+
+        //Create a dialog and set the title/message
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Bekräfta ankomst");
+        builder.setMessage("Har du nått din utlovade destination?");
+
+        // Set up the OK-button
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+
+                if (activeUser == null) throw new IllegalStateException("user should be signed in");
+
+                displayedTrip.finishTripPassenger( activeUser.getUid() );
+                mTripRef.set(displayedTrip);
+            }
+        });
+
+        builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     @Override
