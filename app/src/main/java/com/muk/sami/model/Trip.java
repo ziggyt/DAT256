@@ -1,11 +1,14 @@
 package com.muk.sami.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.Exclude;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,6 +67,15 @@ public class Trip {
     public void finishTripPassenger(String passenger){
         int passengerIndex = passengers.indexOf(passenger);
         passengerStatus.set( passengerIndex, "Finished trip");
+    }
+
+    public boolean tripIsFinished(){
+        for(String passenger : passengerStatus) {
+            if( !passenger.equals("Finished trip")){
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean tripIsFull() {
