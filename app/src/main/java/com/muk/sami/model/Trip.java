@@ -174,5 +174,10 @@ public class Trip {
     public double getDistanceBetweenStartAndDestination(){
         return distanceBetweenCoordinates(startCoordinates, destinationCoordinates);
     }
+
+    public int getSeatPrice() {
+        double distanceInKm = getDistanceBetweenStartAndDestination()/1000.0;
+        return (int)(distanceInKm*2)/(totalNumberOfSeats+1);
+    }
 }
 
