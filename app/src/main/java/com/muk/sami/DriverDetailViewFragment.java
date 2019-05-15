@@ -165,6 +165,7 @@ public class DriverDetailViewFragment extends Fragment {
                     dateTextView.setText(displayedTrip.getDateString());
                     timeTextView.setText(displayedTrip.getTimeString());
 
+                    passengerList.clear();
                     passengersStatus.clear();
                     passengersStatus.addAll( displayedTrip.getPassengerStatus() );
 

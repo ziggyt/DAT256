@@ -70,6 +70,9 @@ public class Trip {
     }
 
     public boolean tripIsFinished(){
+        if( passengers.isEmpty()){
+            return false;
+        }
         for(String passenger : passengerStatus) {
             if( !passenger.equals("Finished trip")){
                 return false;
