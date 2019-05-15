@@ -1,7 +1,9 @@
 package com.muk.sami;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -11,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -149,6 +153,11 @@ public class DriverDetailViewFragment extends Fragment {
                 //Convert the snapshot to a trip object
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
+                //If the trip is finished, display dialog, else continue
+                if( displayedTrip.tripIsFinished() ){
+                    tripFinishedDialog();
+                }
+
                 //Set the components
                 if (displayedTrip != null) {
                     fromTextView.setText(displayedTrip.getStartAddress());
@@ -239,6 +248,28 @@ public class DriverDetailViewFragment extends Fragment {
             startTripButton.setBackgroundColor(Color.rgb(2,255,114));
             startTripButton.setClickable(true);
         }
+    }
+
+
+    /**
+     * Temporary dialog, this confirmation that the trip is finished could be placed in fragment
+     */
+    private void tripFinishedDialog() {
+
+        //Create a dialog and set the title/message
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Resan avslutad");
+        builder.setMessage("Alla passagerare har fullföljt sin resa. Du får snart din betalning");
+
+        // Set up the OK-button
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
 }
