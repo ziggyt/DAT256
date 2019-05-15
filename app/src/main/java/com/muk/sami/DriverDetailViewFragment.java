@@ -89,19 +89,16 @@ public class DriverDetailViewFragment extends Fragment {
         toTextView = view.findViewById(R.id.to_text_view);
         dateTextView = view.findViewById(R.id.date_text_view);
         timeTextView = view.findViewById(R.id.time_text_view);
-
         startTripButton = view.findViewById(R.id.start_trip_button);
-
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
-
         passengerListView = view.findViewById(R.id.passengers_list_view);
-
 
         passengerList = new ArrayList<>();
         passengersStatus = new ArrayList<>();
         adapter = new PassengerListAdapter(getActivity(), passengerList, passengersStatus);
         passengerListView.setAdapter(adapter);
 
+        registerTickReceiver();
         initListeners();
         initFirebaseSetup();
 
@@ -109,32 +106,17 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        tickReceiver=new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if(intent.getAction().compareTo(Intent.ACTION_TIME_TICK)==0) {
-                    checkIfPastStartTime();
-                }
-            }
-        };
-        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if(tickReceiver!=null)
-            getActivity().unregisterReceiver(tickReceiver);
+    public void onDestroyView() {
+        super.onDestroyView();
+        unRegisterTickReceiver();
     }
 
 
     private void initFirebaseSetup() {
 
         mDatabase = FirebaseFirestore.getInstance();
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
+            throw new IllegalStateException("user should be signed in");
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         //Retrieve the tripId string that was passed along from SearchTripFragment
@@ -159,7 +141,7 @@ public class DriverDetailViewFragment extends Fragment {
                 }
 
                 //If the trip is finished, display dialog, else continue
-                if( displayedTrip.tripIsFinished() ){
+                if (displayedTrip.tripIsFinished()) {
                     tripFinishedDialog();
                 }
 
@@ -172,7 +154,7 @@ public class DriverDetailViewFragment extends Fragment {
 
                     passengerList.clear();
                     passengersStatus.clear();
-                    passengersStatus.addAll( displayedTrip.getPassengerStatus() );
+                    passengersStatus.addAll(displayedTrip.getPassengerStatus());
 
                     createPassengerList(displayedTrip);
                 }
@@ -184,7 +166,7 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void createPassengerList(Trip trip) {
-        for(String passenger : trip.getPassengers()) {
+        for (String passenger : trip.getPassengers()) {
             DocumentReference mUserRef = mDatabase.collection("users").document(passenger);
             mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -230,7 +212,7 @@ public class DriverDetailViewFragment extends Fragment {
      * Changes the document at tripBookingNotification/tripId, which triggers a cloud function,
      * sending a notification to the passengers confirming that the trip has started
      */
-    private void sendTripStartedMessage(){
+    private void sendTripStartedMessage() {
         //The topic name, which equals the tripId
         String topic = tripId;
 
@@ -259,11 +241,11 @@ public class DriverDetailViewFragment extends Fragment {
         cal2.set(Calendar.MILLISECOND, 0);
         cal2.set(Calendar.SECOND, 0);
 
-        if(cal2.getTime().compareTo(cal1.getTime()) > 0) {
+        if (cal2.getTime().compareTo(cal1.getTime()) > 0) {
             startTripButton.setBackgroundColor(Color.GRAY);
             startTripButton.setClickable(false);
         } else {
-            startTripButton.setBackgroundColor(Color.rgb(2,255,114));
+            startTripButton.setBackgroundColor(Color.rgb(2, 255, 114));
             startTripButton.setClickable(true);
         }
     }
@@ -288,6 +270,23 @@ public class DriverDetailViewFragment extends Fragment {
         });
 
         builder.show();
+    }
+
+    private void registerTickReceiver() {
+        tickReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
+                    checkIfPastStartTime();
+                }
+            }
+        };
+        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+    }
+
+    private void unRegisterTickReceiver() {
+        if (tickReceiver != null)
+            getActivity().unregisterReceiver(tickReceiver);
     }
 
 }
