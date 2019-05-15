@@ -19,6 +19,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.muk.sami.model.Coordinates;
 
 import java.util.Arrays;
 
@@ -104,7 +105,14 @@ public class SearchTripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // opens fragment for filtering trips
-                Navigation.findNavController(v).navigate(R.id.action_searchTripFragment_to_filteredTripsFragment);
+
+                Coordinates startCoordinatesToBePassed = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
+
+                SearchTripFragmentDirections.ActionSearchTripFragmentToFilteredTripsFragment action = SearchTripFragmentDirections.actionSearchTripFragmentToFilteredTripsFragment();
+                action.setStartLatitude(Double.toString(startCoordinatesToBePassed.getLat()));
+                action.setStartLongitude(Double.toString(startCoordinatesToBePassed.getLon()));
+
+                Navigation.findNavController(v).navigate(action);
             }
 
         });
