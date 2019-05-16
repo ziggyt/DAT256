@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +44,7 @@ import static com.firebase.ui.auth.AuthUI.TAG;
 public class MyTripsFragment extends Fragment {
 
     private ListView tripsListView;
+    private ProgressBar loadingSpinner;
     private FloatingActionButton createTripButton;
 
     private List<Trip> driverTrips;
@@ -73,6 +75,7 @@ public class MyTripsFragment extends Fragment {
 
         //Initialize components
         tripsListView = view.findViewById(R.id.listView_Trips);
+        loadingSpinner = view.findViewById(R.id.loading_spinner);
         createTripButton = view.findViewById(R.id.createTripButton);
 
         driverTrips = new ArrayList<>();
