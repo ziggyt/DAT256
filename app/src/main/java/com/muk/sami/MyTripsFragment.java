@@ -6,13 +6,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,13 +32,12 @@ import java.util.List;
 
 public class MyTripsFragment extends Fragment {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ListView tripsListView;
-    private ProgressBar loadingSpinner;
     private FloatingActionButton createTripButton;
 
     private TripListAdapter adapter;
 
-    private FirebaseFirestore mDatabase;
     private CollectionReference mTripsRef;
 
     private View view;
@@ -56,83 +55,25 @@ public class MyTripsFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         getActivity().setTitle(R.string.navigation_my_trips);
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_trips, container, false);
+        initViews();
+        initListeners();
 
-        //Initialize components
-        tripsListView = view.findViewById(R.id.listView_Trips);
-        loadingSpinner = view.findViewById(R.id.loading_spinner);
-        createTripButton = view.findViewById(R.id.createTripButton);
-
-        myTrips.clear();
-        firstTaskDone = false;
-
+        mTripsRef = FirebaseFirestore.getInstance().collection("trips");
         adapter = new TripListAdapter(getActivity(), myTrips, FirebaseAuth.getInstance().getUid());
 
-        //Initialize Firebase and Listeners
-        initFirebaseSetup();
-        initListeners();
+        updateTrips();
 
         return view;
     }
 
-    private void initFirebaseSetup() {
-
-        mDatabase = FirebaseFirestore.getInstance();
-        //Create a reference to the trips collection
-        mTripsRef = mDatabase.collection("trips");
-
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            loadingSpinner.setVisibility(View.INVISIBLE);
-        } else {
-            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            //Create a query against the collection to find trips where the user is a driver
-            final Query driverQuery = mTripsRef.whereEqualTo("driver", userID);
-            //Create a query against the collection to find trips where the user is a passenger
-            Query passengerQuery = mTripsRef.whereArrayContains("passengers", userID);
-
-            driverQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        myTrips.addAll(task.getResult().toObjects(Trip.class));
-                        taskFinished();
-                    }
-                }
-            });
-
-            passengerQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        myTrips.addAll(task.getResult().toObjects(Trip.class));
-                        taskFinished();
-                    }
-                }
-            });
-        }
-
-    }
-
-    private void taskFinished() {
-        if (!firstTaskDone) {
-            firstTaskDone = true;
-            return;
-        }
-
-        loadingSpinner.setVisibility(View.INVISIBLE);
-
-        Collections.sort(myTrips, new Comparator<Trip>() {
-            @Override
-            public int compare(Trip o1, Trip o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
-
-        tripsListView.setAdapter(adapter);
+    private void initViews() {
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        tripsListView = view.findViewById(R.id.listView_Trips);
+        createTripButton = view.findViewById(R.id.createTripButton);
     }
 
 
@@ -171,6 +112,66 @@ public class MyTripsFragment extends Fragment {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateTrips();
+            }
+        });
+
+    }
+
+    private void updateTrips() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
+
+        swipeRefreshLayout.setRefreshing(true);
+        firstTaskDone = false;
+        myTrips.clear();
+
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        //Create a query against the collection to find trips where the user is a driver
+        Query driverQuery = mTripsRef.whereEqualTo("driver", userID);
+        //Create a query against the collection to find trips where the user is a passenger
+        Query passengerQuery = mTripsRef.whereArrayContains("passengers", userID);
+
+        driverQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    myTrips.addAll(task.getResult().toObjects(Trip.class));
+                    taskFinished();
+                }
+            }
+        });
+
+        passengerQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    myTrips.addAll(task.getResult().toObjects(Trip.class));
+                    taskFinished();
+                }
+            }
+        });
+
+    }
+
+    private void taskFinished() {
+        if (!firstTaskDone) {
+            firstTaskDone = true;
+            return;
+        }
+
+        Collections.sort(myTrips, new Comparator<Trip>() {
+            @Override
+            public int compare(Trip o1, Trip o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+        tripsListView.setAdapter(adapter);
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
