@@ -26,6 +26,8 @@ public class User {
     String photoURL;
     private @Getter @Setter
     BankCard bankCard;
+    private @Getter @Setter
+    int savedCarbon;
 
     public User() {
         // Required empty public constructor
