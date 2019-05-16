@@ -42,7 +42,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
         username.setText( currentUser.getDisplayName() );
 
         TextView savedCarb = view.findViewById(R.id.user_saved_carbon_textview);
-        //savedCarb.setText();
+        savedCarb.setText( Integer.toString( currentUser.getSavedCarbon()) + " kg");
 
         return view;
     }
