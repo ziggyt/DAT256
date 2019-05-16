@@ -24,10 +24,10 @@ import java.util.List;
 public class LeaderboardFragment extends Fragment {
 
     private FirebaseFirestore mDatabase;
-    private CollectionReference mTripsRef;
+    private CollectionReference mUsersRef;
 
-    private ListView listViewTrips;
     private List<User> users;
+    private ListView listViewUsers;
 
     private View view;
 
@@ -37,15 +37,16 @@ public class LeaderboardFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().setTitle(R.string.navigation_leaderboard);
 
         view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
         mDatabase = FirebaseFirestore.getInstance();
-        mTripsRef = mDatabase.collection("users");
+        mUsersRef = mDatabase.collection("users");
+
+
         // Inflate the layout for this fragment
         return view;
     }
