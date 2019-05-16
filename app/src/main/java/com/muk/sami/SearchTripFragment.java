@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -105,6 +106,10 @@ public class SearchTripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // opens fragment for filtering trips
+                if( startPlace ==  null ){
+                    Toast.makeText(getContext(), "Du måste välja startpunkt!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Coordinates startCoordinatesToBePassed = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
 
