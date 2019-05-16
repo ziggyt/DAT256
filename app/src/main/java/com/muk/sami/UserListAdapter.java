@@ -1,6 +1,7 @@
 package com.muk.sami;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.muk.sami.model.User;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.w3c.dom.Text;
 
@@ -27,6 +31,8 @@ public class UserListAdapter extends ArrayAdapter<User> {
         super(context, 0, users);
         this.mContext = context;
         this.users = users;
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -35,8 +41,17 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
         User currentUser = users.get(position);
 
-        //CircleImageView userImage = view.findViewById(R.id.profile_picture);
-        //userImage.setImageBitmap();
+        final CircleImageView userImage = view.findViewById(R.id.profile_picture);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        String profilePictureURL = currentUser.getPhotoURL();
+
+        imageLoader.loadImage(profilePictureURL, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                userImage.setImageBitmap(loadedImage);
+            }
+        });
 
         TextView username = view.findViewById(R.id.user_name_textview);
         username.setText( currentUser.getDisplayName() );
