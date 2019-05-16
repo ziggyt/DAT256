@@ -72,7 +72,7 @@ public class LeaderboardFragment extends Fragment {
                         Integer i1 = o1.getSavedCarbon();
                         Integer i2 = o2.getSavedCarbon();
 
-                        return i1.compareTo(i2);
+                        return i2.compareTo(i1);
                     }
                 });
 
