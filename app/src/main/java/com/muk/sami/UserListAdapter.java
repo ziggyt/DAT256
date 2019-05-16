@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import com.muk.sami.model.User;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserListAdapter extends ArrayAdapter<User> {
 
@@ -27,7 +31,18 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = mContext.getLayoutInflater();
-        View view = inflater.inflate(R.layout.passenger_list_item, null, true);
+        View view = inflater.inflate(R.layout.user_list_item, null, true);
+
+        User currentUser = users.get(position);
+
+        //CircleImageView userImage = view.findViewById(R.id.profile_picture);
+        //userImage.setImageBitmap();
+
+        TextView username = view.findViewById(R.id.user_name_textview);
+        username.setText( currentUser.getDisplayName() );
+
+        TextView savedCarb = view.findViewById(R.id.user_saved_carbon_textview);
+        //savedCarb.setText();
 
         return view;
     }
