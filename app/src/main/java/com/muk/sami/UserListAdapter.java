@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.muk.sami.model.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -35,13 +37,19 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = mContext.getLayoutInflater();
-        View view = inflater.inflate(R.layout.user_list_item, null, true);
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+
+        View listItem = convertView;
+
+        if (listItem == null) {
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.user_list_item, parent, false);
+        }
+
 
         User currentUser = users.get(position);
 
-        final CircleImageView userImage = view.findViewById(R.id.profile_picture);
+        final CircleImageView userImage = listItem.findViewById(R.id.profile_picture);
 
         ImageLoader imageLoader = ImageLoader.getInstance();
         String profilePictureURL = currentUser.getPhotoURL();
@@ -53,13 +61,13 @@ public class UserListAdapter extends ArrayAdapter<User> {
             }
         });
 
-        TextView username = view.findViewById(R.id.user_name_textview);
+        TextView username = listItem.findViewById(R.id.user_name_textview);
         username.setText( currentUser.getDisplayName() );
 
-        TextView savedCarb = view.findViewById(R.id.user_saved_carbon_textview);
+        TextView savedCarb = listItem.findViewById(R.id.user_saved_carbon_textview);
         savedCarb.setText( Integer.toString( currentUser.getSavedCarbon()) + " kg");
 
-        return view;
+        return listItem;
     }
 }
 

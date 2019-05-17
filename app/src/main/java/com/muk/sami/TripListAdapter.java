@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.muk.sami.model.Trip;
 
 import java.util.List;
@@ -25,20 +27,24 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
     }
 
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        LayoutInflater inflater = context.getLayoutInflater();
-        View listitem = inflater.inflate(R.layout.listitem_trip, null, true);
+        View listItem = convertView;
+
+        if (listItem == null) {
+            listItem = LayoutInflater.from(context).inflate(R.layout.listitem_trip, parent, false);
+        }
 
 
-        ImageView driverOrNot  = listitem.findViewById(R.id.driverOrNot);
-        TextView textViewFrom  = listitem.findViewById(R.id.from_text_view);
-        TextView textViewTo    = listitem.findViewById(R.id.to_text_view);
-        TextView textViewDate  = listitem.findViewById(R.id.date_text_view);
-        TextView textViewTime  = listitem.findViewById(R.id.time_text_view);
-        TextView textViewSeats = listitem.findViewById(R.id.seats_text_view);
-        TextView tripLengthTextView = listitem.findViewById(R.id.trip_length_text_view);
+        ImageView driverOrNot  = listItem.findViewById(R.id.driverOrNot);
+        TextView textViewFrom  = listItem.findViewById(R.id.from_text_view);
+        TextView textViewTo    = listItem.findViewById(R.id.to_text_view);
+        TextView textViewDate  = listItem.findViewById(R.id.date_text_view);
+        TextView textViewTime  = listItem.findViewById(R.id.time_text_view);
+        TextView textViewSeats = listItem.findViewById(R.id.seats_text_view);
+        TextView tripLengthTextView = listItem.findViewById(R.id.trip_length_text_view);
 
         Trip trip = trips.get(position);
 
@@ -65,7 +71,7 @@ public class TripListAdapter extends ArrayAdapter <Trip> {
             textViewSeats.setText(remainingSeats + " platser kvar");
         }
 
-        return listitem;
+        return listItem;
     }
 
 }
