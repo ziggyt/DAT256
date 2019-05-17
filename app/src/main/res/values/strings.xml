@@ -34,6 +34,7 @@
 
     <!-- CreateTrip -->
     <string name="navigation_create_trip">Skapa resa</string>
+    <string name="amount_of_passengers">Antal passagerare</string>
 
     <!-- My Page -->
     <string name="navigation_my_page">Min sida</string>

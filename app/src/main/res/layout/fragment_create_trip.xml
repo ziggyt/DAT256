@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -28,14 +26,14 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView">
+        app:layout_constraintTop_toBottomOf="@id/cardView">
 
         <fragment
             android:id="@+id/destination_autocomplete_fragment"
@@ -44,87 +42,77 @@
             android:layout_height="wrap_content" />
     </androidx.cardview.widget.CardView>
 
-    <EditText
-        android:id="@+id/edit_Seats"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_seats"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Antal passagerare?"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.004"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:hint="@string/amount_of_passengers"
+        app:layout_constraintTop_toBottomOf="@id/cardView2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="number" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="92dp"
-        android:text="Välj datum:"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewTime"
+        android:text="Datum:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/datePicker"
         app:layout_constraintEnd_toStartOf="@+id/datePicker"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/datePicker" />
 
     <DatePicker
         android:id="@+id/datePicker"
         android:layout_width="268dp"
         android:layout_height="110dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
         android:calendarViewShown="false"
         android:datePickerMode="spinner"
-        app:layout_constraintBottom_toTopOf="@+id/timePicker"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_input_seats" />
 
     <TextView
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="8dp"
-        android:text="Välj tid:"
-        android:textSize="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.023"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/timePicker" />
+        android:text="Tid:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/timePicker"
+        app:layout_constraintEnd_toStartOf="@id/timePicker"
+        app:layout_constraintTop_toTopOf="@id/timePicker" />
 
     <TimePicker
         android:id="@+id/timePicker"
         android:layout_width="268dp"
         android:layout_height="110dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginStart="64dp"
         android:timePickerMode="spinner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/datePicker" />
 
     <Button
         android:id="@+id/addTripButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:text="Lägg till resa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.939"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.988" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

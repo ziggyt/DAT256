@@ -34,6 +34,7 @@
 
     <!-- CreateTrip -->
     <string name="navigation_create_trip">Create Trip</string>
+    <string name="amount_of_passengers">Amount of Passengers</string>
 
     <!-- My Page -->
     <string name="navigation_my_page">My Page</string>
