@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.muk.sami.model.User;
 
 import java.util.ArrayList;
@@ -26,12 +28,17 @@ public class PassengerListAdapter extends ArrayAdapter<String> {
         this.passengersStatus = passengersStatus;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = mContext.getLayoutInflater();
-        View view = inflater.inflate(R.layout.passenger_list_item, null, true);
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        TextView passengerNameTextView = view.findViewById(R.id.passenger_name_text_view);
-        CheckBox checkBox = view.findViewById(R.id.checkBox);
+        View listItem = convertView;
+
+        if (listItem == null) {
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.passenger_list_item, parent, false);
+        }
+
+        TextView passengerNameTextView = listItem.findViewById(R.id.passenger_name_text_view);
+        CheckBox checkBox = listItem.findViewById(R.id.checkBox);
 
         String passenger = passengers.get(position);
         String passengerStatus = passengersStatus.get(position);
@@ -42,7 +49,7 @@ public class PassengerListAdapter extends ArrayAdapter<String> {
             checkBox.setChecked(true);
         }
 
-        return view;
+        return listItem;
     }
 }
 
