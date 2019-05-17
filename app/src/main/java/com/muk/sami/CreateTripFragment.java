@@ -23,6 +23,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,12 +36,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.firebase.ui.auth.AuthUI.TAG;
-
 public class CreateTripFragment extends Fragment {
     private EditText fromEditText;
     private EditText toEditText;
-    private EditText seatsEditText;
+    private TextInputLayout textInputSeats;
     private TextView dateTextView;
     private DatePicker datePicker;
     private TimePicker timePicker;
@@ -71,7 +70,7 @@ public class CreateTripFragment extends Fragment {
 
         fromEditText = view.findViewById(R.id.edit_From);
         toEditText = view.findViewById(R.id.edit_To);
-        seatsEditText = view.findViewById(R.id.edit_Seats);
+        textInputSeats = view.findViewById(R.id.text_input_seats);
         dateTextView = view.findViewById(R.id.textViewDate);
         datePicker = view.findViewById(R.id.datePicker);
         timePicker = view.findViewById(R.id.timePicker);
@@ -85,14 +84,7 @@ public class CreateTripFragment extends Fragment {
         addTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String seats = seatsEditText.getText().toString();
-                Date date = dateFromDatePicker(datePicker, timePicker);
-
-                if (seats.equals("")) {
-                    Toast.makeText(getContext(), "VÄLJ ANTAL PASSAGERARE", Toast.LENGTH_SHORT).show();
-                } else {
-                    createTrip(date, Integer.parseInt(seats));
-                }
+                createTrip();
             }
         });
 
@@ -166,11 +158,16 @@ public class CreateTripFragment extends Fragment {
         return calendar.getTime();
     }
 
-    private void createTrip(Date date, int seats) {
+    private void createTrip() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
+
+        if (!validateInput()) return;
 
         String tripId = mTripsRef.document().getId();
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) throw new IllegalStateException("user should be signed in");
         String driverId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        int seats = Integer.parseInt(textInputSeats.getEditText().getText().toString().trim());
+        Date date = dateFromDatePicker(datePicker, timePicker);
 
         String startAddress = startPlace.getAddress();
         String destinationAddress = destinationPlace.getAddress();
@@ -203,6 +200,17 @@ public class CreateTripFragment extends Fragment {
                 });
 
         Navigation.findNavController(view).popBackStack();
+    }
+
+    private boolean validateInput() {
+        String seatsInput = textInputSeats.getEditText().getText().toString().trim();
+        if (seatsInput.isEmpty()) {
+            textInputSeats.setError("Fältet kan inte vara tomt"); //TODO replace with string value
+            return false;
+        } else {
+            textInputSeats.setError(null);
+            return true;
+        }
     }
 
 }
