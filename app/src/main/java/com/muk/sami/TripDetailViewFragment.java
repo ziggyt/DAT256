@@ -31,6 +31,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -114,7 +115,7 @@ public class TripDetailViewFragment extends Fragment {
         finishTripButton.setVisibility(View.INVISIBLE);
     }
 
-    private void showViewForStartedTrip(){
+    private void showViewForStartedTrip() {
         bookTripButton.setVisibility(View.INVISIBLE);
         cancelTripButton.setVisibility(View.INVISIBLE);
         showQrCodeButton.setVisibility(View.INVISIBLE);
@@ -147,50 +148,50 @@ public class TripDetailViewFragment extends Fragment {
         mTripRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-            if (e != null) {
-                //Listen failed
-                return;
-            }
-
-            //Convert the snapshot to a trip object
-            displayedTrip = documentSnapshot.toObject(Trip.class);
-
-            //Set the components
-            if (displayedTrip != null) {
-                fromTextView.setText(displayedTrip.getStartAddress());
-                toTextView.setText(displayedTrip.getDestinationAddress());
-                dateTextView.setText(displayedTrip.getDateString());
-                timeTextView.setText(displayedTrip.getTimeString());
-                totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
-                numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
-
-
-                mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot user = task.getResult();
-                            if (user != null) {
-                                driverTextView.setText(user.getString("displayName"));
-                                driverRatingBar.setRating(4);
-                            }
-                        }
-                    }
-                });
-
-                if( displayedTrip.isTripStarted()){
-                    showViewForStartedTrip();
+                if (e != null) {
+                    //Listen failed
                     return;
                 }
 
-                //Check if the user is a passenger
-                if (activeUser != null && displayedTrip.userInTrip(activeUser.getUid())) {
-                    showViewForBookedUser();
-                } else {
-                    showViewForUnbookedUser();
+                //Convert the snapshot to a trip object
+                displayedTrip = documentSnapshot.toObject(Trip.class);
+
+                //Set the components
+                if (displayedTrip != null) {
+                    fromTextView.setText(displayedTrip.getStartAddress());
+                    toTextView.setText(displayedTrip.getDestinationAddress());
+                    dateTextView.setText(displayedTrip.getDateString());
+                    timeTextView.setText(displayedTrip.getTimeString());
+                    totalNumOfSeatsTextView.setText(String.valueOf(displayedTrip.getTotalNumberOfSeats()));
+                    numOfBookedSeatsTextView.setText(String.valueOf(displayedTrip.getNumberOfBookedSeats()));
+
+
+                    mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot user = task.getResult();
+                                if (user != null) {
+                                    driverTextView.setText(user.getString("displayName"));
+                                    driverRatingBar.setRating(4);
+                                }
+                            }
+                        }
+                    });
+
+                    if (displayedTrip.isTripStarted()) {
+                        showViewForStartedTrip();
+                        return;
+                    }
+
+                    //Check if the user is a passenger
+                    if (activeUser != null && displayedTrip.userInTrip(activeUser.getUid())) {
+                        showViewForBookedUser();
+                    } else {
+                        showViewForUnbookedUser();
+                    }
+                    checkIfTripIsFull();
                 }
-                checkIfTripIsFull();
-            }
             }
         });
 
@@ -199,50 +200,14 @@ public class TripDetailViewFragment extends Fragment {
 
     }
 
-    private void checkIfTripIsFull(){
-        if(displayedTrip.tripIsFull()){
+    private void checkIfTripIsFull() {
+        if (displayedTrip.tripIsFull()) {
             bookTripButton.setAlpha(.5f);
             bookTripButton.setClickable(false);
-        } else{
+        } else {
             bookTripButton.setAlpha(1);
             bookTripButton.setClickable(true);
         }
-    }
-
-    private void payTripDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Betala resan");
-
-        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.pay_trip_dialog, (ViewGroup) getView(), false);
-
-        //Set the content of the main dialog view
-        builder.setView(dialogView);
-
-        TextView priceTextView = dialogView.findViewById(R.id.price_text_view);
-
-        priceTextView.setText("Din plats kommer att kosta " + String.valueOf(displayedTrip.getSeatPrice()) + " Kr");
-
-        // Set up the OK-button
-        builder.setPositiveButton("Betala", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mTripRef.set(displayedTrip);
-                showViewForBookedUser();
-                initTripMessaging();
-                sendTripBookedMessage();
-                Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //Set up the Cancel-button
-        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
     }
 
     private void initListeners() {
@@ -250,22 +215,7 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Sign in first if not signed in
-                if (activeUser == null) {
-                    if (mSignInRequestListener != null) mSignInRequestListener.onSignInRequest();
-                    return;
-                }
-
-                if(user.getBankCard() == null) {
-                    Toast.makeText(getContext(), "Finns inget giltigt bankkort", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (displayedTrip.addPassenger(activeUser.getUid())) {
-                    payTripDialog();
-                } else {
-                    Toast.makeText(getContext(), R.string.trip_full_message, Toast.LENGTH_SHORT).show();
-                }
-                checkIfTripIsFull();
+                payTripDialog();
             }
         });
 
@@ -300,7 +250,58 @@ public class TripDetailViewFragment extends Fragment {
 
     }
 
-    private void initTripMessaging(){
+    private void bookTrip() {
+        // Sign in first if not signed in
+        if (activeUser == null) {
+            if (mSignInRequestListener != null) mSignInRequestListener.onSignInRequest();
+            return;
+        }
+        if (user.getBankCard() == null) { //TODO 'add bankcard' request
+            Toast.makeText(getContext(), "Finns inget giltigt bankkort", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        payTripDialog();
+    }
+
+    private void payTripDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Betala resan");
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.pay_trip_dialog, (ViewGroup) getView(), false);
+
+        //Set the content of the main dialog view
+        builder.setView(dialogView);
+
+        TextView priceTextView = dialogView.findViewById(R.id.price_text_view);
+
+        priceTextView.setText("Din plats kommer att kosta " + String.valueOf(displayedTrip.getSeatPrice()) + " Kr");
+
+        // Set up the OK-button
+        builder.setPositiveButton("Betala", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                displayedTrip.addPassenger(activeUser.getUid());
+                mTripRef.set(displayedTrip);
+                checkIfTripIsFull();
+                showViewForBookedUser();
+                initTripMessaging();
+                sendTripBookedMessage();
+                Toast.makeText(getContext(), R.string.user_added_to_trip, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Set up the Cancel-button
+        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void initTripMessaging() {
         FirebaseMessaging.getInstance().subscribeToTopic(tripId)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -315,7 +316,7 @@ public class TripDetailViewFragment extends Fragment {
                 });
     }
 
-    private void cancelTripMessaging(){
+    private void cancelTripMessaging() {
         FirebaseMessaging.getInstance().unsubscribeFromTopic(tripId)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -335,7 +336,7 @@ public class TripDetailViewFragment extends Fragment {
      * Changes the document at tripBookingNotification/tripId, which triggers a cloud function,
      * sending a notification to the driver/passengers telling them that a passenger has joined
      */
-    private void sendTripBookedMessage(){
+    private void sendTripBookedMessage() {
         //The topic name, which equals the tripId
         String topic = tripId;
 
@@ -367,7 +368,7 @@ public class TripDetailViewFragment extends Fragment {
 
                 if (activeUser == null) throw new IllegalStateException("user should be signed in");
 
-                displayedTrip.finishTripPassenger( activeUser.getUid() );
+                displayedTrip.finishTripPassenger(activeUser.getUid());
                 mTripRef.set(displayedTrip);
             }
         });
