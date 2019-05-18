@@ -29,7 +29,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity implements SignInListener, MyPageFragment.OnAccountManageListener {
+public class MainActivity extends AppCompatActivity implements SignInRequestListener, MyPageFragment.OnAccountManageListener {
 
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 0;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements SignInListener, M
      * Starts the sign in flow in a new activity.
      */
     @Override
-    public void signIn() {
+    public void onSignInRequest() {
         // Start AuthUI's sign in flow
         startActivityForResult(
                 AuthUI.getInstance()
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SignInListener, M
                 .signOut(this)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     public void onComplete(@NonNull Task<Void> task) { // User is now signed out
-                        signIn();
+                        onSignInRequest();
                     }
                 });
     }
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements SignInListener, M
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) { // Deletion succeeded
-                            signIn();
+                            onSignInRequest();
                         } else { // Deletion failed
                             Snackbar.make(findViewById(android.R.id.content), R.string.deletion_failed_message, Snackbar.LENGTH_LONG)
                                     .setAction(R.string.sign_in, new View.OnClickListener() {

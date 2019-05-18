@@ -42,7 +42,7 @@ public class MyTripsFragment extends Fragment {
 
     private View view;
 
-    private SignInListener mSignInListener;
+    private SignInRequestListener mSignInRequestListener;
 
     private List<Trip> myTrips = new ArrayList<>();
     private boolean firstTaskDone = false;
@@ -103,7 +103,7 @@ public class MyTripsFragment extends Fragment {
             public void onClick(View v) {
                 // Sign in first if not signed in
                 if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    if (mSignInListener != null) mSignInListener.signIn();
+                    if (mSignInRequestListener != null) mSignInRequestListener.onSignInRequest();
                     return;
                 }
 
@@ -178,18 +178,18 @@ public class MyTripsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof SignInListener) {
-            mSignInListener = (SignInListener) context;
+        if (context instanceof SignInRequestListener) {
+            mSignInRequestListener = (SignInRequestListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement SignInListener");
+                    + " must implement SignInRequestListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mSignInListener = null;
+        mSignInRequestListener = null;
     }
 
 }

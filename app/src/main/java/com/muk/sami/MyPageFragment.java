@@ -3,9 +3,6 @@ package com.muk.sami;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -25,20 +21,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.muk.sami.model.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,7 +52,7 @@ public class MyPageFragment extends Fragment {
     private DocumentReference mUserRef;
 
     private OnAccountManageListener mAccountManageListener;
-    private SignInListener mSignInListener;
+    private SignInRequestListener mSignInRequestListener;
 
     public MyPageFragment() {
         // Required empty public constructor
@@ -83,7 +70,7 @@ public class MyPageFragment extends Fragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mSignInListener != null) mSignInListener.signIn();
+                    if (mSignInRequestListener != null) mSignInRequestListener.onSignInRequest();
                 }
             });
             return view;
@@ -172,11 +159,11 @@ public class MyPageFragment extends Fragment {
                     + " must implement OnAccountManageListener");
         }
 
-        if (context instanceof SignInListener) {
-            mSignInListener = (SignInListener) context;
+        if (context instanceof SignInRequestListener) {
+            mSignInRequestListener = (SignInRequestListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement SignInListener");
+                    + " must implement SignInRequestListener");
         }
     }
 
@@ -184,7 +171,7 @@ public class MyPageFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mAccountManageListener = null;
-        mSignInListener = null;
+        mSignInRequestListener = null;
     }
 
     public interface OnAccountManageListener {
