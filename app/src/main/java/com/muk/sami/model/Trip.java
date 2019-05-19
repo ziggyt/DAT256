@@ -161,6 +161,10 @@ public class Trip {
         return startCoordinates.kilometersBetweenCoordinates(c1);
     }
 
+    public double getDistanceBetweenDestinationAndCustomCoordinates(Coordinates c1){
+        return destinationCoordinates.kilometersBetweenCoordinates(c1);
+    }
+
     public int getSeatPrice() {
         double distanceInKm = getDistanceBetweenStartAndDestination()/1000.0;
         return (int)(distanceInKm*2)/(totalNumberOfSeats+1);

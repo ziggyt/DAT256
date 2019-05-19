@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
@@ -35,15 +34,12 @@ import com.muk.sami.model.Trip;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.Random;
 
 
 public class FilteredTripsFragment extends Fragment {
@@ -74,6 +70,7 @@ public class FilteredTripsFragment extends Fragment {
     private Coordinates enteredStartCoordinates;
 
     private int startRadiusLimit = 99999;
+    private int destinationRadiusLimit = 30; // HARDCODED VALUE FOR NOW
 
 
     private View view;
@@ -96,6 +93,11 @@ public class FilteredTripsFragment extends Fragment {
         double startLongitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLongitude());
 
         enteredStartCoordinates = new Coordinates(startLatitude, startLongitude);
+
+        double destinationLatitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLatitude());
+        double destinationLongitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLongitude());
+
+        enteredDestinationCoordinates = new Coordinates(destinationLatitude, destinationLongitude);
 
         Integer[] items = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, items);
@@ -128,6 +130,7 @@ public class FilteredTripsFragment extends Fragment {
 
                 trips.clear();
                 trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
+                initializeTripsList();
 
 
                 Collections.sort(trips, new Comparator<Trip>() {
@@ -146,13 +149,14 @@ public class FilteredTripsFragment extends Fragment {
                 });
                 */
 
+
+
                 if (filterOn) {
                     applyFilter();
                 } else if (getActivity() != null) {
                     TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
                     listViewTrips.setAdapter(adapter);
                 }
-
             }
         });
 
@@ -305,9 +309,22 @@ public class FilteredTripsFragment extends Fragment {
         showFilterButton();
     }
 
+    private void initializeTripsList(){
+
+        ArrayList<Trip> tripsCloseToDestination = new ArrayList<>();
+
+        for (Trip t : trips) {
+            if (t.getDistanceBetweenDestinationAndCustomCoordinates(enteredDestinationCoordinates) <= destinationRadiusLimit) {
+                tripsCloseToDestination.add(t);
+            }
+        }
+        trips = tripsCloseToDestination;
+    }
+
     private void showOnlyTripsWithinRadius() {
 
         ArrayList<Trip> tripsWithinRadius = new ArrayList<>();
+
         for (Trip t : trips) {
             if (t.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates) <= startRadiusLimit) {
                 tripsWithinRadius.add(t);
