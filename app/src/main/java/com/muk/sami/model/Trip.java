@@ -41,7 +41,9 @@ public class Trip {
     @Getter private
     String destinationAddress;
     @Getter private
-    boolean tripStarted;
+    boolean tripStarted = false;
+    @Getter private
+    boolean tripFinished = false;
 
 
     public Trip() {
@@ -64,12 +66,16 @@ public class Trip {
         tripStarted = true;
     }
 
+    public void finishTrip(){
+        tripFinished = true;
+    }
+
     public void finishTripPassenger(String passenger){
         int passengerIndex = passengers.indexOf(passenger);
         passengerStatus.set( passengerIndex, "Finished trip");
     }
 
-    public boolean tripIsFinished(){
+    public boolean passengersFinishedTrip(){
         if( passengers.isEmpty()){
             return false;
         }

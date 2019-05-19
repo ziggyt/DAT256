@@ -1,6 +1,7 @@
 package com.muk.sami;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,12 +12,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,22 +22,17 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.muk.sami.model.BankCard;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
-import com.muk.sami.model.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,6 +47,7 @@ public class DriverDetailViewFragment extends Fragment {
     private TextView timeTextView;
 
     private Button startTripButton;
+    private Button finishTripButton;
     private Button showQrCodeButton;
 
     private ListView passengerListView;
@@ -74,15 +68,29 @@ public class DriverDetailViewFragment extends Fragment {
     private Trip displayedTrip;
     private String tripId;
 
-    View view;
+    private Context context;
+    private View view;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tickReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
+                    checkIfPastStartTime();
+                }
+            }
+        };
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         getActivity().setTitle(R.string.navigation_trip_detailview);
-
+        this.context = getContext();
         view = inflater.inflate(R.layout.fragment_driver_detail_view, container, false);
 
         fromTextView = view.findViewById(R.id.from_text_view);
@@ -90,6 +98,7 @@ public class DriverDetailViewFragment extends Fragment {
         dateTextView = view.findViewById(R.id.date_text_view);
         timeTextView = view.findViewById(R.id.time_text_view);
         startTripButton = view.findViewById(R.id.start_trip_button);
+        finishTripButton = view.findViewById(R.id.finish_trip_button);
         showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
         passengerListView = view.findViewById(R.id.passengers_list_view);
 
@@ -98,19 +107,11 @@ public class DriverDetailViewFragment extends Fragment {
         adapter = new PassengerListAdapter(getActivity(), passengerList, passengersStatus);
         passengerListView.setAdapter(adapter);
 
-        registerTickReceiver();
         initListeners();
         initFirebaseSetup();
 
         return view;
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unRegisterTickReceiver();
-    }
-
 
     private void initFirebaseSetup() {
 
@@ -135,29 +136,27 @@ public class DriverDetailViewFragment extends Fragment {
                 //Convert the snapshot to a trip object
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
-                //If the trip is started make the startButton grey
-                if( displayedTrip.isTripStarted() ){
+                if (displayedTrip.isTripFinished()) {
+                    showViewForFinishedTrip();
+                } else if (displayedTrip.isTripStarted()) {
                     showViewForStartedTrip();
-                }
 
-                //If the trip is finished, display dialog, else continue
-                if (displayedTrip.tripIsFinished()) {
-                    tripFinishedDialog();
+                    if (displayedTrip.passengersFinishedTrip()) {
+                        finishTrip();
+                    }
                 }
 
                 //Set the components
-                if (displayedTrip != null) {
-                    fromTextView.setText(displayedTrip.getStartAddress());
-                    toTextView.setText(displayedTrip.getDestinationAddress());
-                    dateTextView.setText(displayedTrip.getDateString());
-                    timeTextView.setText(displayedTrip.getTimeString());
+                fromTextView.setText(displayedTrip.getStartAddress());
+                toTextView.setText(displayedTrip.getDestinationAddress());
+                dateTextView.setText(displayedTrip.getDateString());
+                timeTextView.setText(displayedTrip.getTimeString());
 
-                    passengerList.clear();
-                    passengersStatus.clear();
-                    passengersStatus.addAll(displayedTrip.getPassengerStatus());
+                passengerList.clear();
+                passengersStatus.clear();
+                passengersStatus.addAll(displayedTrip.getPassengerStatus());
 
-                    createPassengerList(displayedTrip);
-                }
+                createPassengerList(displayedTrip);
             }
         });
 
@@ -193,19 +192,50 @@ public class DriverDetailViewFragment extends Fragment {
         startTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayedTrip.startTrip();
-                mTripRef.set(displayedTrip);
+                startTrip();
+            }
+        });
 
-                showViewForStartedTrip();
-                sendTripStartedMessage();
+        finishTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishTrip();
             }
         });
     }
 
-    private void showViewForStartedTrip(){
-        startTripButton.setBackgroundColor(Color.GRAY);
-        startTripButton.setClickable(false);
-        startTripButton.setText("Resa startad");
+    private void startTrip() {
+        displayedTrip.startTrip();
+        mTripRef.set(displayedTrip);
+
+        showViewForStartedTrip();
+        sendTripStartedMessage();
+    }
+
+    private void finishTrip() {
+        displayedTrip.finishTrip();
+        mTripRef.set(displayedTrip);
+
+        tripFinishedDialog();
+        showViewForFinishedTrip();
+        cancelTripMessaging();
+    }
+
+    private void showViewForStartedTrip() {
+        startTripButton.setVisibility(View.INVISIBLE);
+        finishTripButton.setVisibility(View.VISIBLE);
+    }
+
+    private void showViewForFinishedTrip() {
+        startTripButton.setVisibility(View.INVISIBLE);
+        finishTripButton.setVisibility(View.GONE);
+    }
+
+    private void cancelTripMessaging() {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(tripId);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(tripId.hashCode());
     }
 
     /**
@@ -227,7 +257,7 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void checkIfPastStartTime() {
-        if( displayedTrip.isTripStarted() ){
+        if (displayedTrip.isTripStarted()) {
             return;
         }
 
@@ -249,7 +279,6 @@ public class DriverDetailViewFragment extends Fragment {
             startTripButton.setClickable(true);
         }
     }
-
 
     /**
      * Temporary dialog, this confirmation that the trip is finished could be placed in fragment
@@ -273,20 +302,23 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void registerTickReceiver() {
-        tickReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
-                    checkIfPastStartTime();
-                }
-            }
-        };
         getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
     }
 
     private void unRegisterTickReceiver() {
-        if (tickReceiver != null)
-            getActivity().unregisterReceiver(tickReceiver);
+        getActivity().unregisterReceiver(tickReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerTickReceiver();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unRegisterTickReceiver();
     }
 
 }
