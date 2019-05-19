@@ -32,6 +32,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.muk.sami.model.Coordinates;
 import com.muk.sami.model.Trip;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -99,6 +100,15 @@ public class FilteredTripsFragment extends Fragment {
 
         enteredDestinationCoordinates = new Coordinates(destinationLatitude, destinationLongitude);
 
+        String searchDateString = FilteredTripsFragmentArgs.fromBundle(getArguments()).getDateString();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
+        try {
+            filterDate = sdf.parse(searchDateString);
+            filterOn = true;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         Integer[] items = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
         final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, items);
         startRadiusSpinner.setAdapter(adapter);
@@ -140,14 +150,14 @@ public class FilteredTripsFragment extends Fragment {
                     }
                 });
 
-                /*
+
                 Collections.sort(trips, new Comparator<Trip>() {
                     @Override
                     public int compare(Trip o1, Trip o2) {
                         return o1.getDate().compareTo(o2.getDate());
                     }
                 });
-                */
+
 
 
 
@@ -337,7 +347,10 @@ public class FilteredTripsFragment extends Fragment {
 
         if(tripsWithinRadius.size() == 0){
             Toast.makeText(getContext(), "Du får stanna hemma", Toast.LENGTH_LONG).show();
+            return;
         }
+
+        applyFilter();
     }
 
     private void showFilterButton() {
