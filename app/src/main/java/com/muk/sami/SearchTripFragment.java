@@ -129,7 +129,11 @@ public class SearchTripFragment extends Fragment {
                 if( startPlace ==  null ){
                     Toast.makeText(getContext(), "Du måste välja startpunkt!", Toast.LENGTH_SHORT).show();
                     return;
+                }else if ( destinationPlace == null ){
+                    Toast.makeText(getContext(), "Du måste välja slutpunkt!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
 
                 Coordinates startCoordinatesToBePassed = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
                 Coordinates destinationCoordinatesToBePassed = new Coordinates(destinationPlace.getLatLng().latitude, destinationPlace.getLatLng().longitude);
