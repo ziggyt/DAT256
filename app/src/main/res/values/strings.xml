@@ -11,6 +11,12 @@
     <string name="msg_subscribe_failed">Failed subscribing to message</string>
     <string name="msg_unsubscribe_failed">Failed unsubscribing from message</string>
 
+    <!-- Notification -->
+    <string name="notification_channel_active_trip_name">Aktiv resa</string>
+    <string name="notification_channel_active_trip_description">Visar pågående resa</string>
+    <string name="notification_channel_normal_name">Normal</string>
+    <string name="notification_channel_normal_description">Normala notifikationsmeddelanden</string>
+
     <!-- SearchTrip -->
     <string name="navigation_trip_search">Sök resa</string>
     <string name="navigation_trip_detailview">Bokningsinformation</string>

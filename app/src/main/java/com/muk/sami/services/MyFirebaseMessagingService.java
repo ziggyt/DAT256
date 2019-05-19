@@ -1,29 +1,26 @@
 package com.muk.sami.services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.navigation.NavDeepLinkBuilder;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.muk.sami.App;
 import com.muk.sami.MainActivity;
 import com.muk.sami.R;
 
@@ -31,7 +28,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-import static com.firebase.ui.auth.AuthUI.TAG;
+import javax.annotation.Nullable;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -49,16 +46,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         Map<String, String> data = remoteMessage.getData();
 
-        sendNotification(notification, data);
+        String tripId = null;
+        if (remoteMessage.getFrom() != null) {
+            // Strip the string to leave the trip ID only
+            tripId = remoteMessage.getFrom().replace("/topics/", "");
+        }
+
+        sendNotification(notification, data, tripId);
     }
 
     /**
      * Create and show a custom notification containing the received FCM message.
      *
-     * @param notification FCM notification payload received.
-     * @param data FCM data payload received.
+     * @param notification  FCM notification payload received.
+     * @param data          FCM data payload received.
+     * @param tripId        The ID of the trip that the notification came form
      */
-    private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {
+    private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data, @Nullable String tripId) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_directions_car_black_24dp);
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -78,15 +82,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String userId = typeOfChange[1];
         String driverId = typeOfChange[2];
 
-        if( change.equals("Passenger joined")){
+        if (tripId != null) { // Set pending intent to the detail view of the trip
+            Bundle bundle = new Bundle();
+            bundle.putString("tripId", tripId);
 
-            if( userId.equals(loggedInUserId) ){
+            NavDeepLinkBuilder navBuilder = new NavDeepLinkBuilder(this);
+            navBuilder.setGraph(R.navigation.nav_graph);
+            navBuilder.setArguments(bundle);
+            if (driverId.equals(loggedInUserId)) {
+                navBuilder.setDestination(R.id.driverDetailViewFragment);
+            } else {
+                navBuilder.setDestination(R.id.tripDetailViewFragment);
+            }
+
+            pendingIntent = navBuilder.createPendingIntent();
+        }
+
+        if (change.equals("Passenger joined")) {
+
+            if (userId.equals(loggedInUserId)) {
 
                 title = "Inbokad på resa";//TODO replace with string values
                 body = "Du är nu inbokad på resan";
                 toastMessage = "Inbokad på resa";
 
-            }else if( driverId.equals(loggedInUserId)){
+            } else if (driverId.equals(loggedInUserId)) {
 
                 title = "Ny passagerare";//TODO replace with string values
                 body = "En passagerare har bokat in sig på din resa";
@@ -99,19 +119,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 toastMessage = "Ny passagerare";
             }
 
-        }else if( change.equals("Trip started")) {
+        } else if (change.equals("Trip started")) {
 
             title = "Resan har börjat";
             body = "Nu är resan igång";
             toastMessage = "Resan startad";
 
-        }else{
+        } else {
             toastMessage = "";
         }
 
-
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "channel_id")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, App.CHANNEL_NORMAL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)
@@ -138,37 +156,28 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Notification Channel is required for Android O and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    "channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT
-            );
-            channel.setDescription("channel description");
-            channel.setShowBadge(true);
-            channel.canShowBadge();
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500});
-            notificationManager.createNotificationChannel(channel);
-        }
-
         notificationManager.notify(0, notificationBuilder.build());
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show(); }
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
+            }
         });
 
 
+        if (change.equals("Trip started")) {
+            Notification activeTripNotification = new NotificationCompat.Builder(this, App.CHANNEL_ACTIVE_TRIP_ID)
+                    .setContentTitle("Pågående resa")
+                    .setContentText("Klicka för att gå till resan")
+                    .setOngoing(true)
+                    .setContentIntent(pendingIntent)
+                    .setSmallIcon(R.drawable.ic_directions_car_black_24dp)
+                    .build();
+            if (tripId == null) throw new IllegalStateException("there should be a trip for this type");
+            notificationManager.notify(tripId.hashCode(), activeTripNotification);
+        }
 
     }
-
-
-
-
-
 
 }
