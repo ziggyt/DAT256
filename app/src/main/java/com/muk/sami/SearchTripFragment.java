@@ -112,10 +112,14 @@ public class SearchTripFragment extends Fragment {
                 }
 
                 Coordinates startCoordinatesToBePassed = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
+                Coordinates destinationCoordinatesToBePassed = new Coordinates(destinationPlace.getLatLng().latitude, destinationPlace.getLatLng().longitude);
 
                 SearchTripFragmentDirections.ActionSearchTripFragmentToFilteredTripsFragment action = SearchTripFragmentDirections.actionSearchTripFragmentToFilteredTripsFragment();
                 action.setStartLatitude(Double.toString(startCoordinatesToBePassed.getLat()));
                 action.setStartLongitude(Double.toString(startCoordinatesToBePassed.getLon()));
+
+                action.setDestinationLatitude(Double.toString(destinationCoordinatesToBePassed.getLat()));
+                action.setDestinationLongitude(Double.toString(destinationCoordinatesToBePassed.getLon()));
 
                 Navigation.findNavController(v).navigate(action);
             }
