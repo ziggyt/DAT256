@@ -105,7 +105,7 @@ public class ActiveTripFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot user = task.getResult();
                             if (user != null) {
-                                passengernameTextView.setText(user.getString("Passagerare: " + "displayName"));
+                                passengernameTextView.setText("Passagerare: " + user.getString("displayName"));
                             }
                         }
                     }
@@ -117,7 +117,7 @@ public class ActiveTripFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot driver = task.getResult();
                             if (driver != null) {
-                                drivernameTextView.setText(driver.getString("Förare: " + "displayName"));
+                                drivernameTextView.setText("Förare: " + driver.getString( "displayName"));
                             }
                         }
                     }
