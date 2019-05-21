@@ -62,7 +62,7 @@ public class TicketFragment extends Fragment {
         passengernameTextView = view.findViewById(R.id.passenger);
         qrImageView = view.findViewById(R.id.qr_image_view);
 
-        tripId = ActiveTripFragmentArgs.fromBundle(getArguments()).getTripId();
+        tripId = TicketFragmentArgs.fromBundle(getArguments()).getTripId();
 
         initFirebase();
 

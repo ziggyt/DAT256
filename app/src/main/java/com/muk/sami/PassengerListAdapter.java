@@ -44,6 +44,7 @@ public class PassengerListAdapter extends ArrayAdapter<String> {
         String passengerStatus = passengersStatus.get(position);
 
         passengerNameTextView.setText(passenger);
+        checkBox.setClickable(false);
 
         if (passengerStatus.equals("Finished trip")){
             checkBox.setChecked(true);
