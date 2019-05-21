@@ -174,7 +174,10 @@ public class DriverDetailViewFragment extends Fragment {
                     DocumentSnapshot dsUser = task.getResult();
                     assert dsUser != null;
                     passengerList.add(dsUser.getString("displayName"));
-                    passengerListView.setAdapter(adapter);
+
+                    if( passengerList.size() == passengersStatus.size()){
+                        passengerListView.setAdapter(adapter);
+                    }
                 }
             });
         }
@@ -206,8 +209,6 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void finishTrip() {
-        displayedTrip.finishTrip();
-        mTripRef.set(displayedTrip);
 
         giveCO2Points();
         tripFinishedDialog();
@@ -309,6 +310,9 @@ public class DriverDetailViewFragment extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+
+                displayedTrip.finishTrip();
+                mTripRef.set(displayedTrip);
                 dialog.cancel();
             }
         });
