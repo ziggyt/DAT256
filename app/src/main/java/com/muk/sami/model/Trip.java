@@ -44,6 +44,8 @@ public class Trip {
     boolean tripStarted = false;
     @Getter private
     boolean tripFinished = false;
+    @Getter private
+    int CO2Points;
 
 
     public Trip() {
@@ -64,6 +66,7 @@ public class Trip {
 
     public void startTrip(){
         tripStarted = true;
+        CO2Points = (int)(passengers.size()*getDistanceBetweenStartAndDestination()*0.15)/(passengers.size()+1);
     }
 
     public void finishTrip(){
