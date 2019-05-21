@@ -31,22 +31,24 @@
 
     <TextView
         android:id="@+id/startingPoint"
-        android:layout_width="150dp"
-        android:layout_height="57dp"
+        android:layout_width="305dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="100dp"
         tools:text="Göteborg" />
 
     <TextView
         android:id="@+id/destination"
-        android:layout_width="150dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="100dp"
+        android:layout_width="306dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="4dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/startingPoint"
         tools:text="Stockholm" />
 
@@ -90,18 +92,22 @@
         android:id="@+id/textView2"
         android:layout_width="49dp"
         android:layout_height="29dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="32dp"
         android:text="Från:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="32dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="88dp"
         android:text="Till:"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="89dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
