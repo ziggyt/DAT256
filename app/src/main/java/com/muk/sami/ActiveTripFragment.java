@@ -95,11 +95,10 @@ public class ActiveTripFragment extends Fragment {
                 startTextview.setText(displayedTrip.getStartAddress());
                 destinationTextview.setText(displayedTrip.getDestinationAddress());
                 dateTimeTextview.setText(displayedTrip.getDateString() + "   " + displayedTrip.getTimeString());
-
-                priceTextview.setText( "100 kr"); //TODO set text to real price
+                priceTextview.setText(displayedTrip.getSeatPrice() + " kr.");
                 passengernameTextView.setText("To be added");
 
-                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid()
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 mDatabase.collection("users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
