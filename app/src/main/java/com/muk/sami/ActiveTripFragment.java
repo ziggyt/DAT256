@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -98,6 +99,19 @@ public class ActiveTripFragment extends Fragment {
                 priceTextview.setText( "100 kr"); //TODO set text to real price
                 passengernameTextView.setText("To be added");
 
+                String userID = FirebaseAuth.getInstance().getCurrentUser().getUid()
+
+                mDatabase.collection("users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot user = task.getResult();
+                            if (user != null) {
+                                passengernameTextView.setText(user.getString("displayName"));
+                            }
+                        }
+                    }
+                });
 
                 mDatabase.collection("users").document(displayedTrip.getDriver()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -110,6 +124,8 @@ public class ActiveTripFragment extends Fragment {
                         }
                     }
                 });
+
+
             }
         });
 
