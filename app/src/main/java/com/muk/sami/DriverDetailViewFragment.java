@@ -33,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.muk.sami.model.SimpleNotification;
 import com.muk.sami.model.Trip;
+import com.muk.sami.model.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -208,6 +209,7 @@ public class DriverDetailViewFragment extends Fragment {
         displayedTrip.finishTrip();
         mTripRef.set(displayedTrip);
 
+        giveCO2Points();
         tripFinishedDialog();
         showViewForFinishedTrip();
         cancelTripMessaging();
@@ -246,6 +248,27 @@ public class DriverDetailViewFragment extends Fragment {
         SimpleNotification message = new SimpleNotification("Trip started," + userId + "," + driverId);
         mNotificationRef.document(topic).set(message);
 
+    }
+
+    private void giveCO2Points() {
+
+        //Creates a list of all users that are to receive carbon points
+        List<String> participantsOfTrip = new ArrayList<>(displayedTrip.getPassengers());
+        participantsOfTrip.add(displayedTrip.getDriver());
+
+        for (String userID : participantsOfTrip) {
+            DocumentReference mUserRef = mDatabase.collection("users").document(userID);
+            mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    DocumentSnapshot dsUser = task.getResult();
+                    assert dsUser != null;
+                    User passenger = dsUser.toObject(User.class);
+                    passenger.setSavedCarbon(passenger.getSavedCarbon()+displayedTrip.getCO2Points());
+                }
+            });
+        }
     }
 
     private void checkIfPastStartTime() {
