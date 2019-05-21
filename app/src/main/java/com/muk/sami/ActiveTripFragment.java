@@ -92,11 +92,10 @@ public class ActiveTripFragment extends Fragment {
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
                 //Set the components
-                startTextview.setText(displayedTrip.getStartAddress());
-                destinationTextview.setText(displayedTrip.getDestinationAddress());
+                startTextview.setText("Från: " + displayedTrip.getStartAddress());
+                destinationTextview.setText("Till: " + displayedTrip.getDestinationAddress());
                 dateTimeTextview.setText(displayedTrip.getDateString() + "   " + displayedTrip.getTimeString());
-                priceTextview.setText(displayedTrip.getSeatPrice() + " kr.");
-                passengernameTextView.setText("To be added");
+                priceTextview.setText("Pris: "+ displayedTrip.getSeatPrice() + " kr");
 
                 String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -106,7 +105,7 @@ public class ActiveTripFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot user = task.getResult();
                             if (user != null) {
-                                passengernameTextView.setText(user.getString("displayName"));
+                                passengernameTextView.setText(user.getString("Passagerare: " + "displayName"));
                             }
                         }
                     }
@@ -118,7 +117,7 @@ public class ActiveTripFragment extends Fragment {
                         if (task.isSuccessful()) {
                             DocumentSnapshot driver = task.getResult();
                             if (driver != null) {
-                                drivernameTextView.setText(driver.getString("displayName"));
+                                drivernameTextView.setText(driver.getString("Förare: " + "displayName"));
                             }
                         }
                     }
