@@ -86,7 +86,7 @@ public class LeaderboardFragment extends Fragment {
 
         users = new ArrayList<>();
 
-        listViewUsers = view.findViewById(R.id.listView_Users);
+        listViewUsers = view.findViewById(R.id.user_list_view);
 
 
         // Inflate the layout for this fragment

@@ -43,6 +43,8 @@ public class MyPageFragment extends Fragment {
     private CircleImageView circleImageView;
     private TextView userNameTextView;
 
+    private TextView CO2PointsTextView;
+
     private String profilePictureUrl = "";
 
     private View view;
@@ -83,6 +85,7 @@ public class MyPageFragment extends Fragment {
         userRatingBar = view.findViewById(R.id.user_rating_ratingbar);
         circleImageView = view.findViewById(R.id.profile_picture_circleimageview);
         userNameTextView = view.findViewById(R.id.user_name_textview);
+        CO2PointsTextView = view.findViewById(R.id.CO2_points_text_view);
 
 
         editProfileButton = view.findViewById(R.id.edit_profile_button);
@@ -102,6 +105,7 @@ public class MyPageFragment extends Fragment {
 
                 userNameTextView.setText(dsUser.getString("displayName"));
                 userRatingBar.setRating(3);
+                CO2PointsTextView.setText(String.valueOf(dsUser.get("savedCarbon")) + "Kg CO2 sparat");
 
                 ImageLoader imageLoader = ImageLoader.getInstance();
 
