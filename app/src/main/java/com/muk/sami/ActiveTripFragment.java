@@ -29,7 +29,7 @@ public class ActiveTripFragment extends Fragment {
 
         getActivity().setTitle(R.string.navigation_active_trip);
 
-        view = inflater.inflate(R.layout.fragment_active_trip, container, false);
+        view = inflater.inflate(R.layout.fragment_ticket, container, false);
 
         qrImageView = view.findViewById(R.id.qr_image_view);
 
