@@ -99,7 +99,7 @@ public class DriverDetailViewFragment extends Fragment {
         timeTextView = view.findViewById(R.id.time_text_view);
         startTripButton = view.findViewById(R.id.start_trip_button);
         finishTripButton = view.findViewById(R.id.finish_trip_button);
-        showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
+        showQrCodeButton = view.findViewById(R.id.show_ticket);
         passengerListView = view.findViewById(R.id.passengers_list_view);
 
         passengerList = new ArrayList<>();

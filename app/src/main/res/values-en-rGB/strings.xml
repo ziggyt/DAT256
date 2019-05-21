@@ -63,7 +63,6 @@
 
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Leaderboard</string>
-    <string name="show_qr_code_string">Show QR-code for the trip</string>
     <string name="show_info_active_trip_string">Show the code below to your driver when the trip is finished</string>
 
     <!-- SignInPrompt -->

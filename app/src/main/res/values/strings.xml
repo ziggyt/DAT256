@@ -34,6 +34,7 @@
     <string name="trip_full_message">Resan är fullbokad</string>
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Du har nu avbokat din plats på resan</string>
+    <string name="show_ticket">Visa biljett</string>
 
     <!-- FileteredTrips -->
     <string name="navigation_filtered_trips">Resultat</string>
@@ -63,7 +64,6 @@
 
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Topplista</string>
-    <string name="show_qr_code_string">Visa QR-kod för resan</string>
     <string name="show_info_active_trip_string">Visa koden nedanför för din förare när resan är färdig</string>
     <string name="search_trip_button">Sök Resa</string>
 
