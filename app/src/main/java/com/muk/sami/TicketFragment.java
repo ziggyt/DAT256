@@ -28,7 +28,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.muk.sami.model.Trip;
 
 
-public class ActiveTripFragment extends Fragment {
+public class TicketFragment extends Fragment {
 
     private View view;
 
