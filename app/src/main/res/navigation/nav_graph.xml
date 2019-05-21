@@ -73,7 +73,7 @@
         android:id="@+id/activeTripFragment"
         android:name="com.muk.sami.ActiveTripFragment"
         android:label="fragment_active_trip"
-        tools:layout="@layout/fragment_active_trip">
+        tools:layout="@layout/fragment_ticket">
         <argument
             android:name="tripId"
             app:argType="string" />

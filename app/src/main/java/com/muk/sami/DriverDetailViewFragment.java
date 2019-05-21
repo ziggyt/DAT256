@@ -48,7 +48,7 @@ public class DriverDetailViewFragment extends Fragment {
 
     private Button startTripButton;
     private Button finishTripButton;
-    private Button showQrCodeButton;
+
 
     private ListView passengerListView;
 
@@ -99,7 +99,6 @@ public class DriverDetailViewFragment extends Fragment {
         timeTextView = view.findViewById(R.id.time_text_view);
         startTripButton = view.findViewById(R.id.start_trip_button);
         finishTripButton = view.findViewById(R.id.finish_trip_button);
-        showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
         passengerListView = view.findViewById(R.id.passengers_list_view);
 
         passengerList = new ArrayList<>();
@@ -181,13 +180,6 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void initListeners() {
-        showQrCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TripDetailViewFragmentDirections.ActionTripDetailViewFragmentToActiveTripFragment action = TripDetailViewFragmentDirections.actionTripDetailViewFragmentToActiveTripFragment(displayedTrip.getTripId());
-                Navigation.findNavController(view).navigate(action);
-            }
-        });
 
         startTripButton.setOnClickListener(new View.OnClickListener() {
             @Override

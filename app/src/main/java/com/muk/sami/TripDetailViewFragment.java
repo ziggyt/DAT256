@@ -91,7 +91,7 @@ public class TripDetailViewFragment extends Fragment {
 
         bookTripButton = view.findViewById(R.id.book_trip_button);
         cancelTripButton = view.findViewById(R.id.cancel_trip_button);
-        showQrCodeButton = view.findViewById(R.id.show_qr_code_button);
+        showQrCodeButton = view.findViewById(R.id.show_ticket);
         finishTripButton = view.findViewById(R.id.finish_trip_button);
 
         driverRatingBar = view.findViewById(R.id.driver_rating_bar);
