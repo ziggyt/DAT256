@@ -104,7 +104,10 @@ public class MyPageFragment extends Fragment {
                 assert dsUser != null;
 
                 userNameTextView.setText(dsUser.getString("displayName"));
+
                 userRatingBar.setRating(3);
+                userRatingBar.setIsIndicator(true);
+
                 CO2PointsTextView.setText(String.valueOf(dsUser.get("savedCarbon")) + "Kg CO2 sparat");
 
                 ImageLoader imageLoader = ImageLoader.getInstance();
