@@ -92,8 +92,8 @@ public class ActiveTripFragment extends Fragment {
                 displayedTrip = documentSnapshot.toObject(Trip.class);
 
                 //Set the components
-                startTextview.setText("Från: " + displayedTrip.getStartAddress());
-                destinationTextview.setText("Till: " + displayedTrip.getDestinationAddress());
+                startTextview.setText(displayedTrip.getStartAddress());
+                destinationTextview.setText(displayedTrip.getDestinationAddress());
                 dateTimeTextview.setText(displayedTrip.getDateString() + "   " + displayedTrip.getTimeString());
                 priceTextview.setText("Pris: "+ displayedTrip.getSeatPrice() + " kr");
 
