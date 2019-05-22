@@ -44,6 +44,9 @@
     <string name="choose_eariliest_departure_time">Välj tidigast avgångstid: </string>
     <string name="stay_home">Du får stanna hemma: </string>
 
+    <!-- TripDetailView -->
+    <string name="action_remove">Ta bort</string>
+    <string name="trip_removed">Resan har tagits bort</string>
 
     <!-- CreateTrip -->
     <string name="navigation_create_trip">Skapa resa</string>

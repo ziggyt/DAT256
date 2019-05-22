@@ -44,8 +44,9 @@
     <string name="choose_eariliest_departure_time">Choose earliest departure time: </string>
     <string name="stay_home">You get to stay home: </string>
 
-
-
+    <!-- TripDetailView -->
+    <string name="action_remove">Remove</string>
+    <string name="trip_removed">This trip has been removed</string>
 
     <!-- CreateTrip -->
     <string name="navigation_create_trip">Create Trip</string>
