@@ -73,11 +73,22 @@ public class Trip {
         tripFinished = true;
     }
 
+    /**
+     * Takes in a passenger and changes its status to finished
+     * @param passenger The passenger whose status is to be changed
+     */
+
     public void finishTripPassenger(String passenger){
         int passengerIndex = passengers.indexOf(passenger);
         passengerStatus.set( passengerIndex, "Finished trip");
     }
 
+
+    /**
+     * Checks if all user has been marked as finished with the trip
+     *
+     * @return If all users has finished the trip
+     */
     public boolean passengersFinishedTrip(){
         if( passengers.isEmpty()){
             return false;
@@ -156,18 +167,37 @@ public class Trip {
         return simpleDateFormatDate.format(date);
     }
 
+    /**
+     *
+     * @return distance betweem start point and destination in km
+     */
     public double getDistanceBetweenStartAndDestination(){
         return startCoordinates.kilometersBetweenCoordinates(destinationCoordinates);
     }
 
+
+    /**
+     * @param c1 represents a custom coordinate
+     * @return distance between the start point and a custom coordinate in km
+     */
     public double getDistanceBetweenStartAndCustomCoordinates(Coordinates c1){
         return startCoordinates.kilometersBetweenCoordinates(c1);
     }
+
+    /**
+     * @param c1 represents a custom coordinate
+     * @return distance between destination and a custom coordinate in km
+     */
 
     public double getDistanceBetweenDestinationAndCustomCoordinates(Coordinates c1){
         return destinationCoordinates.kilometersBetweenCoordinates(c1);
     }
 
+    /**
+     * Calculates the price per seat using the trips distance and the total amount of seats
+     *
+     * @return The calculated price for a seat casted to an integer
+     */
     public int getSeatPrice() {
         double distanceInKm = getDistanceBetweenStartAndDestination()/1000.0;
         return (int)(distanceInKm*2)/(totalNumberOfSeats+1);
