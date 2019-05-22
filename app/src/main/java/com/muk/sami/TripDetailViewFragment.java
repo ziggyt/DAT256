@@ -259,7 +259,7 @@ public class TripDetailViewFragment extends Fragment {
         finishTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tripFinishedDialog();
+                tripFinishedDialog2();
             }
         });
 
@@ -410,6 +410,44 @@ public class TripDetailViewFragment extends Fragment {
             }
         });
 
+        builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void tripFinishedDialog2() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Bekräfta ankomst");
+        builder.setMessage("Har du nått din utlovade destination?");
+
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.finish_trip_passenger_dialog, (ViewGroup) getView(), false);
+
+        //Set the content of the main dialog view
+        builder.setView(dialogView);
+
+        RatingBar driverRatingBar = dialogView.findViewById(R.id.driver_rating_bar);
+        driverRatingBar.setMax(0);
+        driverRatingBar.setStepSize(0.5f);
+
+        // Set up the OK-button
+        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (activeUser == null) throw new IllegalStateException("user should be signed in");
+
+                displayedTrip.finishTripPassenger(activeUser.getUid());
+                mTripRef.set(displayedTrip);
+
+                cancelTripMessaging();
+            }
+        });
+
+        //Set up the Cancel-button
         builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
