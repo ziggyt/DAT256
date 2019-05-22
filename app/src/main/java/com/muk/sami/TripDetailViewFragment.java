@@ -259,7 +259,7 @@ public class TripDetailViewFragment extends Fragment {
         finishTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tripFinishedDialog2();
+                tripFinishedDialog();
             }
         });
 
@@ -385,42 +385,7 @@ public class TripDetailViewFragment extends Fragment {
 
     }
 
-    /**
-     * Dialog for the passenger to confirm arrival
-     * TODO: Add Rating of driver
-     */
     private void tripFinishedDialog() {
-
-        //Create a dialog and set the title/message
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Bekräfta ankomst");
-        builder.setMessage("Har du nått din utlovade destination?");
-
-        // Set up the OK-button
-        builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
-
-                if (activeUser == null) throw new IllegalStateException("user should be signed in");
-
-                displayedTrip.finishTripPassenger(activeUser.getUid());
-                mTripRef.set(displayedTrip);
-
-                cancelTripMessaging();
-            }
-        });
-
-        builder.setNegativeButton("Nej", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-    }
-
-    private void tripFinishedDialog2() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Bekräfta ankomst");
         builder.setMessage("Har du nått din utlovade destination?");
@@ -430,9 +395,16 @@ public class TripDetailViewFragment extends Fragment {
         //Set the content of the main dialog view
         builder.setView(dialogView);
 
-        RatingBar driverRatingBar = dialogView.findViewById(R.id.driver_rating_bar);
-        driverRatingBar.setMax(0);
-        driverRatingBar.setStepSize(0.5f);
+        final RatingBar driverRatingBar = dialogView.findViewById(R.id.driver_rating_bar);
+        driverRatingBar.setRating(0);
+        driverRatingBar.setNumStars(5);
+        driverRatingBar.setStepSize(1);
+        driverRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ratingBar.setRating(rating);
+            }
+        });
 
         // Set up the OK-button
         builder.setPositiveButton("Ja", new DialogInterface.OnClickListener() {
@@ -442,6 +414,11 @@ public class TripDetailViewFragment extends Fragment {
 
                 displayedTrip.finishTripPassenger(activeUser.getUid());
                 mTripRef.set(displayedTrip);
+
+                int rating = (int) driverRatingBar.getRating();
+                if( rating != 0 ){
+                    rateDriver(rating);
+                }
 
                 cancelTripMessaging();
             }
@@ -456,6 +433,27 @@ public class TripDetailViewFragment extends Fragment {
         });
 
         builder.show();
+    }
+
+    private void rateDriver(final int rating ){
+
+        final String driverString = displayedTrip.getDriver();
+
+        mDatabase.collection("users").document(driverString).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot dsDriver = task.getResult();
+                    if (user != null) {
+                        User driver = dsDriver.toObject(User.class);
+                        driver.addRating(rating);
+                        mDatabase.collection("users").document(driverString).set(driver);
+                    }
+                }
+            }
+        });
+
+
     }
 
     @Override
