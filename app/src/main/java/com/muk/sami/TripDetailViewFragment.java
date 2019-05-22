@@ -163,6 +163,10 @@ public class TripDetailViewFragment extends Fragment {
 
                 //Convert the snapshot to a trip object
                 displayedTrip = documentSnapshot.toObject(Trip.class);
+                if (displayedTrip == null) { // Trip doesn't exist
+                    tripRemovedDialog();
+                    return;
+                }
 
                 // Check if the user is a passenger and then if the trip is started or finished
                 if (activeUser != null && displayedTrip.userInTrip(activeUser.getUid())) {
@@ -306,6 +310,23 @@ public class TripDetailViewFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void tripRemovedDialog() {
+        //Create a dialog and set the title
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.trip_removed);
+
+        builder.setPositiveButton(R.string.ok_button, null);
+
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                Navigation.findNavController(view).popBackStack();
             }
         });
 
