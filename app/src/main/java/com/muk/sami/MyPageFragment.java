@@ -108,7 +108,11 @@ public class MyPageFragment extends Fragment {
                 userRatingBar.setRating(3);
                 userRatingBar.setIsIndicator(true);
 
-                CO2PointsTextView.setText(String.valueOf(dsUser.get("savedCarbon")) + "Kg CO2 sparat");
+                if(dsUser.get("savedCarbon") != null) {
+                    CO2PointsTextView.setText(String.valueOf(dsUser.get("savedCarbon")) + "Kg CO2 sparat");
+                } else {
+                    CO2PointsTextView.setText("Du har inte sparat någon koldioxid än");
+                }
 
                 ImageLoader imageLoader = ImageLoader.getInstance();
 
