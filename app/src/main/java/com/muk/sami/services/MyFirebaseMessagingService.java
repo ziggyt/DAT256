@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -162,7 +163,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify((int) SystemClock.uptimeMillis(), notificationBuilder.build());
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
