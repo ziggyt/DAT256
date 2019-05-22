@@ -66,11 +66,8 @@ public class DriverDetailViewFragment extends Fragment {
     private List<String> passengersStatus;
 
     private String userId;
-
-    private static BroadcastReceiver tickReceiver;
-
-    private Trip displayedTrip;
     private String tripId;
+    private Trip displayedTrip;
 
     private Context context;
     private View view;
@@ -80,14 +77,6 @@ public class DriverDetailViewFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        tickReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
-                    checkIfPastStartTime();
-                }
-            }
-        };
     }
 
     @Nullable
@@ -329,35 +318,6 @@ public class DriverDetailViewFragment extends Fragment {
         }
     }
 
-    private void checkIfPastStartTime() {
-
-        //if the trip has already started, return
-        if (displayedTrip.isTripStarted()) {
-            return;
-        }
-
-        //Instantiate current time as a Calendar object
-        Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(new Date());
-        cal1.set(Calendar.MILLISECOND, 0);
-        cal1.set(Calendar.SECOND, 0);
-
-        //Instantiate the time of the trip as a Calendar object
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(displayedTrip.getDate());
-        cal2.set(Calendar.MILLISECOND, 0);
-        cal2.set(Calendar.SECOND, 0);
-
-        // Use Calenders compare, if the trips time isn´t greater than the current time, make the start button available
-        if (cal2.getTime().compareTo(cal1.getTime()) > 0) {
-            startTripButton.setBackgroundColor(Color.GRAY);
-            startTripButton.setClickable(false);
-        } else {
-            startTripButton.setBackgroundColor(Color.rgb(2, 255, 114));
-            startTripButton.setClickable(true);
-        }
-    }
-
     /**
      * Temporary dialog, this confirmation that the trip is finished could be placed in fragment
      */
@@ -404,26 +364,6 @@ public class DriverDetailViewFragment extends Fragment {
     private void removeTrip() {
         mTripRef.delete();
         sendTripRemovedMessage();
-    }
-
-    private void registerTickReceiver() {
-        getActivity().registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
-    }
-
-    private void unRegisterTickReceiver() {
-        getActivity().unregisterReceiver(tickReceiver);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        registerTickReceiver();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unRegisterTickReceiver();
     }
 
 }
