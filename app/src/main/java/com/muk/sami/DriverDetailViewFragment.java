@@ -257,8 +257,9 @@ public class DriverDetailViewFragment extends Fragment {
         List<String> participantsOfTrip = new ArrayList<>(displayedTrip.getPassengers());
         participantsOfTrip.add(displayedTrip.getDriver());
 
+
         for (String userID : participantsOfTrip) {
-            DocumentReference mUserRef = mDatabase.collection("users").document(userID);
+            final DocumentReference mUserRef = mDatabase.collection("users").document(userID);
             mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
                 @Override
@@ -267,6 +268,7 @@ public class DriverDetailViewFragment extends Fragment {
                     assert dsUser != null;
                     User passenger = dsUser.toObject(User.class);
                     passenger.setSavedCarbon(passenger.getSavedCarbon()+displayedTrip.getCO2Points());
+                    mUserRef.set(passenger);
                 }
             });
         }
