@@ -122,7 +122,10 @@ public class MyTripsFragment extends Fragment {
     }
 
     private void updateTrips() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
 
         swipeRefreshLayout.setRefreshing(true);
         firstTaskDone = false;
@@ -139,8 +142,8 @@ public class MyTripsFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     myTrips.addAll(task.getResult().toObjects(Trip.class));
-                    taskFinished();
                 }
+                taskFinished();
             }
         });
 
@@ -149,8 +152,8 @@ public class MyTripsFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     myTrips.addAll(task.getResult().toObjects(Trip.class));
-                    taskFinished();
                 }
+                taskFinished();
             }
         });
 
