@@ -165,6 +165,8 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void createPassengerList(Trip trip) {
+
+        // Iterate through the trips passengers
         for (String passenger : trip.getPassengers()) {
             DocumentReference mUserRef = mDatabase.collection("users").document(passenger);
             mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -173,8 +175,12 @@ public class DriverDetailViewFragment extends Fragment {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot dsUser = task.getResult();
                     assert dsUser != null;
+
+                    // Add passengers name the passengerList
                     passengerList.add(dsUser.getString("displayName"));
 
+
+                    // Set the adapter for the passengerListView that uses the passengerList
                     if( passengerList.size() == passengersStatus.size()){
                         passengerListView.setAdapter(adapter);
                     }
@@ -258,7 +264,10 @@ public class DriverDetailViewFragment extends Fragment {
         participantsOfTrip.add(displayedTrip.getDriver());
 
 
+        //Iterate through trip participants UID
         for (String userID : participantsOfTrip) {
+
+            //Find the user in the database and create a DocumentSnapshot of it
             final DocumentReference mUserRef = mDatabase.collection("users").document(userID);
             mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
@@ -266,8 +275,12 @@ public class DriverDetailViewFragment extends Fragment {
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot dsUser = task.getResult();
                     assert dsUser != null;
+
+                    //Create a user from the DocumentSnapshot, update the savedCarbon
                     User passenger = dsUser.toObject(User.class);
                     passenger.setSavedCarbon(passenger.getSavedCarbon()+displayedTrip.getCO2Points());
+
+                    //Add the changes to the database
                     mUserRef.set(passenger);
                 }
             });
@@ -275,20 +288,25 @@ public class DriverDetailViewFragment extends Fragment {
     }
 
     private void checkIfPastStartTime() {
+
+        //if the trip has already started, return
         if (displayedTrip.isTripStarted()) {
             return;
         }
 
+        //Instantiate current time as a Calendar object
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(new Date());
         cal1.set(Calendar.MILLISECOND, 0);
         cal1.set(Calendar.SECOND, 0);
 
+        //Instantiate the time of the trip as a Calendar object
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(displayedTrip.getDate());
         cal2.set(Calendar.MILLISECOND, 0);
         cal2.set(Calendar.SECOND, 0);
 
+        // Use Calenders compare, if the trips time isn´t greater than the current time, make the start button available
         if (cal2.getTime().compareTo(cal1.getTime()) > 0) {
             startTripButton.setBackgroundColor(Color.GRAY);
             startTripButton.setClickable(false);
