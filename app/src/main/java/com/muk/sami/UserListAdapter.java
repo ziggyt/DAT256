@@ -2,6 +2,7 @@ package com.muk.sami;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
     private Activity mContext;
     private List<User> users;
-
 
 
     public UserListAdapter(Activity context, List<User> users) {
@@ -57,15 +57,24 @@ public class UserListAdapter extends ArrayAdapter<User> {
         imageLoader.loadImage(profilePictureURL, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                userImage.setImageBitmap(loadedImage);
+                if (loadedImage != null) {
+                    userImage.setImageBitmap(loadedImage);
+                }
+
+                if (userImage.getDrawable() == null){
+                    Bitmap defaultImage = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_person_black_24dp);
+                    userImage.setImageBitmap(defaultImage);
+                }
             }
         });
 
+
+
         TextView username = listItem.findViewById(R.id.user_name_textview);
-        username.setText( currentUser.getDisplayName() );
+        username.setText(currentUser.getDisplayName());
 
         TextView savedCarb = listItem.findViewById(R.id.user_saved_carbon_textview);
-        savedCarb.setText( Integer.toString( currentUser.getSavedCarbon()) + " kg");
+        savedCarb.setText(Integer.toString(currentUser.getSavedCarbon()) + " kg");
 
         return listItem;
     }

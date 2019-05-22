@@ -27,6 +27,7 @@ public class Coordinates implements Serializable {
         double lat2 = otherLocation.lat;
         double lon2 = otherLocation.lon;
 
+
         final int radiusOfEarth = 6371; // Radius of the earth
 
         double latDistance = Math.toRadians(lat2 - lat1);
