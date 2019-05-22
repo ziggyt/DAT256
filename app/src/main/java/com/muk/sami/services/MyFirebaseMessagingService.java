@@ -82,7 +82,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String userId = typeOfChange[1];
         String driverId = typeOfChange[2];
 
-        if (tripId != null) { // Set pending intent to the detail view of the trip
+        if (tripId != null && !change.equals("Trip removed")) { // Set pending intent to the detail view of the trip
             Bundle bundle = new Bundle();
             bundle.putString("tripId", tripId);
 
@@ -124,6 +124,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             title = "Resan har börjat";
             body = "Nu är resan igång";
             toastMessage = "Resan startad";
+
+        } else if (change.equals("Trip removed")) {
+
+            title = "Resa borttagen";
+            body = "En resa du var med i har tagits bort";
+            toastMessage = "Resa borttagen";
 
         } else {
             toastMessage = "";

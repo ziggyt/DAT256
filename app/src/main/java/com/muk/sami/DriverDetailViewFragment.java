@@ -139,6 +139,10 @@ public class DriverDetailViewFragment extends Fragment {
 
                 //Convert the snapshot to a trip object
                 displayedTrip = documentSnapshot.toObject(Trip.class);
+                if (displayedTrip == null) { // Trip doesn't exist
+                    tripRemovedDialog();
+                    return;
+                }
 
                 if (displayedTrip.isTripFinished()) {
                     showViewForFinishedTrip();
@@ -259,6 +263,40 @@ public class DriverDetailViewFragment extends Fragment {
         SimpleNotification message = new SimpleNotification("Trip started," + userId + "," + driverId);
         mNotificationRef.document(topic).set(message);
 
+    }
+
+    /**
+     * Sends a notification to the passengers that the trip has been removed
+     */
+    private void sendTripRemovedMessage() {
+        //The topic name, which equals the tripId
+        String topic = tripId;
+
+        //The driverId to send with the message
+        String driverId = displayedTrip.getDriver();
+
+
+        //Creates a message to be sent via Firestore Cloud Messaging
+        SimpleNotification message = new SimpleNotification("Trip removed," + userId + "," + driverId);
+        mNotificationRef.document(topic).set(message);
+
+    }
+
+    private void tripRemovedDialog() {
+        //Create a dialog and set the title
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.trip_removed);
+
+        builder.setPositiveButton(R.string.ok_button, null);
+
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                Navigation.findNavController(view).popBackStack();
+            }
+        });
+
+        builder.show();
     }
 
     private void giveCO2Points() {
