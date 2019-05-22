@@ -234,7 +234,7 @@ public class FilteredTripsFragment extends Fragment {
 
         //Create a dialog and set the title
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Välj tidigast avgångstid"); //TODO replace with string value
+        builder.setTitle(R.string.choose_eariliest_departure_time);
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.filter_trip_dialog, (ViewGroup) getView(), false);
 
@@ -247,21 +247,21 @@ public class FilteredTripsFragment extends Fragment {
         builder.setView(dialogView);
 
         // Set up the OK-button
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+            public void onClick(DialogInterface dialog, int which) {
                 filterDate = dateFromDatePicker(datePicker, timePicker);
                 String dateAndTime = getDateAndTimeString();
 
-                timeTextView.setText("Avgångstid: " + dateAndTime); //TODO replace with string value
+                timeTextView.setText(R.string.departure_time + dateAndTime);
                 //applyFilter();
             }
         });
 
         //Set up the Cancel-button
-        builder.setNegativeButton("Avbryt", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) { //TODO replace with string value
+            public void onClick(DialogInterface dialog, int which) {
                 // dialog.cancel();
             }
         });
@@ -346,7 +346,7 @@ public class FilteredTripsFragment extends Fragment {
         }
 
         if(tripsWithinRadius.size() == 0){
-            Toast.makeText(getContext(), "Du får stanna hemma", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.stay_home, Toast.LENGTH_LONG).show();
             return;
         }
 

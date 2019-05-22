@@ -38,6 +38,12 @@
 
     <!-- FileteredTrips -->
     <string name="navigation_filtered_trips">Resultat</string>
+    <string name="ok_button">Okej</string>
+    <string name="cancel_button">Avbryt</string>
+    <string name="departure_time">Avgångstid: </string>
+    <string name="choose_eariliest_departure_time">Välj tidigast avgångstid: </string>
+    <string name="stay_home">Du får stanna hemma: </string>
+
 
     <!-- CreateTrip -->
     <string name="navigation_create_trip">Skapa resa</string>

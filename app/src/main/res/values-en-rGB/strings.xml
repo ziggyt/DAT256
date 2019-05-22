@@ -34,9 +34,18 @@
     <string name="trip_full_message">No seats available</string>
     <string name="user_added_to_trip">Booked a seat</string>
     <string name="user_removed_from_trip">Removed user from trip</string>
+    <string name="show_ticket">Show ticket</string>
 
     <!-- FileteredTrips -->
     <string name="navigation_filtered_trips">Result</string>
+    <string name="ok_button">Ok</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="departure_time">Departure time: </string>
+    <string name="choose_eariliest_departure_time">Choose earliest departure time: </string>
+    <string name="stay_home">You get to stay home: </string>
+
+
+
 
     <!-- CreateTrip -->
     <string name="navigation_create_trip">Create Trip</string>
@@ -64,8 +73,10 @@
     <!-- LeaderBoard -->
     <string name="navigation_leaderboard">Leaderboard</string>
     <string name="show_info_active_trip_string">Show the code below to your driver when the trip is finished</string>
+    <string name="search_trip_button">Search trip</string>
 
     <!-- SignInPrompt -->
     <string name="click_to_sign_in">Click to sign in/register</string>
+    <string name="search_trip_hint_textview">Choose start point and destination and press \"Search trip\"</string>
 
 </resources>
