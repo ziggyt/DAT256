@@ -22,12 +22,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.muk.sami.model.Coordinates;
 import com.muk.sami.model.Trip;
@@ -62,7 +65,6 @@ public class FilteredTripsFragment extends Fragment {
     private List<Trip> filteredTrips;
 
     private Date filterDate;
-    private boolean filterOn;
 
     private String startLocation = "";
     private String destinationLocation = "";
@@ -73,6 +75,7 @@ public class FilteredTripsFragment extends Fragment {
     private int startRadiusLimit = 99999;
     private int destinationRadiusLimit = 30; // HARDCODED VALUE FOR NOW
 
+    private TripListAdapter adapter;
 
     private View view;
 
@@ -91,7 +94,10 @@ public class FilteredTripsFragment extends Fragment {
         timeTextView = view.findViewById(R.id.timeTextView);
         startRadiusSpinner = view.findViewById(R.id.start_km_radius_spinner);
 
-        filterOn = false;
+        trips = new ArrayList<>();
+        filteredTrips = new ArrayList<>();
+        adapter = new TripListAdapter(getActivity(), filteredTrips, null);
+        listViewTrips.setAdapter(adapter);
 
         double startLatitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLatitude());
         double startLongitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getStartLongitude());
@@ -107,22 +113,20 @@ public class FilteredTripsFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
         try {
             filterDate = sdf.parse(searchDateString);
-            filterOn = true;
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         Integer[] items = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-        final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, items);
-        startRadiusSpinner.setAdapter(adapter);
+        final ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, items);
+        startRadiusSpinner.setAdapter(spinnerAdapter);
+        startRadiusSpinner.setSelection(items.length-1);
 
         startRadiusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 startRadiusLimit = Integer.parseInt(startRadiusSpinner.getItemAtPosition(position).toString());
-                adapter.notifyDataSetChanged();
-                showOnlyTripsWithinRadius();
-
+                spinnerAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -133,51 +137,35 @@ public class FilteredTripsFragment extends Fragment {
 
         mDatabase = FirebaseFirestore.getInstance();
         mTripsRef = mDatabase.collection("trips");
-        mTripsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        Query tripsQuery = mTripsRef
+                .whereEqualTo("tripFinished", false)
+                .whereEqualTo("tripStarted", false);
+        tripsQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    trips.addAll(task.getResult().toObjects(Trip.class));
+                    initializeTripsList();
 
-                trips.clear();
-                trips.addAll(queryDocumentSnapshots.toObjects(Trip.class));
-                initializeTripsList();
-
-
-                Collections.sort(trips, new Comparator<Trip>() {
-                    @Override
-                    public int compare(Trip o1, Trip o2) {
-                        return Double.compare(o1.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates), o2.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates));
-                    }
-                });
+                    Collections.sort(trips, new Comparator<Trip>() {
+                        @Override
+                        public int compare(Trip o1, Trip o2) {
+                            return Double.compare(o1.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates), o2.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates));
+                        }
+                    });
 
 
-                Collections.sort(trips, new Comparator<Trip>() {
-                    @Override
-                    public int compare(Trip o1, Trip o2) {
-                        return o1.getDate().compareTo(o2.getDate());
-                    }
-                });
+                    Collections.sort(trips, new Comparator<Trip>() {
+                        @Override
+                        public int compare(Trip o1, Trip o2) {
+                            return o1.getDate().compareTo(o2.getDate());
+                        }
+                    });
 
-
-
-
-                if (filterOn) {
                     applyFilter();
-                } else if (getActivity() != null) {
-                    TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
-                    listViewTrips.setAdapter(adapter);
                 }
             }
         });
-
-        // Inflate the layout for this fragment
-        mDatabase = FirebaseFirestore.getInstance();
-
-        trips = new ArrayList<>();
-        filteredTrips = new ArrayList<>();
 
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,7 +179,7 @@ public class FilteredTripsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Revert the filtering
-                revertFilter();
+                //revertFilter();
             }
         });
 
@@ -202,9 +190,6 @@ public class FilteredTripsFragment extends Fragment {
                 filterTripDialog();
             }
         });
-
-        //Visibility for filter buttons
-        showFilterButton();
 
         listViewTrips.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -282,39 +267,24 @@ public class FilteredTripsFragment extends Fragment {
     }
 
     private void applyFilter() {
-
-        if (filterDate == null) {
-            return;
-        }
-
-        filteredTrips.clear();
-
-        for (int i = 0; i < trips.size(); i++) {
-            if (filterDate.compareTo(trips.get(i).getDate()) <= 0) {
-                filteredTrips.add(trips.get(i));
+        List<Trip> temp = new ArrayList<>();
+        for (Trip t : trips) {
+            if (filterDate.compareTo(t.getDate()) <= 0) {
+                temp.add(t);
             }
         }
 
-        if (getActivity() != null) {
-            TripListAdapter adapter = new TripListAdapter(getActivity(), filteredTrips, null);
-            listViewTrips.setAdapter(adapter);
-        }
-
-        filterOn = true;
-    }
-
-    private void revertFilter() {
-
         filteredTrips.clear();
-
-        if (getActivity() != null) {
-            TripListAdapter adapter = new TripListAdapter(getActivity(), trips, null);
-            listViewTrips.setAdapter(adapter);
+        for (Trip t : temp) {
+            if (t.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates) <= startRadiusLimit) {
+                filteredTrips.add(t);
+            }
         }
+        adapter.notifyDataSetChanged();
 
-        filterOn = false;
-
-        showFilterButton();
+        if(filteredTrips.size() == 0){
+            Toast.makeText(getContext(), R.string.stay_home, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initializeTripsList(){
@@ -326,34 +296,8 @@ public class FilteredTripsFragment extends Fragment {
                 tripsCloseToDestination.add(t);
             }
         }
-        trips = tripsCloseToDestination;
-    }
-
-    private void showOnlyTripsWithinRadius() {
-
-        ArrayList<Trip> tripsWithinRadius = new ArrayList<>();
-
-        for (Trip t : trips) {
-            if (t.getDistanceBetweenStartAndCustomCoordinates(enteredStartCoordinates) <= startRadiusLimit) {
-                tripsWithinRadius.add(t);
-            }
-
-            TripListAdapter adapter = new TripListAdapter(getActivity(), tripsWithinRadius, null);
-            listViewTrips.setAdapter(adapter);
-
-        }
-
-        if(tripsWithinRadius.size() == 0){
-            Toast.makeText(getContext(), R.string.stay_home, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        applyFilter();
-    }
-
-    private void showFilterButton() {
-        filterButton.setVisibility(View.VISIBLE);
-        revertFilterButton.setVisibility(View.INVISIBLE);
+        trips.clear();
+        trips.addAll(tripsCloseToDestination);
     }
 
 
