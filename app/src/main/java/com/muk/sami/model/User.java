@@ -15,17 +15,29 @@ public class User {
 
     private @Getter
     String email;
+
     private @Getter
     String displayName;
+
     private @Getter
     String phoneNumber;
+
     //private @Getter String address;
+
+    //An average of the ratings received (1-5)
     private @Getter
-    List<Integer> samiRating = new ArrayList<>();
+    double driverRating;
+
+    //The number of ratings received
+    private @Getter
+    int numberOfRatings;
+
     private @Getter
     String photoURL;
+
     private @Getter @Setter
     BankCard bankCard;
+
     private @Getter @Setter
     int savedCarbon;
 
@@ -49,7 +61,26 @@ public class User {
         return email.equals(user.email);
     }
 
-    public void addRating(int rating){
+    /**
+     * The method takes the average rating and multiplies by the total number of ratings to get the
+     * sum of all ratings. Then adds the new rating and divides by the new number of ratings.
+     *
+     * @param rating the rating to be added
+     */
+    public void addRating(double rating){
+
+        //Calculate the total number of stars
+        double total = driverRating * numberOfRatings;
+
+        //Add the new rating and divide by numberOfRatings to get new average
+        double newTotal = total + rating; numberOfRatings++;
+        double newAverage = newTotal/numberOfRatings;
+
+        driverRating = newAverage;
+
+    }
+
+    /*public void addRating(int rating){
         samiRating.add(rating);
     }
 
@@ -71,7 +102,7 @@ public class User {
         double averageRatingRemainder = total % nRatings;
 
         return averageRatingQuotient + averageRatingRemainder;
-    }
+    }*/
 
     @Override
     public int hashCode() {

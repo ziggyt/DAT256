@@ -20,30 +20,43 @@ public class Trip {
 
     @Getter private
     String tripId;
+
     @Getter private
     Date date;
+
     @Getter private
     int numberOfBookedSeats;
+
     @Getter private
     int totalNumberOfSeats;
+
     @Getter private
     List<String> passengers = new ArrayList<>();
+
     @Getter private
     List<String> passengerStatus = new ArrayList<>();
+
     @Getter private
     String driver;
+
     @Getter private
     Coordinates startCoordinates;
+
     @Getter private
     Coordinates destinationCoordinates;
+
     @Getter private
     String startAddress;
+
     @Getter private
     String destinationAddress;
+
     @Getter private
     boolean tripStarted = false;
+
     @Getter private
     boolean tripFinished = false;
+
     @Getter private
     int CO2Points;
 
