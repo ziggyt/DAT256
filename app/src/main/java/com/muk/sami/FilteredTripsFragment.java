@@ -85,6 +85,9 @@ public class FilteredTripsFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_filtered_trips, container, false);
 
+        listViewTrips = view.findViewById(R.id.listView_Trips);
+        filterButton = view.findViewById(R.id.filterButton);
+        revertFilterButton = view.findViewById(R.id.revertFilterButton);
         timeTextView = view.findViewById(R.id.timeTextView);
         startRadiusSpinner = view.findViewById(R.id.start_km_radius_spinner);
 
@@ -176,10 +179,6 @@ public class FilteredTripsFragment extends Fragment {
         trips = new ArrayList<>();
         filteredTrips = new ArrayList<>();
 
-        listViewTrips = view.findViewById(R.id.listView_Trips);
-
-
-        filterButton = view.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,7 +187,6 @@ public class FilteredTripsFragment extends Fragment {
             }
         });
 
-        revertFilterButton = view.findViewById(R.id.revertFilterButton);
         revertFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
