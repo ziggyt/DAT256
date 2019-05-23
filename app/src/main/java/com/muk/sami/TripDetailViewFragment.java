@@ -200,9 +200,12 @@ public class TripDetailViewFragment extends Fragment {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot user = task.getResult();
-                            if (user != null) {
-                                driverTextView.setText(user.getString("displayName"));
-                                driverRatingBar.setRating(4);
+                            User driver = user.toObject(User.class);
+                            if (driver != null) {
+                                driverTextView.setText(driver.getDisplayName());
+
+                                float rating = (float) driver.getDriverRating();
+                                driverRatingBar.setRating(rating);
                             }
                         }
                     }
