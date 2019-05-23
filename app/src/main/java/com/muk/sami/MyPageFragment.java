@@ -92,10 +92,10 @@ public class MyPageFragment extends Fragment {
         signOutButton = view.findViewById(R.id.sign_out_button);
         deleteAccountButton = view.findViewById(R.id.delete_account_button);
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase = FirebaseFirestore.getInstance();
 
-        DocumentReference mUserRef = mDatabase.collection("users").document(userId);
+        final DocumentReference mUserRef = mDatabase.collection("users").document(userId);
 
         mUserRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -103,12 +103,22 @@ public class MyPageFragment extends Fragment {
                 DocumentSnapshot dsUser = task.getResult();
                 assert dsUser != null;
 
-                userNameTextView.setText(dsUser.getString("displayName"));
+                User user = dsUser.toObject(User.class);
+                //Use the below code to clear cache if necessary
+                //user.setDriverRating(4);
+                //user.setNumberOfRatings(1);
+                //mUserRef.set(user);
 
-                userRatingBar.setRating(3);
+                String displayName = user.getDisplayName();
+                float rating = (float) user.getDriverRating();
+                int savedCarbon = user.getSavedCarbon();
+
+
+                userNameTextView.setText(displayName);
+                userRatingBar.setRating(rating);
                 userRatingBar.setIsIndicator(true);
 
-                if(dsUser.get("savedCarbon") != null) {
+                if( savedCarbon > 0 ) {
                     CO2PointsTextView.setText(String.valueOf(dsUser.get("savedCarbon")) + "Kg CO2 sparat");
                 } else {
                     CO2PointsTextView.setText("Du har inte sparat någon koldioxid än");

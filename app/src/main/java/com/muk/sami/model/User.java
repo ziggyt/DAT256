@@ -108,4 +108,12 @@ public class User {
     public int hashCode() {
         return Objects.hash(email, displayName, phoneNumber);
     }
+
+    public void setDriverRating(double driverRating) {
+        this.driverRating = driverRating;
+    }
+
+    public void setNumberOfRatings(int numberOfRatings) {
+        this.numberOfRatings = numberOfRatings;
+    }
 }
