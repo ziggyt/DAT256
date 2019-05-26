@@ -104,10 +104,12 @@ public class FilteredTripsFragment extends Fragment {
 
         enteredStartCoordinates = new Coordinates(startLatitude, startLongitude);
 
-        double destinationLatitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLatitude());
-        double destinationLongitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLongitude());
+        if (FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLatitude() != null) {
+            double destinationLatitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLatitude());
+            double destinationLongitude = Double.parseDouble(FilteredTripsFragmentArgs.fromBundle(getArguments()).getDestinationLongitude());
 
-        enteredDestinationCoordinates = new Coordinates(destinationLatitude, destinationLongitude);
+            enteredDestinationCoordinates = new Coordinates(destinationLatitude, destinationLongitude);
+        }
 
         String searchDateString = FilteredTripsFragmentArgs.fromBundle(getArguments()).getDateString();
         SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", new Locale("us"));
@@ -120,7 +122,7 @@ public class FilteredTripsFragment extends Fragment {
         Integer[] items = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
         final ArrayAdapter<Integer> spinnerAdapter = new ArrayAdapter<Integer>(getContext(), android.R.layout.simple_spinner_item, items);
         startRadiusSpinner.setAdapter(spinnerAdapter);
-        startRadiusSpinner.setSelection(items.length-1);
+        startRadiusSpinner.setSelection(items.length - 1);
 
         startRadiusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -281,14 +283,18 @@ public class FilteredTripsFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
 
-        if(filteredTrips.size() == 0){
+        if (filteredTrips.size() == 0) {
             Toast.makeText(getContext(), R.string.stay_home, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void initializeTripsList(){
+    private void initializeTripsList() {
 
         ArrayList<Trip> tripsCloseToDestination = new ArrayList<>();
+
+        if (enteredDestinationCoordinates == null){
+            return;
+        }
 
         for (Trip t : trips) {
             if (t.getDistanceBetweenDestinationAndCustomCoordinates(enteredDestinationCoordinates) <= destinationRadiusLimit) {

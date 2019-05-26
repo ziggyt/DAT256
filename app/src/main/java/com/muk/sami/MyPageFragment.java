@@ -119,7 +119,7 @@ public class MyPageFragment extends Fragment {
                 userRatingBar.setRating(rating);
                 userRatingBar.setIsIndicator(true);
 
-                if( savedCarbon > 0 ) {
+                if (savedCarbon > 0) {
                     CO2PointsTextView.setText(String.valueOf(dsUser.get("savedCarbon")) + "Kg CO2 sparat");
                 } else {
                     CO2PointsTextView.setText("Du har inte sparat någon koldioxid än");

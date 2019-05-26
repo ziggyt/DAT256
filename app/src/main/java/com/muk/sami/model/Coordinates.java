@@ -20,6 +20,13 @@ public class Coordinates implements Serializable {
         this.lon = lon;
     }
 
+
+    /**
+     * A method to compute the distance in kilometers between two Coordinate objects
+     * @param otherLocation the other coordinates to compare this coordinate to
+     * @return the distance in kilometers between two coordinates
+     */
+
     double kilometersBetweenCoordinates(Coordinates otherLocation) {
 
         double lat1 = lat;

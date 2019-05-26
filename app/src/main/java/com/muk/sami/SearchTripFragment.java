@@ -126,18 +126,19 @@ public class SearchTripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // opens fragment for filtering trips
-                if( startPlace ==  null ){
+                if (startPlace == null) {
                     Toast.makeText(getContext(), "Du måste välja startpunkt!", Toast.LENGTH_SHORT).show();
-                    return;
-                }else if ( destinationPlace == null ){
-                    Toast.makeText(getContext(), "Du måste välja slutpunkt!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
 
                 Coordinates startCoordinatesToBePassed = new Coordinates(startPlace.getLatLng().latitude, startPlace.getLatLng().longitude);
-                Coordinates destinationCoordinatesToBePassed = new Coordinates(destinationPlace.getLatLng().latitude, destinationPlace.getLatLng().longitude);
-                if ( searchDate == null ){
+
+                Coordinates destinationCoordinatesToBePassed = null;
+                if(destinationPlace != null) {
+                    destinationCoordinatesToBePassed = new Coordinates(destinationPlace.getLatLng().latitude, destinationPlace.getLatLng().longitude);
+                }
+                if (searchDate == null) {
                     searchDate = new Date();
                 }
 
@@ -145,8 +146,10 @@ public class SearchTripFragment extends Fragment {
                 action.setStartLatitude(Double.toString(startCoordinatesToBePassed.getLat()));
                 action.setStartLongitude(Double.toString(startCoordinatesToBePassed.getLon()));
 
-                action.setDestinationLatitude(Double.toString(destinationCoordinatesToBePassed.getLat()));
-                action.setDestinationLongitude(Double.toString(destinationCoordinatesToBePassed.getLon()));
+                if(destinationCoordinatesToBePassed != null) {
+                    action.setDestinationLatitude(Double.toString(destinationCoordinatesToBePassed.getLat()));
+                    action.setDestinationLongitude(Double.toString(destinationCoordinatesToBePassed.getLon()));
+                }
 
                 action.setDateString(searchDate.toString());
 
