@@ -196,9 +196,8 @@ public class FilteredTripsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Trip trip = trips.get(position);
                 FirebaseUser activeUser = FirebaseAuth.getInstance().getCurrentUser();
-                if (activeUser == null) throw new IllegalStateException("user should be signed in");
 
-                if (trip.getDriver().equals(activeUser.getUid())) {
+                if (activeUser != null && trip.getDriver().equals(activeUser.getUid())) {
                     FilteredTripsFragmentDirections.DriverDetailViewAction action = FilteredTripsFragmentDirections.driverDetailViewAction();
                     action.setTripId(trip.getTripId());
                     Navigation.findNavController(view).navigate(action);
