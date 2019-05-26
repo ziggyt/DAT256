@@ -79,7 +79,6 @@ public class Trip {
 
     public void startTrip(){
         tripStarted = true;
-        CO2Points = (int)(passengers.size()*getDistanceBetweenStartAndDestination()*0.15)/(passengers.size()+1);
     }
 
     public void finishTrip(){

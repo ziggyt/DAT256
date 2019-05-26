@@ -294,6 +294,9 @@ public class DriverDetailViewFragment extends Fragment {
         List<String> participantsOfTrip = new ArrayList<>(displayedTrip.getPassengers());
         participantsOfTrip.add(displayedTrip.getDriver());
 
+        final int CO2points = (int)((displayedTrip.getPassengers().size()*displayedTrip.getDistanceBetweenStartAndDestination()*0.15)/(displayedTrip.getPassengers().size()+1))/1000;
+
+        System.out.println(CO2points);
 
         //Iterate through trip participants UID
         for (String userID : participantsOfTrip) {
@@ -309,7 +312,7 @@ public class DriverDetailViewFragment extends Fragment {
 
                     //Create a user from the DocumentSnapshot, update the savedCarbon
                     User passenger = dsUser.toObject(User.class);
-                    passenger.setSavedCarbon(passenger.getSavedCarbon()+displayedTrip.getCO2Points());
+                    passenger.setSavedCarbon(passenger.getSavedCarbon()+CO2points);
 
                     //Add the changes to the database
                     mUserRef.set(passenger);
