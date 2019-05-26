@@ -233,7 +233,7 @@ public class TripDetailViewFragment extends Fragment {
         bookTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payTripDialog();
+                bookTrip();
             }
         });
 
