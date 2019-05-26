@@ -3,6 +3,7 @@ package com.muk.sami;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -126,12 +127,14 @@ public class MyPageFragment extends Fragment {
 
                 ImageLoader imageLoader = ImageLoader.getInstance();
 
-                String profilePictureUrl = dsUser.getString("photoURL");
+                final String profilePictureUrl = dsUser.getString("photoURL");
 
                 imageLoader.loadImage(profilePictureUrl, new SimpleImageLoadingListener() {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        circleImageView.setImageBitmap(loadedImage);
+                        if (loadedImage != null) {
+                            circleImageView.setImageBitmap(loadedImage);
+                        }
                     }
                 });
             }
