@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "232413880574",
+    "firebase_url": "https://sami-0.firebaseio.com",
+    "project_id": "sami-0",
+    "storage_bucket": "sami-0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232413880574:android:f60a104f6ee7a0de",
+        "android_client_info": {
+          "package_name": "com.muk.sami"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232413880574-2ghs3lkla6ohfd9na0aj5a64k10ninpv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.muk.sami",
+            "certificate_hash": "c77e6f5dc8378dda98e644ef7155c0f706f0441c"
+          }
+        },
+        {
+          "client_id": "232413880574-kds2jm9d5jqkhot8fsk22ggdknig6ld8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClNSTIy9-Zn_nBVNqd1I69m8tSpDKcuhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232413880574-kds2jm9d5jqkhot8fsk22ggdknig6ld8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
